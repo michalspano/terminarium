@@ -1,9 +1,9 @@
-# TODO: finalize the .gitignore
+# .gitignore - what to exclude from VCS
 
 # exclude system binaries (macOS)
 *.DS_Store
 
-# exclude build files
+# exclude build
 dist/
 build/
 
