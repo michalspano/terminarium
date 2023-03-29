@@ -1,0 +1,37 @@
+# TODO: finalize the .gitignore
+
+# exclude system binaries (macOS)
+*.DS_Store
+
+# exclude build files
+dist/
+build/
+
+# exclude credentials/env variables
+.env
+.env.local
+
+# exclude IDE files
+.idea/
+.vscode/
+.vs/
+
+# exclude node modules
+node_modules/
+
+# exclude maven/gradle
+target/
+.gradle/
+
+# exclude Java class files
+*.class
+
+# exclude log files
+*.log
+
+# exclude c/c++ files
+*.o
+*.so
+*.dll
+*.exe
+
