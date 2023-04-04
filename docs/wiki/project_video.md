@@ -12,11 +12,15 @@ Furthermore, the system will _notify_ the user in the event of an __emergency__ 
 
 ## Intended usage
 
-TODO: write 1 short paragraph explaining the intended usage (e.g., user persona, examples of scenarios, etc.).
+*User* is a commuting worker and an avid keeper of exotic animals. Today, they have brought home yet another tarantula as a pet. They have prepared an enclosure and, as a responsible pet owner, they have done their research regarding the optimal living conditions under which this species thrives. However, with every new pet they take home, problems amass:
 
-Jerry, new tarant, preset, modify ...
+*User* has a large number of animals under his care, and maintaining optimal conditions in each terrarium is complicated and confusing. It is usually difficult to discern whether conditions are even suboptimal at all. This problem is further compounded by each animal having differing needs regarding factors like temperature, humidity, light, sound and vibration levels in their habitats. Lastly, *user's* long periods of absence due to their commuting means they cannot check on the living conditions of their beloved creatures regularly throughout the day.
 
-User is an avid keeper of exotic pets and has brought home a new tarantula
+*User* therefore requires a system that facilitates carrying out their duty to provide uncompromising care. For this reason, *user* decides to use the __Terminarium__ system. Installation initially involves placing the physical sensors inside the animals' enclosures, which record the conditions inside the terrariums and continuously broadcast that environmental data to the __Terminarium__ software's user interface. From this UI, __Terminarium__ enables *user* to thoroughly monitor the exact living conditions experienced by each animal, from any place and at any time of day, simply with a few clicks.
+
+Furthermore, __Terminarium__ eases *user's* job by no longer requiring them to memorize the exact requirements for their entire menagerie; the software can remember for them. Upper and lower boundaries for optimal and suboptimal environmental readings can be programmed by *user* into the software, and they are notified in the event that these fall or rise to a level dangerous to the animal. This way, *user* can spend the day far from home and remain reassured that, in the case of any emergency, they will be made aware and can act immediately.
+
+Thus, monitoring becomes simple, problems become substantially more detectable, and ultimately, caring for the animals is streamlined.
 
 ## Initial System design
 
