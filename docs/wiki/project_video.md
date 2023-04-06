@@ -26,4 +26,5 @@ Thus, monitoring becomes simple, problems become substantially more detectable, 
 
 The __initial system's design__ is depicted in the following diagram (with an additional legend):
 
-![Initial System Design](TODO.png)
+![Initial System Design](assets/system-design.png)
+
