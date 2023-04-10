@@ -1,5 +1,7 @@
 # Project Video
 
+> __Video summary__ (pitch) of the project: [link](https://tinyurl.com/dit113-video-summary)
+
 ## Project's name
 
 The project is entitled _"Terminarium"_, a portmanteau derived from the words __Terrarium__ and __Terminal__ that represents the interplay between the physical components of our integrated system; environmental data is collected from within a terrarium physical sensors that are connected to a terminal.
