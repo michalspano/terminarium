@@ -1,3 +1,10 @@
+# [WIP]
+
+TODO: apply the changes to the `readme` such that all the necessary sections are provided.
+> Follow the __template__ agreed upon by the team members.
+
+___
+
 ## Terminarium = Terminal + Terrarium
 
 ### Team Information
