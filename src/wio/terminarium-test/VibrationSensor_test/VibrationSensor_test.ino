@@ -9,14 +9,11 @@ void setup() {
     Serial.begin(9600);
 }
 
-// Declare variable to store sensor output
-int signal;
-
 // Main code, runs repeatedly:
 void loop() {
   
   // Store sensor output to variable
-  signal = digitalRead(vib);
+  int signal = digitalRead(vib);
 
   // If sensor detects vibration, print confirmation message
   if(signal != NULL) {
