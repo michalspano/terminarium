@@ -11,18 +11,18 @@ void setup() {
 
 // Main code, runs repeatedly:
 void loop() {
-  
+
   // Store sensor output to variable
   int signal = digitalRead(vib);
 
-  // If sensor detects vibration, print confirmation message
-  if(signal != NULL) {
-    Serial.println("Signal received"); 
-  } else {
-    Serial.println("No signal"); 
-  }
+  // Variable for storing parsed signal output as string
+  String result;
 
-  // Delay so confirmation message is readable
-  delay(200);
+  // If sensor detects vibration, print confirmation message
+  if(signal == 0) {
+    result = "Vibrating";
+  } else {
+    result = "Not Vibrating";
+  }
   
 }
