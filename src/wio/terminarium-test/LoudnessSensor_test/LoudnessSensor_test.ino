@@ -6,7 +6,7 @@ void setup() {
 void loop() {
   int loudness = analogRead(LOUDNESS_PIN);
   if(loudness != NULL){
-      Serial.printf("Signal received, Loudness: %i\n", loudness);
+      Serial.println("Signal received");
   }else{
     Serial.println("No signal");
   }
