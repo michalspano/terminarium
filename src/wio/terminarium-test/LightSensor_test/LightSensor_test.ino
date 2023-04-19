@@ -20,7 +20,8 @@ void loop() {
   // Store sensor output to variable
   signal = analogRead(lightSensor);
 
-  // Map sensor values to %
+  // Signal coming from sensor does not correspond to any real-world measure of luminosity
+  // Therefore we map the data to a range of 1-100 percent, as a way to intuitively gauge relative light levels.
   signal = map(signal,0,1023,0,100);
 }
 
