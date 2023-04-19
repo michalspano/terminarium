@@ -1,20 +1,23 @@
-//#include "DHT.h" // for later
+//import DHT library
+#include "DHT.h"
 
-//define temp&hum sensor
-#define dht D0  
+//define pin of sensor
+#define DHTPIN D0  
+
+//define type of DHT sensor
+#define DHTTYPE DHT11
+
+//initialise sensor
+DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-  pinMode(dht, INPUT);
   Serial.begin(9600);
+  dht.begin();
 }
 
 void loop() {
-  float input = digitalRead(dht);
+  float temp = dht.readTemperature();
+  float humi = dht.readHumidity();
   
-  if (input != NULL) {
-    Serial.println("It works! :)");
-  } else {
-    Serial.println("Not working! :(");
-  }
-
+  delay(500);
 }
