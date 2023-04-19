@@ -16,8 +16,15 @@ void setup() {
 }
 
 void loop() {
-  float temp = dht.readTemperature();
-  float humi = dht.readHumidity();
+  //store temperature & humidity data in variables
+  float temp  = dht.readTemperature();
+  int humi    = dht.readHumidity();
+  
+  //print temperature in Celcius
+  Serial.printf("Temperature: %.2f°C\n", temp);
+
+  //print humidity as percentage
+  Serial.printf("Humidity: %d%%\n", humi);
   
   delay(500);
 }
