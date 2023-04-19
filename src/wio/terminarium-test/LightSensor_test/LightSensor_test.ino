@@ -11,16 +11,17 @@ void setup() {
   Serial.begin(9600);
 }
 
+// Declare variable to store sensor output
+int signal;
+
 // Main code, runs repeatedly:
 void loop() {
 
   // Store sensor output to variable
-  int signal = analogRead(lightSensor);
+  signal = analogRead(lightSensor);
 
-  // If terminal receives signal, print confirmation message to serial monitor
-  if(signal != NULL) {
-    Serial.println("Signal received");
-  } else {
-    Serial.println("No signal");
-  }
+  // Signal coming from sensor does not correspond to any real-world measure of luminosity
+  // Therefore we map the data to a range of 1-100 percent, as a way to intuitively gauge relative light levels.
+  signal = map(signal,0,1023,0,100);
 }
+
