@@ -2,10 +2,10 @@
 
 <img src="docs/images/terminarium.png" width="300px" height="auto" align="right"/>
 
-## Table of Contents
+### Table of Contents
 
 - [Terminarium](#terminarium)
-  - [Table of Contents](#table-of-contents)
+    - [Table of Contents](#table-of-contents)
   - [Synopsis \& Motivation](#synopsis--motivation)
   - [Dependencies \& Requirements](#dependencies--requirements)
   - [Installation](#installation)
