@@ -11,16 +11,16 @@ void setup() {
   Serial.begin(9600);
 }
 
+// Declare variable to store sensor output
+int signal;
+
 // Main code, runs repeatedly:
 void loop() {
 
   // Store sensor output to variable
-  int signal = analogRead(lightSensor);
+  signal = analogRead(lightSensor);
 
-  // If terminal receives signal, print confirmation message to serial monitor
-  if(signal != NULL) {
-    Serial.println("Signal received");
-  } else {
-    Serial.println("No signal");
-  }
+  // Map sensor values to %
+  signal = map(signal,0,1023,0,100);
 }
+
