@@ -18,11 +18,18 @@ void loop() {
   // Variable for storing parsed signal output as string
   String result;
 
-  // If sensor detects vibration, print confirmation message
+  // If sensor detects vibration, store the result in a variable
   if(signal == 0) {
     result = "Vibrating";
+    delay(300);
   } else {
     result = "Not Vibrating";
   }
+
+  // Print vibration signal to serial monitor
+  Serial.println("Vibration status: " + result);
+
+  // Delay so message is readable
+  delay(100);
   
 }
