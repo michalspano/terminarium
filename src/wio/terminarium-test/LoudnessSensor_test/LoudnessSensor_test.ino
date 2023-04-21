@@ -8,6 +8,6 @@ void loop() {
 
   float loudnessPercent = ((float) loudness / (float) MAX_READING) * 100.0; // Calculating loudness as percentage of highest possible reading
 
-  Serial.printf("Loudness: %.2f°C\n", loudness); //Prints loudness percentage to serial monitor
+  Serial.printf("Loudness: %.2f%%\n", loudnessPercent); //Prints loudness percentage to serial monitor
   delay(200);
 }
