@@ -16,4 +16,10 @@ void loop(){
   // Parsing analog read into percentage.
   float moisturePercentage = map(moistureRaw, 0, 876, 0, 100);
   
+  // Printing moisture value
+  Serial.printf("Moisture: %d%%\n", moisturePercentage);
+  
+  // Delay reading will be printed every five seconds 
+  delay(5000);
+
 }
