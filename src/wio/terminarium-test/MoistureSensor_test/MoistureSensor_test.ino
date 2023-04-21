@@ -10,7 +10,7 @@ void setup() {
 }
 
 void loop(){
-  // Reading from analog pin A0
+  // Readung from analog pin A0
   int moistureRaw = analogRead(A0);
   
   // Parsing analog read into percentage.
