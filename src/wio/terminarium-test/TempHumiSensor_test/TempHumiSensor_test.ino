@@ -2,7 +2,7 @@
 #include "DHT.h"
 
 //define pin of sensor (temp&humi)
-#define DHTPIN D0  
+#define DHTPIN D0
 
 //define type of DHT sensor (temp&humi)
 #define DHTTYPE DHT11
