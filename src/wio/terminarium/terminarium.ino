@@ -40,9 +40,9 @@ void loop() {
   float temp            = tempHumiVal[0];
   float humi            = tempHumiVal[1];
   String vibResult      = parseVibrationValue(vibSignal);
-  int moistureResult    = mapToPercentage(moistureSignal, MOISTURE);
-  int lightResult       = mapToPercentage(lightSignal, LIGHT);
-  int loudnessResult    = mapToPercentage(loudnessSignal, LOUDNESS);
+  int moistureResult    = mapToPercentage(moistureSignal);
+  int lightResult       = mapToPercentage(lightSignal);
+  int loudnessResult    = mapToPercentage(loudnessSignal);
 
   // ***************************** PRINTING (serial monitor) ***************************** //
 
