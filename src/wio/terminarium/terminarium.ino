@@ -1,99 +1,58 @@
 /***************************************************************************************************
  * Terminarium
- * File: {@code Main.ino}
+ * File: {@code terminarium.ino}
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda, 
  *          Konstantinos Rokanas, Jonathan Boman
  * 
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
-// import DHT library
-#include "DHT.h"
-
-// macros
-#define DHT_PIN       D0        // pin for the temp&humi sensor
-#define VIBRATION_PIN D2        // pin for the vibration sensor
-#define MOISTURE_PIN  A3        // pin for moisture sensor 
-#define LIGHT_PIN     A4        // pin for the LIGHT sensor
-#define LOUDNESS_PIN  A5        // pin for the loudness sensor
-
-#define DHTTYPE DHT11           // type of DHT sensor (temp&humi)
-
-#define SERIAL_BAUD_RATE      9600
-#define MAX_READING           1023  // max possible reading from loudness and light sensor
-#define MIN_READING           0     // min possible reading from loudness and light sensor
-
-#define SEPARATOR for (int i = 0; i < 30; i++) Serial.print("="); Serial.println()
+// declare imports
+#include "DHT.h"      // import DHT library
+#include "pins.h"     // import pins for sensors
+#include "utils.h"    // import utility functions
 
 // initialise temp&humi sensor-struct
 DHT dht(DHT_PIN, DHTTYPE);
 
 void setup() {
-  
-  // Enable the serial monitor
-  Serial.begin(SERIAL_BAUD_RATE);
-
-  // Set up digital sensors
-  pinMode(VIBRATION_PIN, INPUT);
-
-  // Initialize temp&humi sensor
-  dht.begin();
+  Serial.begin(SERIAL_BAUD_RATE); // Enable the serial monitor
+  pinMode(VIBRATION_PIN, INPUT);  // Set up digital sensors
+  dht.begin();                    // Initialize temp&humi sensor
 }
 
 void loop() {
-  // Read sensor data
-  int vibSignal   = digitalRead(VIBRATION_PIN);
+  /* Note: the temperature/humidity code sample has been adapted from the DHT library example:
+   * Link: https://github.com/Seeed-Studio/Grove_Temperature_And_Humidity_Sensor/blob/master/examples/DHTtester/DHTtester.ino */
 
-  // Store sensor output to variable
-  int lightSignal = analogRead(LIGHT_PIN);
+  // ***************************** READING ********************************************* //
 
-  // Signal coming from sensor does not correspond to any real-world measure of luminosity
-  // Therefore we map the data to a range of 1-100 percent, as a way to intuitively gauge relative light levels.
-  int lightValue = map(lightSignal, MIN_READING, MAX_READING, 0, 100);
+  float tempHumiVal[2] = {};                      // initialise array for temp&humi values
+  dht.readTempAndHumidity(tempHumiVal);            // read temp&humi sensor
 
-  //store temperature & humidity data in variables
-  float temp  = dht.readTemperature();
-  int humi    = dht.readHumidity();
+  int vibSignal       = digitalRead(VIBRATION_PIN); // read vibration signal
+  int moistureSignal  = analogRead(MOISTURE_PIN);   // read moisture signal
+  int lightSignal     = analogRead(LIGHT_PIN);      // read light signal
+  int loudnessSignal  = analogRead(LOUDNESS_PIN);   // read loudness signal
 
-  int loudness            = analogRead(LOUDNESS_PIN);                           // Reading sensor value
-  float loudnessPercent   = ((float) loudness / (float) MAX_READING) * 100.0;   // Calculating loudness as percentage of highest possible reading
+  // ***************************** PARSING ********************************************* //
 
-  // Readung from MOISTURE_PIN
-  int moistureRaw         = analogRead(MOISTURE_PIN);
+  float temp            = tempHumiVal[0];
+  float humi            = tempHumiVal[1];
+  String vibResult      = parseVibrationValue(vibSignal);
+  int moistureResult    = mapToPercentage(moistureSignal, MOISTURE);
+  int lightResult       = mapToPercentage(lightSignal, LIGHT);
+  float loudnessResult  = calculatePercentage(loudnessSignal);
 
-  // Parsing analog read into percentage.
-  int moisturePercentage  = map(moistureRaw, MIN_READING, MAX_READING, 0, 100);
+  // ***************************** PRINTING (serial monitor) ***************************** //
 
-  // Variable for storing parsed vibration signal output as string
-  String vibResult;
+  Serial.printf("Temperature: %.2f°C\n", temp);         // temperature in Celcius
+  Serial.printf("Humidity: %.2f%%RH\n", humi);          // humidity in percentage
+  Serial.printf("Vibration: %s\n", vibResult.c_str());  // vibration as string state
+  Serial.printf("Moisture: %d%%\n", moistureResult);    // moisture in percentage
+  Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage
+  Serial.printf("Loudness: %.2f%%\n", loudnessResult);  // loudness in percentage
 
-  // If sensor detects vibration, store the result in a variable
-  if (vibSignal == 0) {
-    vibResult = "Vibrating";
-    delay(300);
-  } else vibResult = "Not Vibrating";
-
-  // display vibration status
-  Serial.println("Vibration status: " + vibResult);
-
-  // print temperature in Celcius
-  Serial.printf("Temperature: %.2f°C\n", temp);
-
-  // print humidity as percentage
-  Serial.printf("Humidity: %d%%\n", humi);
-
-  // print light data to serial monitor
-  Serial.printf("Light level: %d%%\n", lightValue);
-
-  // prints loudness percentage to serial monitor
-  Serial.printf("Loudness: %.2f%%\n", loudnessPercent);
-
-  // print the moisture value
-  Serial.printf("Moisture: %d%%\n", moisturePercentage);
-
-  // visual separator between each loop's iteration
-  SEPARATOR;
-
-  // arbitrary delay to make up for the sensors' latency delay
-  delay(500);
+  SEPARATOR;          // visual separator for serial monitor
+  delay(LOOP_DELAY);  // arbitrary delay to make up for the sensors' latency delay
 }
