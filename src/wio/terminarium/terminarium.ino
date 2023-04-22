@@ -27,8 +27,8 @@ void loop() {
 
   // ***************************** READING ********************************************* //
 
-  float tempHumiVal[2] = {};                      // initialise array for temp&humi values
-  dht.readTempAndHumidity(tempHumiVal);            // read temp&humi sensor
+  float tempHumiVal[2] = {};                        // initialise array for temp&humi values
+  dht.readTempAndHumidity(tempHumiVal);             // read temp&humi sensor
 
   int vibSignal       = digitalRead(VIBRATION_PIN); // read vibration signal
   int moistureSignal  = analogRead(MOISTURE_PIN);   // read moisture signal
@@ -42,7 +42,7 @@ void loop() {
   String vibResult      = parseVibrationValue(vibSignal);
   int moistureResult    = mapToPercentage(moistureSignal, MOISTURE);
   int lightResult       = mapToPercentage(lightSignal, LIGHT);
-  float loudnessResult  = calculatePercentage(loudnessSignal);
+  int loudnessResult    = mapToPercentage(loudnessSignal, LOUDNESS);
 
   // ***************************** PRINTING (serial monitor) ***************************** //
 
@@ -51,7 +51,7 @@ void loop() {
   Serial.printf("Vibration: %s\n", vibResult.c_str());  // vibration as string state
   Serial.printf("Moisture: %d%%\n", moistureResult);    // moisture in percentage
   Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage
-  Serial.printf("Loudness: %.2f%%\n", loudnessResult);  // loudness in percentage
+  Serial.printf("Loudness: %d%%\n", loudnessResult);    // loudness in percentage
 
   SEPARATOR;          // visual separator for serial monitor
   delay(LOOP_DELAY);  // arbitrary delay to make up for the sensors' latency delay

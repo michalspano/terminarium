@@ -38,29 +38,20 @@ enum SensorType {
 /**
  * Signal coming from sensor does not correspond to any real-world measure,
  * therefore we map the data to a range of 1-100 percent, as a way to intuitively gauge relative measure.
- * Note: the moisture sensor requires a different mapping, as it has a different range of values.
+ * Note: the moisture sensor requires a different mapping, as it has a different range of values. The light and 
+ *      loudness sensors have the same range of values, so they can be mapped in the same way.
  * @param signal - the signal coming from the sensor
  * @return int - the mapped value
  */
 int mapToPercentage(int signal, SensorType type) {
     switch (type) {
-    case MOISTURE:
+    case MOISTURE:  // the moisture sensor has a different range of values
         return map(signal, MIN_READING, MAX_READING_MOISTURE, 0, 100);
         break;
-    default:
+    default:        // other sensors (as of now, LIGHT and LOUDNESS) have the same range of values
         return map(signal, MIN_READING, MAX_READING, 0, 100);
         break;
     }
-}
-
-/**
- * Calculate the percentage of the signal relative to the max possible reading.
- * This method is similar to {@code mapToPercentage}, but it is suitable for float values.
- * @param signal - the signal coming from the sensor
- * @return float - the relative percentage of the signal
-*/
-float calculatePercentage(int signal) {
-    return ((float) signal / (float) MAX_READING) * 100.0;
 }
 
 /**
