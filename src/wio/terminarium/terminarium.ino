@@ -8,17 +8,31 @@
  ***************************************************************************************************/
 
 // declare imports
-#include "DHT.h"      // import DHT library
-#include "pins.h"     // import pins for sensors
-#include "utils.h"    // import utility functions
+#include "DHT.h"                          // import DHT library
+#include "pins.h"                         // import pins for sensors
+#include "utils.h"                        // import utility functions
+#include "TFT_eSPI.h"                     // import TFT LCD library 
+#include "screen_control.h"               // import screen controller functions
+#include "screen_draw.h"                  // import screen drawing functions
 
-// initialise temp&humi sensor-struct
-DHT dht(DHT_PIN, DHTTYPE);
+// initializations
+DHT dht(DHT_PIN, DHTTYPE);                // initialise temp&humi sensor-struct
+TFT_eSPI tft;                             // initialise TFT LCD
+TFT_eSprite spr = TFT_eSprite(&tft);      // initialise buffer
+Screen screen;                            // initialise screen enum
 
 void setup() {
-  Serial.begin(SERIAL_BAUD_RATE); // Enable the serial monitor
-  pinMode(VIBRATION_PIN, INPUT);  // Set up digital sensors
-  dht.begin();                    // Initialize temp&humi sensor
+  Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
+  pinMode(VIBRATION_PIN, INPUT);          // set up digital sensors
+  dht.begin();                            // initialise temp&humi sensor
+  tft.begin();                            // start TFT LCD
+  tft.setRotation(3);                     // set TFT LCD rotation
+  spr.createSprite(TFT_HEIGHT,TFT_WIDTH); // create buffer
+
+  // set buttons as input
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goNextScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goPrevScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
 }
 
 void loop() {
@@ -35,10 +49,10 @@ void loop() {
   int lightSignal     = analogRead(LIGHT_PIN);      // read light signal
   int loudnessSignal  = analogRead(LOUDNESS_PIN);   // read loudness signal
 
-  // ***************************** PARSING ********************************************* //
+  // ********************************* PARSING ******************************************* //
 
-  float temp            = tempHumiVal[0];
-  float humi            = tempHumiVal[1];
+  float temp            = tempHumiVal[1];
+  float humi            = tempHumiVal[0];
   String vibResult      = parseVibrationValue(vibSignal);
   int moistureResult    = mapToPercentage(moistureSignal);
   int lightResult       = mapToPercentage(lightSignal);
@@ -54,5 +68,11 @@ void loop() {
   Serial.printf("Loudness: %d%%\n", loudnessResult);    // loudness in percentage
 
   SEPARATOR;          // visual separator for serial monitor
+
+  // ******************************* DRAWING (LCD screen) ******************************** //
+
+  drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult);
+  spr.pushSprite(0,0); //Push to LCD
+
   delay(LOOP_DELAY);  // arbitrary delay to make up for the sensors' latency delay
 }
