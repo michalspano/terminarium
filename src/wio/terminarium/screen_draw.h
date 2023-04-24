@@ -7,6 +7,9 @@
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
+/* Note: the code for the dashboard and header has been adapted from Seeed Studio's Smart Garden project from the Wio Terminal Classroom video series:
+* Link: https://github.com/lakshanthad/Wio_Terminal_Classroom_Arduino/tree/main/Classroom%2012/Smart_Garden */
+
 // define acceptable sensor value boundaries
 #define MAX_LIMIT 75
 #define MIN_LIMIT 25
