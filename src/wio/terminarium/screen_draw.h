@@ -1,242 +1,143 @@
-//Define acceptable boundaries
+/***************************************************************************************************
+ * Terminarium - LCD screen drawing functions
+ * File: {@code pins.h}
+ * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
+ *          Konstantinos Rokanas, Jonathan Boman
+ *
+ * DIT113 Systems Development, SEM @ CSE.
+ ***************************************************************************************************/
+
+// define acceptable sensor value boundaries
 #define MAX_LIMIT 75
 #define MIN_LIMIT 25
 
-extern TFT_eSprite spr;
-extern Screen screen;
+extern TFT_eSprite spr;                         // include screen buffer sprite in current scope
+extern Screen screen;                           // include global screen state variable in current scope 
 
-void dashboardScreen(int temp, int humi, int vib, int moist, int light, int loud) {
 
-  //Set dashboard lines
-  spr.drawFastVLine(106,50,190,TFT_DARKGREEN); //Drawing 1st verticle line
-  spr.drawFastVLine(212,50,190,TFT_DARKGREEN); // Drawing 2nd vertical line
-  spr.drawFastHLine(0,140,320,TFT_DARKGREEN); //Drawing horizontal line
+// draw dashboard element
+void drawDashboardElem(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY) {
+  spr.setTextSize(2);                           // set text size to 2
+  spr.setTextColor(TFT_WHITE);                  // set text color to white
+  spr.drawString(heading, headingX, headingY);  // draw sensor heading
+  spr.setTextSize(3);                           // set text size to 3
 
-  //Setting temperature
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Temp",30,65);
-  spr.setTextSize(3);
-  if(temp > MAX_LIMIT || temp < MIN_LIMIT){
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(temp,25,95); //Display temperature values 
-  spr.drawString("C",65,95);
-
-  //Setting humidity
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Humi",140,65);
-  spr.setTextSize(3);
-  if(humi > MAX_LIMIT || humi < MIN_LIMIT){
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(humi,115,95); //Display humidity values as a percentage
-  spr.drawString("%RH",155,95);
-
-  //Setting vibration
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Vib",250,65);
-  spr.setTextSize(3);
-  if(vib == 0) {
-    spr.setTextColor(TFT_RED);
-    spr.drawString("Yes",242,95);
-  } else {
-    spr.drawString("No",251,95);
-  }
-
-  //Setting moisture
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Moist",25,160);
-  spr.setTextSize(3);
-  if(moist > MAX_LIMIT || moist < MIN_LIMIT){
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(moist,30,190); //Display humidity values 
-  spr.drawString("%",70,190);
-  
-  //Setting light 
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Light",134,160);
-  spr.setTextSize(3);
-  if(light > MAX_LIMIT || light < MIN_LIMIT){
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(light,135,190); //Display sensor values as percentage  
-  spr.drawString("%",175,190);
-
-  //Setting loudness
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Loud",245,160);
-  spr.setTextSize(3);
-  if(loud > MAX_LIMIT || loud < MIN_LIMIT){
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(loud,240,190); //Display sensor values as percentage  
-  spr.drawString("%",280,190);
-}
-
-void drawStatus(int value) {
-  spr.setTextSize(2);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("STATUS:",60,175);
-  if(value > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
-    spr.drawString("TOO HIGH", 160,175);
-  } else if (value < MIN_LIMIT) {
-    spr.setTextColor(TFT_RED);
-    spr.drawString("TOO LOW", 172,175);
-  } else {
-    spr.setTextColor(TFT_GREEN);
-    spr.drawString("OK",200,175);
+  if(type == VIB) {                             // check if element type is vibration
+    if(value == 0) {                            // if so, check if vib sensor value is positive
+      spr.setTextColor(TFT_RED);                // if so, set text color to red
+      spr.drawString("Yes",242,95);             // print affirmative String reading
+    } else {
+      spr.drawString("No",251,95);              // else, print negative String reading
+    }
+  } else {                                      // if any other element type
+    if(value > max || value < min) {            // compare parsed sensor data to user-defined limits
+      spr.setTextColor(TFT_RED);                // set text color to red if sensor value outside of limits
+    }
+    spr.drawNumber(value, valueX, valueY);      // draw parsed sensor data
+    spr.drawString(unit, unitX, unitY);         // draw sensor data unit as a String
   }
 }
 
-void drawTriangles() {
-  spr.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);
-  spr.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);
+
+// draw dashboard
+void drawDashboardScreen(int temp, int humi, int vib, int moist, int light, int loud) {
+
+  // draw dashboard separator lines
+  spr.drawFastVLine(106,50,190,TFT_DARKGREEN);  // draw 1st vertical line
+  spr.drawFastVLine(212,50,190,TFT_DARKGREEN);  // draw 2nd veritcal line
+  spr.drawFastHLine(0,140,320,TFT_DARKGREEN);   // draw horizontal line
+
+  // draw sensor panel elements
+  drawDashboardElem(TEMP, "Temp", 30, 65, MAX_LIMIT, MIN_LIMIT, temp, 25, 95, "C", 65, 95);
+  drawDashboardElem(HUMI, "Humi", 140, 65, MAX_LIMIT, MIN_LIMIT, humi, 115, 95, "%RH", 155, 95);
+  drawDashboardElem(VIB, "Vib", 250, 65, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
+  drawDashboardElem(MOIST, "Moist", 25, 160, MAX_LIMIT, MIN_LIMIT, moist, 30, 190, "%", 70, 190);
+  drawDashboardElem(LIGHT, "Light", 134, 160, MAX_LIMIT, MIN_LIMIT, light, 135, 190, "%", 175, 190);
+  drawDashboardElem(LOUD, "Loud", 245, 160, MAX_LIMIT, MIN_LIMIT, loud, 240, 190, "%", 280, 190);
 }
 
-void tempScreen(int temp) {
-
-  //Draw temperature reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Temperature",60,75);
-  if(temp < MIN_LIMIT || temp > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
+void drawStatus(int value) {                    // draw status data (common for all individual sensor screens)
+  spr.setTextSize(2);                           // set text size
+  spr.setTextColor(TFT_WHITE);                  // set text color to white
+  spr.drawString("STATUS:",60,175);             // draw "STATUS" String
+  if(value > MAX_LIMIT) {                       // check if sensor value exceeds max limit
+    spr.setTextColor(TFT_RED);                  // if so, set text color to red
+    spr.drawString("TOO HIGH", 160,175);        // draw String "TOO HIGH" 
+  } else if (value < MIN_LIMIT) {               // check if sensor value below min limit
+    spr.setTextColor(TFT_RED);                  // if so, set text color to red
+    spr.drawString("TOO LOW", 172,175);         // draw String "TOO LOW" 
+  } else {                                      // if sensor value within desirable range
+    spr.setTextColor(TFT_GREEN);                // set text color to green
+    spr.drawString("OK",200,175);               // draw String "OK"
   }
-  spr.drawNumber(temp,132,115); 
-  spr.drawString("C",172,115);
-  
-  drawStatus(temp);
-
-  drawTriangles();
 }
 
-void humiScreen(int humi) {
 
-  //Draw humidity reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Humidity",87,75);
-  if(humi < MIN_LIMIT || humi > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(humi,105,115); 
-  spr.drawString("% RH",145,115);
-  
-  drawStatus(humi);
-
-  drawTriangles();
+void drawTriangles() {                                        // draw triangle graphics (common in all sensor screens)
+  spr.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);     // draw left triangle 
+  spr.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);  // draw right triangle 
 }
 
-void vibScreen(int vib) {
 
-  //Draw temperature reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Vibration",80,75);
-  if(vib == 0) {
-    spr.setTextColor(TFT_RED);
-    spr.drawString("Vibrating",80,115);
-  } else {
-    spr.setTextColor(TFT_GREEN);
-    spr.drawString("NOT",135,115);
-    spr.setTextColor(TFT_WHITE);
-    spr.drawString("Vibrating",80,155);
+void drawSensorScreen(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY) {
+  spr.setTextSize(3);                           // set text size to 3                    
+  spr.setTextColor(TFT_WHITE);                  // set text color to white
+  spr.drawString(heading, headingX, headingY);  // draw sensor heading
+
+  if(type == VIB) {                             // check if element type is vibration                
+    if(value == 0) {                            // if so, check if vib sensor value is positive
+      spr.setTextColor(TFT_RED);                // if so, set text color to red
+      spr.drawString("Vibrating",80,115);       // print affirmative String reading
+    } else {
+      spr.setTextColor(TFT_GREEN);              // else, set text color to green
+      spr.drawString("NOT",135,115);            // draw String "NOT"
+      spr.setTextColor(TFT_WHITE);              // set text color to white
+      spr.drawString("Vibrating",80,155);       // draw String "VIBRATING"
+    }
+  } else {                                      // if any other element type
+    if(value > max || value < min) {            // compare parsed sensor data to user-defined limits
+      spr.setTextColor(TFT_RED);                // set text color to red if sensor value outside of limits
+    }
+    spr.drawNumber(value,valueX,valueY);        // draw parsed sensor data
+    spr.drawString(unit, unitX, unitY);         // draw sensor data unit as a String
+    drawStatus(value);                          // call function to draw status message
   }
 
-  drawTriangles(); 
-}
+  drawTriangles();                              // call function to draw triangle graphics
+} 
 
-void moistScreen(int moist) {
-
-  //Draw moisture reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Moisture",91,75);
-  if(moist < MIN_LIMIT || moist > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(moist,132,115); 
-  spr.drawString("%",172,115);
-  
-  drawStatus(moist);
-
-  drawTriangles();
-}
-
-void lightScreen(int light) {
-
-  //Draw moisture reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Light",115,75);
-  if(light < MIN_LIMIT || light > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(light,132,115); 
-  spr.drawString("%",172,115);
-  
-  //Draw Status
-  drawStatus(light);
-
-  drawTriangles();
-}
-
-void loudScreen(int loud) {
-
-  //Draw moisture reading
-  spr.setTextSize(3);
-  spr.setTextColor(TFT_WHITE);
-  spr.drawString("Loudness",91,75);
-  if(loud < MIN_LIMIT || loud > MAX_LIMIT) {
-    spr.setTextColor(TFT_RED);
-  }
-  spr.drawNumber(loud,132,115); 
-  spr.drawString("%",172,115);
-  
-  drawStatus(loud);
-
-  drawTriangles();
-}
 
 void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
   
-  //Setting the background color and title header, present in all screens
-  spr.fillSprite(TFT_BLACK); //Fill background with black color
-  spr.fillRect(0,0,320,50,TFT_DARKGREEN); //Rectangle fill with dark green 
-  spr.setTextColor(TFT_WHITE); //Setting text color
-  spr.setTextSize(3); //Setting text size 
-  spr.drawString("Terminarium",60,15); //Drawing a text string 
+  // draw background & header for all screens
+  spr.fillSprite(TFT_BLACK);                    // fill background with black color
+  spr.fillRect(0,0,320,50,TFT_DARKGREEN);       // fill header rectangle with dark green 
+  spr.setTextColor(TFT_WHITE);                  // set text color
+  spr.setTextSize(3);                           // set text size 
+  spr.drawString("Terminarium",60,15);          // draw header String
 
+  // draw screen corresponding to current screen state
   switch(screen) {
-
     case TEMP:
-      tempScreen(temp);
+      drawSensorScreen(TEMP, "Temperature", 60, 75, MAX_LIMIT, MIN_LIMIT, temp, 132, 115, "C", 172, 115);
       break;
     case HUMI:
-      humiScreen(humi);
+      drawSensorScreen(HUMI, "Humidity", 87, 75, MAX_LIMIT, MIN_LIMIT, humi, 105, 115, "% RH", 145, 115);
       break;
     case VIB:
-      vibScreen(vib);
+      drawSensorScreen(VIB, "Vibration", 80, 75, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
       break; 
     case MOIST:
-      moistScreen(moist);
+      drawSensorScreen(MOIST, "Moisture", 91, 75, MAX_LIMIT, MIN_LIMIT, moist, 132, 115, "%", 172, 115);
       break;
     case LIGHT:
-      lightScreen(light);
+      drawSensorScreen(LOUD, "Loudness", 91, 75, MAX_LIMIT, MIN_LIMIT, loud, 132, 115, "%", 172, 115);
       break;
     case LOUD:
-      loudScreen(loud);
+      drawSensorScreen(LIGHT, "Light", 115, 75, MAX_LIMIT, MIN_LIMIT, light, 132, 115, "%", 172, 115);
       break;
     default:
-      dashboardScreen(temp, humi, vib, moist, light, loud);
+      drawDashboardScreen(temp, humi, vib, moist, light, loud);
       break;
   }
 }

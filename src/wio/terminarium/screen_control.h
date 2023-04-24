@@ -1,4 +1,13 @@
-enum Screen {
+/***************************************************************************************************
+ * Terminarium - LCD screen controller
+ * File: {@screen_control.h}
+ * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
+ *          Konstantinos Rokanas, Jonathan Boman
+ *
+ * DIT113 Systems Development, SEM @ CSE.
+ ***************************************************************************************************/
+ 
+enum Screen {               // enums denoting screen state 
   DASHBOARD,
   TEMP,
   HUMI,
@@ -8,10 +17,9 @@ enum Screen {
   LOUD
 };
 
-extern Screen screen;
+extern Screen screen;       // include global screen state variable in current scope 
 
-void goNextScreen() {
-
+void goNextScreen() {       // function to cycle next screen depending on current screen state
   switch(screen) {
     case TEMP:
       screen = HUMI;
@@ -37,7 +45,7 @@ void goNextScreen() {
   }
 }
 
-void goPrevScreen() {
+void goPrevScreen() {       // function to cycle previous screen depending on current screen state
 
   switch(screen) {
     case TEMP:
@@ -64,6 +72,6 @@ void goPrevScreen() {
   }
 }
 
-void goDashScreen() {
+void goDashScreen() {       // function to jump to dashboard from any screen state
   screen = DASHBOARD;
 }

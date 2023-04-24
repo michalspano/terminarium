@@ -17,16 +17,16 @@
 
 // initializations
 DHT dht(DHT_PIN, DHTTYPE);                // initialise temp&humi sensor-struct
-TFT_eSPI tft;                             // initialise TFT LCD
-TFT_eSprite spr = TFT_eSprite(&tft);      // initialise buffer
-Screen screen;                            // initialise screen enum
+TFT_eSPI tft;                             // initialise terimnal LCD
+TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
+Screen screen;                            // initialise variable storing current screen
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
-  pinMode(VIBRATION_PIN, INPUT);          // set up digital sensors
-  dht.begin();                            // initialise temp&humi sensor
-  tft.begin();                            // start TFT LCD
-  tft.setRotation(3);                     // set TFT LCD rotation
+  pinMode(VIBRATION_PIN, INPUT);          // set up vibration sensor (digital)
+  dht.begin();                            // initialise temp&humi sensor (digital)
+  tft.begin();                            // start terminal LCD
+  tft.setRotation(3);                     // set terminal LCD rotation
   spr.createSprite(TFT_HEIGHT,TFT_WIDTH); // create buffer
 
   // set buttons as input
@@ -67,12 +67,12 @@ void loop() {
   Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage
   Serial.printf("Loudness: %d%%\n", loudnessResult);    // loudness in percentage
 
-  SEPARATOR;          // visual separator for serial monitor
+  SEPARATOR;           // visual separator for serial monitor
 
   // ******************************* DRAWING (LCD screen) ******************************** //
 
-  drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult);
-  spr.pushSprite(0,0); //Push to LCD
+  drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult);   // draw screen graphics on LCD
+  spr.pushSprite(0,0); // push sprite to LCD
 
-  delay(LOOP_DELAY);  // arbitrary delay to make up for the sensors' latency delay
+  delay(LOOP_DELAY);   // arbitrary delay to make up for the sensors' latency delay
 }
