@@ -38,7 +38,7 @@ int mapToPercentage(int signal) {
  * Parse the raw vibration signal to a human-readable string.
  * @param vibrationSignal - the raw vibration signal
  * @return String - the parsed vibration signal
-*/
+ */
 String parseVibrationValue(int vibrationSignal) {
     if (vibrationSignal == 0) {
         delay(350); // arbitrary delay to prevent multiple readings
