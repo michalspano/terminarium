@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - LCD screen controller
- * File: {@screen_control.h}
+ * File: {@code screen_control.h}
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -39,7 +39,7 @@ void goNextScreen() {       // function to cycle next screen depending on curren
     case LOUD:
       screen = DASHBOARD;
       break;
-    default:
+    default:                // default == dashboard
       screen = TEMP;
       break;
   }
@@ -66,7 +66,7 @@ void goPrevScreen() {       // function to cycle previous screen depending on cu
     case LOUD:
       screen = LIGHT;
       break;
-    default:
+    default:                // default == dashboard
       screen = LOUD;
       break;
   }

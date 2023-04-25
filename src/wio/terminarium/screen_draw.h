@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - LCD screen drawing functions
- * File: {@code pins.h}
+ * File: {@code screen_draw.h}
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -18,7 +18,7 @@ extern TFT_eSprite spr;                         // include screen buffer sprite 
 extern Screen screen;                           // include global screen state variable in current scope 
 
 
-// draw dashboard element
+// draw dashboard element (sensor panels)
 void drawDashboardElem(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY) {
   spr.setTextSize(2);                           // set text size to 2
   spr.setTextColor(TFT_WHITE);                  // set text color to white
@@ -42,7 +42,7 @@ void drawDashboardElem(Screen type, String heading, int headingX, int headingY, 
 }
 
 
-// draw dashboard
+// draw dashboard (main screen)
 void drawDashboardScreen(int temp, int humi, int vib, int moist, int light, int loud) {
 
   // draw dashboard separator lines
@@ -59,7 +59,9 @@ void drawDashboardScreen(int temp, int humi, int vib, int moist, int light, int 
   drawDashboardElem(LOUD, "Loud", 245, 160, MAX_LIMIT, MIN_LIMIT, loud, 240, 190, "%", 280, 190);
 }
 
-void drawStatus(int value) {                    // draw status data (common for all individual sensor screens)
+
+// draw status data (common for all individual sensor screens)
+void drawStatus(int value) {                    
   spr.setTextSize(2);                           // set text size
   spr.setTextColor(TFT_WHITE);                  // set text color to white
   spr.drawString("STATUS:",60,175);             // draw "STATUS" String
@@ -75,13 +77,15 @@ void drawStatus(int value) {                    // draw status data (common for 
   }
 }
 
-
-void drawTriangles() {                                        // draw triangle graphics (common in all sensor screens)
+/* draw triangle graphics (common in all sensor screens)
+ * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
+void drawTriangles() {                                        
   spr.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);     // draw left triangle 
   spr.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);  // draw right triangle 
 }
 
 
+// draw individual sensor screens, which can be cycled through using button inputs
 void drawSensorScreen(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY) {
   spr.setTextSize(3);                           // set text size to 3                    
   spr.setTextColor(TFT_WHITE);                  // set text color to white
@@ -110,6 +114,7 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
 } 
 
 
+// general function that draws all screens, called directly from main program loop
 void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
   
   // draw background & header for all screens
@@ -134,10 +139,10 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
       drawSensorScreen(MOIST, "Moisture", 91, 75, MAX_LIMIT, MIN_LIMIT, moist, 132, 115, "%", 172, 115);
       break;
     case LIGHT:
-      drawSensorScreen(LOUD, "Loudness", 91, 75, MAX_LIMIT, MIN_LIMIT, loud, 132, 115, "%", 172, 115);
+      drawSensorScreen(LIGHT, "Light", 115, 75, MAX_LIMIT, MIN_LIMIT, light, 132, 115, "%", 172, 115);
       break;
     case LOUD:
-      drawSensorScreen(LIGHT, "Light", 115, 75, MAX_LIMIT, MIN_LIMIT, light, 132, 115, "%", 172, 115);
+      drawSensorScreen(LOUD, "Loudness", 91, 75, MAX_LIMIT, MIN_LIMIT, loud, 132, 115, "%", 172, 115);
       break;
     default:
       drawDashboardScreen(temp, humi, vib, moist, light, loud);
