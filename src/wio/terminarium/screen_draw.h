@@ -77,6 +77,7 @@ void drawStatus(int value) {
   }
 }
 
+
 /* draw triangle graphics (common in all sensor screens)
  * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
 void drawTriangles() {                                        
@@ -91,7 +92,7 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
   spr.setTextColor(TFT_WHITE);                  // set text color to white
   spr.drawString(heading, headingX, headingY);  // draw sensor heading
 
-  if(type == VIB) {                             // check if element type is vibration                
+  if(type == VIB) {                             // check if screen type is vibration                
     if(value == 0) {                            // if so, check if vib sensor value is positive
       spr.setTextColor(TFT_RED);                // if so, set text color to red
       spr.drawString("Vibrating",80,115);       // print affirmative String reading
@@ -101,7 +102,7 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
       spr.setTextColor(TFT_WHITE);              // set text color to white
       spr.drawString("Vibrating",80,155);       // draw String "VIBRATING"
     }
-  } else {                                      // if any other element type
+  } else {                                      // if any other screen type
     if(value > max || value < min) {            // compare parsed sensor data to user-defined limits
       spr.setTextColor(TFT_RED);                // set text color to red if sensor value outside of limits
     }
