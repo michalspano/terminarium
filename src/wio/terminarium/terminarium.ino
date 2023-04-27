@@ -58,7 +58,7 @@ void loop() {
   if(intervalPassed()) {                                  // run code if desired interval (in ms) has elapsed
 
     Serial.printf("Temperature: %.2f°C\n", temp);         // temperature in Celcius
-    Serial.printf("Humidity: %.2f%%RH\n", humi);          // humidity in percentage
+    Serial.printf("Humidity: %.f%% RH\n", humi);          // humidity in percentage
     Serial.printf("Vibration: %s\n", vibResult.c_str());  // vibration as string state
     Serial.printf("Moisture: %d%%\n", moistureResult);    // moisture in percentage
     Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage

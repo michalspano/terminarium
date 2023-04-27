@@ -67,19 +67,17 @@ String parseVibrationValue(int vibrationSignal) {
 /* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
 * Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */
 
-float temperature;
-float humidity;
-float tempHumi[2];
-
 float* readTempHumi() {                                 // read & parse temp&humi readings
-
-    static unsigned long timeStamp = millis();          // store currently elapsed time since program start / last interval (in ms) 
-    if (millis() - timeStamp >= DHT_INTERVAL) {         // data is measured once per defined interval
-        if (dht.measure(&temperature, &humidity)) {     
-            timeStamp = millis();                       // update timestamp of elapsed interval 
-        }
+  static float temperature;
+  static float humidity;
+  static float tempHumi[2];
+  static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
+  if (millis() - timeStamp >= DHT_INTERVAL) {           // data is measured once per defined interval
+    if (dht.measure(&temperature, &humidity)) {     
+      timeStamp = millis();                             // update timestamp of elapsed interval 
     }
-    tempHumi[0] = temperature;
-    tempHumi[1] = humidity;
-    return (tempHumi);                                  // return parsed temp&humi values in an array
+  }
+  tempHumi[0] = temperature;
+  tempHumi[1] = humidity;
+  return (tempHumi);                                    // return parsed temp&humi values in an array
 }
