@@ -17,11 +17,27 @@ extern DHT_Async dht;               // include temp&humi sensor struct
 #define DHT_INTERVAL 500            // interval (ms) 
 #define SEP_CHAR "="                // character used for visual separator
 
+// ************************* FORMAT OUTPUT ******************************* //
+
 // visual separator for serial monitor
 #define SEPARATOR                \
     for (int i = 0; i < 30; i++) \
         Serial.print(SEP_CHAR);  \
     Serial.println()
+
+// convert int to sequence of characters for mqtt publish
+char* toString (int value) {
+  static char strValue[5];
+  sprintf(strValue, "%d", value);
+  return(strValue);
+}
+
+// convert float to sequence of characters for mqtt publish
+char* toString (float value) {
+  static char strValue[6];
+  sprintf(strValue, "%.1f", value);
+  return(strValue);
+}
 
 // ************************ PROGRAM INTERVAL ***************************** //
 
@@ -30,7 +46,6 @@ extern DHT_Async dht;               // include temp&humi sensor struct
 
 
 bool intervalPassed() {                                 // function for checking if interval has passed
-
   static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
   if (millis() - timeStamp >= LOOP_INTERVAL) {          // if currently elapsed time minus last interval timestamp >= desired interval
     timeStamp = millis();                               // update timestamp of elapsed interval
@@ -56,7 +71,7 @@ int mapToPercentage(int signal) {
  * @param vibrationSignal - the raw vibration signal
  * @return String - the parsed vibration signal
  */
-String parseVibrationValue(int vibrationSignal) {
+char* parseVibrationValue(int vibrationSignal) {
     if (vibrationSignal == 0) {
         delay(350);                                     // arbitrary delay to prevent multiple readings
         return "Vibrating";
