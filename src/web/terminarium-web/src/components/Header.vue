@@ -20,11 +20,11 @@
 
 
 <script>
-/* Only used during development to export and view component
+//Only used during development to export and view component
 export default {
   name: "Header.vue"
 }
- */
+ 
 </script>
 
 <style scoped>                 /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
