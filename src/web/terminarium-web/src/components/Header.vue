@@ -2,14 +2,17 @@
 <template>
   <header class="terrminarium_header">
     <div class="logotype">
-      <img src="logohere" alt="Terrminarium logo">
+      // TODO: implement logo
+      <img src="" alt="Terrminarium logo">
     </div>
     <nav class="header_nav_bar">
+      // TODO: Set links
       <a href="#" class="header_link">About</a>
       <a href="#" class="header_link">Help</a>
       <a href="#" class="header_link">Contact</a>
     </nav>
     <div class="header_button">
+      // TODO: Implement button
       <button class="placeholder_button">Sign in / sign out</button>
     </div>
   </header>
@@ -17,23 +20,23 @@
 
 
 <script>
+/* Only used during development to export and view component
 export default {
   name: "Header.vue"
 }
+ */
 </script>
 
-
-<style scoped>
-
+<style scoped>                 /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
 
 * {
-  outline: red dashed 1px;    /*SUPER GOOD TIP!!! This outlines all your elements which makes it way easier to see effects and catch bugs.
-                               Will be removed when doing final styling*/
+  outline: red dashed 1px;    /* SUPER GOOD TIP!!! This outlines all your elements which makes it way easier to see effects and catch bugs.
+                               Will be removed when doing final styling */
 }
 .terrminarium_header {
   background-color: #5A5A5A;
   color: #fff;
-  display: flex;              /*Adapting to screen size */
+  display: flex;              /* Adapting to screen size */
   align-items: center;
   height: 100px;
   position: fixed;
@@ -50,9 +53,9 @@ export default {
 
 
 .header_nav_bar {
-  display: flex;              /*Adapting to screen size */
-  flex: 1;                    /*Resizes when growing and shrinking */
-  justify-content: center;    /*Centers the flex items horizontally within the container. (The links are always centered )  */
+  display: flex;              /* Adapting to screen size */
+  flex: 1;                    /* Resizes when growing and shrinking */
+  justify-content: center;    /* Centers the flex items horizontally within the container. (The links are always centered )  */
 }
 
 
@@ -67,7 +70,7 @@ export default {
 }
 
 
-.placeholder_button {       /* This will be replaced */
+.placeholder_button {        /* This will be replaced */
   margin: 10px;
   background-color: #000;
   border: none;
