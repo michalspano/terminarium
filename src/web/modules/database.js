@@ -46,3 +46,8 @@ onValue(ref(database, ".info/connected"), (snapshot) => {
         console.log("Database connection lost.");
     }
 });
+
+// export the firebase object for use in other modules
+module.exports = {
+    app
+  };
