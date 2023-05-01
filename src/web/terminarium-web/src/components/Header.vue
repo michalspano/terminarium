@@ -12,7 +12,7 @@
       <a href="#" class="header_link">Contact</a>
     </nav>
     <div class="header_button">
-      // TODO: Implement button
+      // TODO: Implement button sign in / sign out button component
       <button class="placeholder_button">Sign in / sign out</button>
     </div>
   </header>
