@@ -30,11 +30,11 @@ const char* TOPIC_SUB = "/terminarium/app/conf";
 * Note: the format of the message shall be two integers < 100 & > 0 separated by a ',' and no spaces - '##,##'
 * Max value followed by min value
 * Single digit numbers must start with 0 - e.g 05, 06 */
-extern const char* TOPIC_SUB_TEMP = "/terminarium/app/conf/temperature";
-extern const char* TOPIC_SUB_HUMI = "/terminarium/app/conf/humidity";
-extern const char* TOPIC_SUB_MOIST = "/terminarium/app/conf/moisture";
-extern const char* TOPIC_SUB_LIGHT = "/terminarium/app/conf/light";
-extern const char* TOPIC_SUB_LOUD = "/terminarium/app/conf/loudness";
+const char* TOPIC_SUB_TEMP = "/terminarium/app/conf/temperature";
+const char* TOPIC_SUB_HUMI = "/terminarium/app/conf/humidity";
+const char* TOPIC_SUB_MOIST = "/terminarium/app/conf/moisture";
+const char* TOPIC_SUB_LIGHT = "/terminarium/app/conf/light";
+const char* TOPIC_SUB_LOUD = "/terminarium/app/conf/loudness";
 
 // topic for sending sensor data
 const char* TOPIC_PUB_TEMP = "/terminarium/sensor/temperature";   
