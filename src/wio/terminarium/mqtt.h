@@ -10,7 +10,7 @@
 #include "rpcWiFi.h"                                  // import wifi library
 #include "PubSubClient.h"                             // import mqtt library
 //#include "credentials.h" 
-//#include "screen_draw.h"                              // import screen drawing functions                      
+                   
 
 WiFiClient wioClient;                                 // initialise wifi client
 PubSubClient client(wioClient);                       // initialise mqtt client

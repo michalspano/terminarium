@@ -17,6 +17,14 @@ extern DHT_Async dht;               // include temp&humi sensor struct
 #define DHT_INTERVAL 500            // interval (ms) 
 #define SEP_CHAR "="                // character used for visual separator
 
+extern int userDefinedRanges[5][2] = {
+  {75,25},   //Temperature max & min
+  {75,25},   //Humidity max & min
+  {75,25},   //Moisture
+  {75,25},   //Light
+  {75,25},   //Loudness
+  };
+
 // ************************* FORMAT OUTPUT ******************************* //
 
 // visual separator for serial monitor
@@ -78,6 +86,55 @@ char* parseVibrationValue(int vibrationSignal) {
     }
     return "Not Vibrating";
 }
+
+// ************************ UPDATING SENSOR RANGES *************************** //
+bool updateSensorRanges(char* topic, char payload[], unsigned int length){
+
+  int newSensorRanges[1];
+
+  if (length != 5){return false;}               //checking that received message is correct length
+  if (strncmp(&payload[2], ",", 1) != 0){return false;}         //checking that ',' is in the proper space
+
+  for (int i = 0; i < length; i++){             //checks that message is in following format: "##,##"
+    if(!isDigit(payload[i]) && i < 2 && i > 2 ){return false;}
+  }
+
+  //parses received payload 
+  char* token = strtok(payload, ",");
+
+  while (token != NULL){
+    newSensorRanges[0] = atoi(token);
+    token = strtok(NULL, ",");
+    newSensorRanges[1] = atoi(token);
+    token = strtok(NULL, ",");
+  }
+
+  //updates the corresponding sensor range depending on topic
+  if(strcmp(topic, "/terminarium/app/conf/temperature") == 0 ){
+    userDefinedRanges[0][0] = newSensorRanges[0];
+    userDefinedRanges[0][1] = newSensorRanges[1];
+    return true;
+  }else if(strcmp(topic, "/terminarium/app/conf/humidity") == 0 ){
+    userDefinedRanges[1][0] = newSensorRanges[0];
+    userDefinedRanges[1][1] = newSensorRanges[1];
+    return true;
+  }else if(strcmp(topic, "/terminarium/app/conf/moisture") == 0 ){
+    userDefinedRanges[2][0] = newSensorRanges[0];
+    userDefinedRanges[2][1] = newSensorRanges[1];
+    return true;
+  }else if(strcmp(topic, "/terminarium/app/conf/light") == 0 ){
+    userDefinedRanges[3][0] = newSensorRanges[0];
+    userDefinedRanges[3][1] = newSensorRanges[1];
+    return true;
+  }else if(strcmp(topic, "/terminarium/app/conf/loudness") == 0 ){
+    userDefinedRanges[4][0] = newSensorRanges[0];
+    userDefinedRanges[4][1] = newSensorRanges[1];
+    return true;
+  }else{
+    Serial.println("unrecognized Topic");
+    return false;
+  }
+}  
 
 /* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
 * Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */

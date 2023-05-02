@@ -11,10 +11,6 @@
 * Link: https://github.com/lakshanthad/Wio_Terminal_Classroom_Arduino/tree/main/Classroom%2012/Smart_Garden */
 
 
-/* user defined sensor ranges - values in the following order: max, min. Sensor order: Temp[0-1], Humi[2-3], Moisture[4-5], Light[6-7], Loudness[8-9] 
-*/
-extern int userDefinedRanges[] = {75,25,75,25,75,25,75,25,75,25};
-
 extern TFT_eSPI tft;                            // include wio terminal LCD screen variable in current scope 
 extern Screen screen;                           // include global screen state variable in current scope
 
@@ -67,12 +63,12 @@ void drawDashboardScreen(int temp, int humi, int vib, int moist, int light, int 
   tft.drawFastHLine(0,140,320,TFT_DARKGREEN);   // draw horizontal line
 
   // draw sensor panel elements
-  drawDashboardElem(TEMP, "Temp", 30, 65, userDefinedRanges[0], userDefinedRanges[1], temp, 25, 95, "C", 65, 95);
-  drawDashboardElem(HUMI, "Humi", 140, 65, userDefinedRanges[2], userDefinedRanges[3], humi, 115, 95, "%RH", 155, 95);
+  drawDashboardElem(TEMP, "Temp", 30, 65, userDefinedRanges[0][0], userDefinedRanges[0][1], temp, 25, 95, "C", 65, 95);
+  drawDashboardElem(HUMI, "Humi", 140, 65, userDefinedRanges[1][0], userDefinedRanges[1][1], humi, 115, 95, "%RH", 155, 95);
   drawDashboardElem(VIB, "Vib", 250, 65, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
-  drawDashboardElem(MOIST, "Moist", 25, 160, userDefinedRanges[4], userDefinedRanges[5], moist, 30, 190, "%", 70, 190);
-  drawDashboardElem(LIGHT, "Light", 134, 160, userDefinedRanges[6], userDefinedRanges[7], light, 135, 190, "%", 175, 190);
-  drawDashboardElem(LOUD, "Loud", 245, 160, userDefinedRanges[8], userDefinedRanges[9], loud, 240, 190, "%", 280, 190);
+  drawDashboardElem(MOIST, "Moist", 25, 160, userDefinedRanges[2][0], userDefinedRanges[5][1], moist, 30, 190, "%", 70, 190);
+  drawDashboardElem(LIGHT, "Light", 134, 160, userDefinedRanges[3][0], userDefinedRanges[3][1], light, 135, 190, "%", 175, 190);
+  drawDashboardElem(LOUD, "Loud", 245, 160, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 240, 190, "%", 280, 190);
 }
 
 
@@ -135,55 +131,6 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
   drawTriangles();                              // call function to draw triangle graphics
 } 
 
-// ************************ UPDATING SENSOR RANGES *************************** //
-bool updateSensorRanges(char* topic, char payload[], unsigned int length){
-
-  int newSensorRanges[1];
-
-  if (length != 5){return false;}               //checking that received message is correct length
-  if (strncmp(&payload[2], ",", 1) != 0){return false;}         //checking that ',' is in the proper space
-
-  for (int i = 0; i < length; i++){             //checks that message is in following format: "##,##"
-    if(!isDigit(payload[i]) && i < 2 && i > 2 ){return false;}
-  }
-
-  //parses received payload 
-  char* token = strtok(payload, ",");
-
-  while (token != NULL){
-    newSensorRanges[0] = atoi(token);
-    token = strtok(NULL, ",");
-    newSensorRanges[1] = atoi(token);
-    token = strtok(NULL, ",");
-  }
-
-  //updates the corresponding sensor range depending on topic
-  if(strcmp(topic, "/terminarium/app/conf/temperature") == 0 ){
-    userDefinedRanges[0] = newSensorRanges[0];
-    userDefinedRanges[1] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/humidity") == 0 ){
-    userDefinedRanges[2] = newSensorRanges[0];
-    userDefinedRanges[3] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/moisture") == 0 ){
-    userDefinedRanges[4] = newSensorRanges[0];
-    userDefinedRanges[5] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/light") == 0 ){
-    userDefinedRanges[6] = newSensorRanges[0];
-    userDefinedRanges[7] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/loudness") == 0 ){
-    userDefinedRanges[8] = newSensorRanges[0];
-    userDefinedRanges[9] = newSensorRanges[1];
-    return true;
-  }else{
-    Serial.println("unrecognized Topic");
-    return false;
-  }
-}  
-
 // **************************** GENERAL ****************************** //
 
 // general function that draws all screens, called directly from main program loop
@@ -192,22 +139,22 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
   // draw screen corresponding to current screen state
   switch(screen) {
     case TEMP:
-      drawSensorScreen(TEMP, "Temperature", 60, 75, userDefinedRanges[0], userDefinedRanges[1], temp, 132, 115, "C", 172, 115);
+      drawSensorScreen(TEMP, "Temperature", 60, 75, userDefinedRanges[0][0], userDefinedRanges[0][1], temp, 132, 115, "C", 172, 115);
       break;
     case HUMI:
-      drawSensorScreen(HUMI, "Humidity", 87, 75, userDefinedRanges[2], userDefinedRanges[3], humi, 105, 115, "% RH", 145, 115);
+      drawSensorScreen(HUMI, "Humidity", 87, 75, userDefinedRanges[1][0], userDefinedRanges[1][1], humi, 105, 115, "% RH", 145, 115);
       break;
     case VIB:
       drawSensorScreen(VIB, "Vibration", 80, 75, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
       break; 
     case MOIST:
-      drawSensorScreen(MOIST, "Moisture", 91, 75, userDefinedRanges[4], userDefinedRanges[5], moist, 132, 115, "%", 172, 115);
+      drawSensorScreen(MOIST, "Moisture", 91, 75, userDefinedRanges[2][0], userDefinedRanges[2][1], moist, 132, 115, "%", 172, 115);
       break;
     case LIGHT:
-      drawSensorScreen(LIGHT, "Light", 115, 75, userDefinedRanges[6], userDefinedRanges[7], light, 132, 115, "%", 172, 115);
+      drawSensorScreen(LIGHT, "Light", 115, 75, userDefinedRanges[3][0], userDefinedRanges[3][1], light, 132, 115, "%", 172, 115);
       break;
     case LOUD:
-      drawSensorScreen(LOUD, "Loudness", 91, 75, userDefinedRanges[8], userDefinedRanges[9], loud, 132, 115, "%", 172, 115);
+      drawSensorScreen(LOUD, "Loudness", 91, 75, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 132, 115, "%", 172, 115);
       break;
     default:
       drawDashboardScreen(temp, humi, vib, moist, light, loud);
