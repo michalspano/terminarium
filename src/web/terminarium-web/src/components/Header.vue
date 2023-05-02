@@ -1,18 +1,18 @@
-// Page header containing slot for logotype, navigation bar and a button
+<!-- Page header containing slot for logotype, navigation bar and a button -->
 <template>
   <header class="terrminarium_header">
     <div class="logotype">
-      // TODO: implement logo
+      <!-- TODO: implement logo -->
       <img src="" alt="Terrminarium logo">
     </div>
     <nav class="header_nav_bar">
-      // TODO: Set links
+      <!-- TODO: Set links -->
       <a href="#" class="header_link">About</a>
       <a href="#" class="header_link">Help</a>
       <a href="#" class="header_link">Contact</a>
     </nav>
     <div class="header_button">
-      // TODO: Implement button sign in / sign out button component
+      <!-- TODO: Implement button sign in / sign out button component -->
       <button class="placeholder_button">Sign in / sign out</button>
     </div>
   </header>
@@ -20,11 +20,10 @@
 
 
 <script>
-//Only used during development to export and view component
-export default {
-  name: "Header.vue"
-}
- 
+  //Only used during development to export and view component
+  export default {
+    name: "Header.vue"
+  }
 </script>
 
 <style scoped>                 /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
