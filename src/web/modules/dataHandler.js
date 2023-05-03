@@ -1,5 +1,12 @@
 import { write } from './database.js'
 
+/** @sensorValues
+ * Sensor data is stored in a map with 6 entries corresponding to 6 sensor types.
+ * For each entry, the key is the mqtt topic and the value is an object containing the
+ * sensor data and a timestamp of when the data is received.
+ * Having the unique sensor topics as keys allows both retrieval of specific sensor 
+ * data and overwriting it when new incoming data is received. */
+
 let sensorValues = new Map();                                        // declare map to contain sensor data
 
 export function saveData(topic, message) {                           // function handling incoming messages (parameters are mqtt topic and contents of message)
