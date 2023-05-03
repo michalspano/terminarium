@@ -1,20 +1,18 @@
-import mqtt from 'mqtt';
-import { handleData } from "dataHandler";
+import mqtt from 'mqtt';                                      // import mqtt client library (install by using npm install mqtt --save)
+import { saveData } from './dataHandler.js'                   // import function that sensor data is passed to
 
-// define the MQTT client and connect to the broker
-const options = {
-    host: '192.168.1.148', // replace with the IP address of your MQTT broker
-    port: 1883             // replace with the port number of your MQTT broker
-  };
 
-// connect to the  broker
-const client = mqtt.connect(options);
+const options = {                                             // define the MQTT client and connect to the broker
+  host: '***.***.**.**',                                    // replace with the IP address of your MQTT broker
+  port: 1883                                                // replace with the port number of your MQTT broker
+};
 
-// subscribe to sensor topics and call function to handle incoming data
-function connect() {
-    client.on('connect', function () {
-      console.log('Connected to MQTT broker!');
-      client.subscribe('/terminarium/sensor/temperature');
+const client = mqtt.connect(options);                         // connect to the mqtt broker
+
+export function connect() {                                   // subscribe to sensor topics and call function to handle incoming data
+    client.on('connect', function () {                        // runs once connected to MQTT broker
+      console.log('Connected to MQTT broker!');               // print connection message to console
+      client.subscribe('/terminarium/sensor/temperature');    // subscribe to all sensor topics
       client.subscribe('/terminarium/sensor/humidity');
       client.subscribe('/terminarium/sensor/vibration');
       client.subscribe('/terminarium/sensor/moisture');
@@ -22,13 +20,10 @@ function connect() {
       client.subscribe('/terminarium/sensor/loudness');
     });
   
-    client.on('message', function (topic, message) {
-      console.log('Received message:', message.toString());
-      handleData(message.toString());
+    client.on('message', function (topic, message) {          // runs once a message is received 
+      console.log('Received message:', message.toString());   // print message received to console
+      saveData(topic, message.toString());                    // pass topic and sensor data as String to be saved
     }); 
-  }
 
-// export the connect function for use in other modules
-module.exports = {
-    connect
-  };
+      
+  }

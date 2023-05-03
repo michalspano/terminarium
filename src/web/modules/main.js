@@ -1,8 +1,9 @@
-import { app } from "database";
-import { connect } from "mqtt";
+import { writeToDB } from "./dataHandler.js";
+import { connect } from './mqtt.js';
 
-// use the imported modules to set up application
-connect();           // call function to start listening for incoming MQTT messages
 
-app.initializeApp(); // firebase is already initialized object? Do i have to do this?
+connect();                      // call function to start listening for incoming MQTT messages and save incoming data
+
+setInterval(writeToDB, 60000);  // write saved data to database every minute
+                              
 
