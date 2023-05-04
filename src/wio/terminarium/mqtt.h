@@ -19,9 +19,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 * Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "######";            // wifi network name
-const char* PASSWORD   = "######";                // wifi network password
-const char* SERVER     = "######";              // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "######";                    // wifi network name
+const char* PASSWORD   = "######";                    // wifi network password
+const char* SERVER     = "######";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/conf";
@@ -129,7 +129,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   //update array values
  if(updateSensorRanges(topic, buff_p, length)){
    Serial.println(" Succesfully updated sensor ranges");
- }else {
+   Serial.println(userDefinedRanges[0][0]);
+ } else {
       Serial.println("Sensor ranges not updated succesfully");
  }
 

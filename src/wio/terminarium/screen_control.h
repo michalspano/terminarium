@@ -6,7 +6,7 @@
  *
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
- 
+
 enum Screen {               // enums denoting screen state 
   DASHBOARD,
   TEMP,
@@ -18,6 +18,7 @@ enum Screen {               // enums denoting screen state
 };
 
 extern Screen screen;       // include global screen state variable in current scope 
+extern TFT_eSPI tft;        // include wio terminal LCD screen variable in current scope 
 
 void goNextScreen() {       // function to cycle next screen depending on current screen state
   switch(screen) {

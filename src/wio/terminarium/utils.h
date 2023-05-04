@@ -17,8 +17,8 @@ extern DHT_Async dht;               // include temp&humi sensor struct
 #define DHT_INTERVAL 500            // interval (ms) 
 #define SEP_CHAR "="                // character used for visual separator
 
-extern int userDefinedRanges[5][2] = {
-  {75,25},   //Temperature max & min
+int userDefinedRanges[5][2] = {
+  {15,10},   //Temperature max & min
   {75,25},   //Humidity max & min
   {75,25},   //Moisture
   {75,25},   //Light
@@ -62,7 +62,7 @@ bool intervalPassed() {                                 // function for checking
   return false;
 }
 
-// ***************************** SUBROUTINES ***************************** //
+// ***************************SENSOR SUBROUTINES ***************************** //
 
 /**
  * Signal coming from sensor does not correspond to any real-world measure,
@@ -87,15 +87,34 @@ char* parseVibrationValue(int vibrationSignal) {
     return "Not Vibrating";
 }
 
+/* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
+* Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */
+
+float* readTempHumi() {                                 // read & parse temp&humi readings
+  static float temperature;
+  static float humidity;
+  static float tempHumi[2];
+  static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
+  if (millis() - timeStamp >= DHT_INTERVAL) {           // data is measured once per defined interval
+    if (dht.measure(&temperature, &humidity)) {     
+      timeStamp = millis();                             // update timestamp of elapsed interval 
+    }
+  }
+  tempHumi[0] = temperature;
+  tempHumi[1] = humidity;
+  return (tempHumi);                                    // return parsed temp&humi values in an array
+}
+
 // ************************ UPDATING SENSOR RANGES *************************** //
+
 bool updateSensorRanges(char* topic, char payload[], unsigned int length){
 
   int newSensorRanges[1];
 
-  if (length != 5){return false;}               //checking that received message is correct length
-  if (strncmp(&payload[2], ",", 1) != 0){return false;}         //checking that ',' is in the proper space
+  if (length != 5){return false;}                       //checking that received message is correct length
+  if (strncmp(&payload[2], ",", 1) != 0){return false;} //checking that ',' is in the proper space
 
-  for (int i = 0; i < length; i++){             //checks that message is in following format: "##,##"
+  for (int i = 0; i < length; i++){                     //checks that message is in following format: "##,##"
     if(!isDigit(payload[i]) && i < 2 && i > 2 ){return false;}
   }
 
@@ -131,25 +150,7 @@ bool updateSensorRanges(char* topic, char payload[], unsigned int length){
     userDefinedRanges[4][1] = newSensorRanges[1];
     return true;
   }else{
-    Serial.println("unrecognized Topic");
+    Serial.println("Unrecognized topic");
     return false;
   }
 }  
-
-/* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
-* Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */
-
-float* readTempHumi() {                                 // read & parse temp&humi readings
-  static float temperature;
-  static float humidity;
-  static float tempHumi[2];
-  static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
-  if (millis() - timeStamp >= DHT_INTERVAL) {           // data is measured once per defined interval
-    if (dht.measure(&temperature, &humidity)) {     
-      timeStamp = millis();                             // update timestamp of elapsed interval 
-    }
-  }
-  tempHumi[0] = temperature;
-  tempHumi[1] = humidity;
-  return (tempHumi);                                    // return parsed temp&humi values in an array
-}

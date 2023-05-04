@@ -21,6 +21,7 @@ DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
 TFT_eSPI tft;                             // initialise wio terminal LCD
 TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
 Screen screen;                            // initialise variable storing current screen
+Screen oldScreen;                         // initialise variable storing old screen (used for recognising if screen has changed)
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
@@ -44,8 +45,8 @@ void setup() {
 
 void loop() {
 
-  // ******************************* CONNECT MQTT***************************************** //
-
+  // ******************************* CONNECT MQTT **************************************** //
+  
   if(WiFi.status() != WL_CONNECTED) {     // check if connected to wifi network
     reconnectWifi();                      // if not, attempt reconnect
   }
@@ -54,7 +55,7 @@ void loop() {
     reconnectClient();                    // if not, attempt reconnect
     }
 
-  client.loop();                          // stay connected and listening to mqtt broker
+  client.loop();                          // stay connected and listening to mqtt broker 
 
   // ********************************* READING ******************************************* //
 
@@ -66,19 +67,20 @@ void loop() {
 
   // ********************************* PARSING ******************************************* //
 
-  float temp            = tempHumiVal[0];
-  int humi              = tempHumiVal[1];
-  char* vibResult       = parseVibrationValue(vibSignal);
-  int moistureResult    = mapToPercentage(moistureSignal);
-  int lightResult       = mapToPercentage(lightSignal);
-  int loudnessResult    = mapToPercentage(loudnessSignal);
+  float temp            = tempHumiVal[0];                  // extract temperature value from tempHumi array 
+  int humi              = tempHumiVal[1];                  // extract humidity value from tempHumi array
+  char* vibResult       = parseVibrationValue(vibSignal);  // parse vibration value from int to char*
+  int moistureResult    = mapToPercentage(moistureSignal); // convert moisture value to a % 
+  int lightResult       = mapToPercentage(lightSignal);    // convert light value to a % 
+  int loudnessResult    = mapToPercentage(loudnessSignal); // convert loudness value to a % 
 
   // *************************** PRINTING (serial monitor) ******************************* //
 
   if(intervalPassed()) {                                  // run code if desired interval (in ms) has elapsed
 
+    // print sensor data to serial monitor
     Serial.printf("Temperature: %.1f°C\n", temp);         // temperature in Celcius
-    Serial.printf("Humidity: %d%% RH\n", humi);          // humidity in percentage
+    Serial.printf("Humidity: %d%% RH\n", humi);           // humidity in percentage
     Serial.printf("Vibration: %s\n", vibResult);          // vibration as string state
     Serial.printf("Moisture: %d%%\n", moistureResult);    // moisture in percentage
     Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage
@@ -89,7 +91,9 @@ void loop() {
   // ***************************** DRAWING (LCD screen) ********************************** //
 
     // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult);   
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult); 
+    
+    oldScreen = screen;                                   // update oldScreen value 
 
   // ********************************** PUBLISHING *************************************** //
 
