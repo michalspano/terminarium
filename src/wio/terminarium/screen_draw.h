@@ -10,13 +10,9 @@
 /* Note: the code for the dashboard and header has been adapted from Seeed Studio's Smart Garden project from the Wio Terminal Classroom video series:
 * Link: https://github.com/lakshanthad/Wio_Terminal_Classroom_Arduino/tree/main/Classroom%2012/Smart_Garden */
 
-// define acceptable sensor value boundaries
-#define MAX_LIMIT 75
-#define MIN_LIMIT 25
 
 extern TFT_eSPI tft;                            // include wio terminal LCD screen variable in current scope 
-extern Screen screen;                           // include global screen state variable in current scope 
-
+extern Screen screen;                           // include global screen state variable in current scope
 
 // ************************** HEADER ********************************* //
 
@@ -67,26 +63,26 @@ void drawDashboardScreen(int temp, int humi, int vib, int moist, int light, int 
   tft.drawFastHLine(0,140,320,TFT_DARKGREEN);   // draw horizontal line
 
   // draw sensor panel elements
-  drawDashboardElem(TEMP, "Temp", 30, 65, MAX_LIMIT, MIN_LIMIT, temp, 25, 95, "C", 65, 95);
-  drawDashboardElem(HUMI, "Humi", 140, 65, MAX_LIMIT, MIN_LIMIT, humi, 115, 95, "%RH", 155, 95);
+  drawDashboardElem(TEMP, "Temp", 30, 65, userDefinedRanges[0][0], userDefinedRanges[0][1], temp, 25, 95, "C", 65, 95);
+  drawDashboardElem(HUMI, "Humi", 140, 65, userDefinedRanges[1][0], userDefinedRanges[1][1], humi, 115, 95, "%RH", 155, 95);
   drawDashboardElem(VIB, "Vib", 250, 65, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
-  drawDashboardElem(MOIST, "Moist", 25, 160, MAX_LIMIT, MIN_LIMIT, moist, 30, 190, "%", 70, 190);
-  drawDashboardElem(LIGHT, "Light", 134, 160, MAX_LIMIT, MIN_LIMIT, light, 135, 190, "%", 175, 190);
-  drawDashboardElem(LOUD, "Loud", 245, 160, MAX_LIMIT, MIN_LIMIT, loud, 240, 190, "%", 280, 190);
+  drawDashboardElem(MOIST, "Moist", 25, 160, userDefinedRanges[2][0], userDefinedRanges[5][1], moist, 30, 190, "%", 70, 190);
+  drawDashboardElem(LIGHT, "Light", 134, 160, userDefinedRanges[3][0], userDefinedRanges[3][1], light, 135, 190, "%", 175, 190);
+  drawDashboardElem(LOUD, "Loud", 245, 160, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 240, 190, "%", 280, 190);
 }
 
 
 // ************************ SENSOR SCREENS *************************** //
 
 // draw status data (common for all individual sensor screens)
-void drawStatus(int value) {                    
+void drawStatus(int value, int max, int min) {                    
   tft.setTextSize(2);                           // set text size
   tft.setTextColor(TFT_WHITE);                  // set text color to white
   tft.drawString("STATUS:",60,175);             // draw "STATUS" String
-  if(value > MAX_LIMIT) {                       // check if sensor value exceeds max limit
+  if(value > max) {                       // check if sensor value exceeds max limit
     tft.setTextColor(TFT_RED);                  // if so, set text color to red
     tft.drawString("TOO HIGH", 160,175);        // draw String "TOO HIGH" 
-  } else if (value < MIN_LIMIT) {               // check if sensor value below min limit
+  } else if (value < min) {               // check if sensor value below min limit
     tft.setTextColor(TFT_RED);                  // if so, set text color to red
     tft.drawString("TOO LOW", 172,175);         // draw String "TOO LOW" 
   } else {                                      // if sensor value within desirable range
@@ -129,12 +125,11 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
     }
     tft.drawNumber(value,valueX,valueY);        // draw parsed sensor data
     tft.drawString(unit, unitX, unitY);         // draw sensor data unit as a String
-    drawStatus(value);                          // call function to draw status message
+    drawStatus(value, max, min);                          // call function to draw status message
   }
 
   drawTriangles();                              // call function to draw triangle graphics
 } 
-
 
 // **************************** GENERAL ****************************** //
 
@@ -144,22 +139,22 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
   // draw screen corresponding to current screen state
   switch(screen) {
     case TEMP:
-      drawSensorScreen(TEMP, "Temperature", 60, 75, MAX_LIMIT, MIN_LIMIT, temp, 132, 115, "C", 172, 115);
+      drawSensorScreen(TEMP, "Temperature", 60, 75, userDefinedRanges[0][0], userDefinedRanges[0][1], temp, 132, 115, "C", 172, 115);
       break;
     case HUMI:
-      drawSensorScreen(HUMI, "Humidity", 87, 75, MAX_LIMIT, MIN_LIMIT, humi, 105, 115, "% RH", 145, 115);
+      drawSensorScreen(HUMI, "Humidity", 87, 75, userDefinedRanges[1][0], userDefinedRanges[1][1], humi, 105, 115, "% RH", 145, 115);
       break;
     case VIB:
       drawSensorScreen(VIB, "Vibration", 80, 75, NULL, NULL, vib, NULL, NULL, "", NULL, NULL);
       break; 
     case MOIST:
-      drawSensorScreen(MOIST, "Moisture", 91, 75, MAX_LIMIT, MIN_LIMIT, moist, 132, 115, "%", 172, 115);
+      drawSensorScreen(MOIST, "Moisture", 91, 75, userDefinedRanges[2][0], userDefinedRanges[2][1], moist, 132, 115, "%", 172, 115);
       break;
     case LIGHT:
-      drawSensorScreen(LIGHT, "Light", 115, 75, MAX_LIMIT, MIN_LIMIT, light, 132, 115, "%", 172, 115);
+      drawSensorScreen(LIGHT, "Light", 115, 75, userDefinedRanges[3][0], userDefinedRanges[3][1], light, 132, 115, "%", 172, 115);
       break;
     case LOUD:
-      drawSensorScreen(LOUD, "Loudness", 91, 75, MAX_LIMIT, MIN_LIMIT, loud, 132, 115, "%", 172, 115);
+      drawSensorScreen(LOUD, "Loudness", 91, 75, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 132, 115, "%", 172, 115);
       break;
     default:
       drawDashboardScreen(temp, humi, vib, moist, light, loud);

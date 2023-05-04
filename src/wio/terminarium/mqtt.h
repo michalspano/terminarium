@@ -9,7 +9,8 @@
 
 #include "rpcWiFi.h"                                  // import wifi library
 #include "PubSubClient.h"                             // import mqtt library
-//#include "credentials.h"                       
+//#include "credentials.h" 
+                   
 
 WiFiClient wioClient;                                 // initialise wifi client
 PubSubClient client(wioClient);                       // initialise mqtt client
@@ -18,12 +19,22 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 * Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "INSERT NETWORK NAME";            // wifi network name
-const char* PASSWORD   = "INSERT PASSWORD";                // wifi network password
-const char* SERVER     = "INSERT IP ADDRESS";              // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "######";            // wifi network name
+const char* PASSWORD   = "######";                // wifi network password
+const char* SERVER     = "######";              // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
-const char* TOPIC_SUB = "/terminarium/app/conf";        
+const char* TOPIC_SUB = "/terminarium/app/conf";
+
+/*These topics are to be used for receiving user defined sensor ranges 
+* Note: the format of the message shall be two integers < 100 & > 0 separated by a ',' and no spaces - '##,##'
+* Max value followed by min value
+* Single digit numbers must start with 0 - e.g 05, 06 */
+const char* TOPIC_SUB_TEMP = "/terminarium/app/conf/temperature";
+const char* TOPIC_SUB_HUMI = "/terminarium/app/conf/humidity";
+const char* TOPIC_SUB_MOIST = "/terminarium/app/conf/moisture";
+const char* TOPIC_SUB_LIGHT = "/terminarium/app/conf/light";
+const char* TOPIC_SUB_LOUD = "/terminarium/app/conf/loudness";
 
 // topic for sending sensor data
 const char* TOPIC_PUB_TEMP = "/terminarium/sensor/temperature";   
@@ -81,6 +92,13 @@ void setupClient() {
 
   Serial.println("Connected!");                       // if succesful, print affirmative message
   client.subscribe(TOPIC_SUB);                        // subscribe to topic
+  client.subscribe(TOPIC_SUB_TEMP);
+  client.subscribe(TOPIC_SUB_HUMI);
+  client.subscribe(TOPIC_SUB_MOIST);
+  client.subscribe(TOPIC_SUB_LIGHT);
+  client.subscribe(TOPIC_SUB_LOUD);
+
+
   Serial.print("Subcribed to: ");                     // print topic subscribed to as a string
   Serial.println(TOPIC_SUB);                      
   SEPARATOR;                                          // visual separator for serial monitor
@@ -108,9 +126,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
     buff_p[i] = (char)payload[i];
   }
+  //update array values
+ if(updateSensorRanges(topic, buff_p, length)){
+   Serial.println(" Succesfully updated sensor ranges");
+ }else {
+      Serial.println("Sensor ranges not updated succesfully");
+ }
+
+
   Serial.println();
   buff_p[length] = '\0';
   String message = String(buff_p);
 }
-
-
