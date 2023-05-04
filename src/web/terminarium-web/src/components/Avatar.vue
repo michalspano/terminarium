@@ -40,7 +40,7 @@ export default {
             default: "150px"
         },
 
-        name: {        //Determines the Terrarium name.
+        name: {                 //Determines the Terrarium name.
             type: String,
             required: true
         },
