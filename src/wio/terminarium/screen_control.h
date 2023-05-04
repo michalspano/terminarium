@@ -7,8 +7,9 @@
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
-enum Screen {               // enums denoting screen state 
+enum Screen {                       // enums denoting screen state 
   DASHBOARD,
+  UPDATE,
   TEMP,
   HUMI,
   VIB,
@@ -17,10 +18,11 @@ enum Screen {               // enums denoting screen state
   LOUD
 };
 
-extern Screen screen;       // include global screen state variable in current scope 
-extern TFT_eSPI tft;        // include wio terminal LCD screen variable in current scope 
+extern Screen screen;               // include global screen state variable in current scope 
+extern Screen oldScreen;            // include global oldScreen state variable in current scope
+extern bool shouldUpdateOldScreen;  // include boolean if oldScreen should be updated
 
-void goNextScreen() {       // function to cycle next screen depending on current screen state
+void goRightScreen() {              // function to cycle screen to the right depending on current screen state
   switch(screen) {
     case TEMP:
       screen = HUMI;
@@ -40,13 +42,13 @@ void goNextScreen() {       // function to cycle next screen depending on curren
     case LOUD:
       screen = DASHBOARD;
       break;
-    default:                // default == dashboard
+    default:                        // default == dashboard
       screen = TEMP;
       break;
   }
 }
 
-void goPrevScreen() {       // function to cycle previous screen depending on current screen state
+void goLeftScreen() {               // function to cycle screen to the left depending on current screen state
 
   switch(screen) {
     case TEMP:
@@ -67,12 +69,24 @@ void goPrevScreen() {       // function to cycle previous screen depending on cu
     case LOUD:
       screen = LIGHT;
       break;
-    default:                // default == dashboard
+    default:                        // default == dashboard
       screen = LOUD;
       break;
   }
 }
 
-void goDashScreen() {       // function to jump to dashboard from any screen state
+void goDashScreen() {               // function to jump to dashboard from any screen state
   screen = DASHBOARD;
+}
+
+void goUpdateScreen() {             // function to jump to update screen when receiving new sensor ranges
+  screen = UPDATE;
+}
+
+/* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
+ * this function is used to revert screen state and correctly update the oldScreen value */
+void goPrevScreen(Screen currentScreen) {
+  screen = oldScreen;               // set screen back to the previous screen
+  oldScreen = currentScreen;        // update oldScreen value
+  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
 }

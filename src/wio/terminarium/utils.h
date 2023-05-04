@@ -9,6 +9,7 @@
 
 #define DHTTYPE DHT_TYPE_11         // type of DHT sensor (temp&humi)
 extern DHT_Async dht;               // include temp&humi sensor struct
+extern Screen screen;               // include global screen state variable in current scope 
 
 #define SERIAL_BAUD_RATE 9600       // baud rate for serial monitor
 #define MAX_READING 1023            // max possible reading (general)
@@ -108,6 +109,9 @@ float* readTempHumi() {                                 // read & parse temp&hum
 // ************************ UPDATING SENSOR RANGES *************************** //
 
 bool updateSensorRanges(char* topic, char payload[], unsigned int length){
+
+  //oldScreen = screen;
+  goUpdateScreen();
 
   int newSensorRanges[1];
 

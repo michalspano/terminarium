@@ -10,9 +10,9 @@
 // declare imports
 #include "DHT_Async.h"                    // import DHT library
 #include "pins.h"                         // import pins for sensors
+#include "screen_control.h"               // import screen controller functions
 #include "utils.h"                        // import utility functions
 #include "TFT_eSPI.h"                     // import TFT LCD library 
-#include "screen_control.h"               // import screen controller functions
 #include "screen_draw.h"                  // import screen drawing functions
 #include "mqtt.h"                         // import mqtt functions
 
@@ -22,6 +22,7 @@ TFT_eSPI tft;                             // initialise wio terminal LCD
 TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
 Screen screen;                            // initialise variable storing current screen
 Screen oldScreen;                         // initialise variable storing old screen (used for recognising if screen has changed)
+bool shouldUpdateOldScreen;               // initialise flag if oldScreen should be updated - necessary for some unique draw functions
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
@@ -30,8 +31,8 @@ void setup() {
   tft.setRotation(3);                     // set terminal LCD rotation
 
   // set buttons as input
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goNextScreen, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goPrevScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
 
   setupWifi();                            // connect to wifi network
@@ -76,25 +77,29 @@ void loop() {
 
   // *************************** PRINTING (serial monitor) ******************************* //
 
-  if(intervalPassed()) {                                  // run code if desired interval (in ms) has elapsed
+  if(intervalPassed()) {                                   // run code if desired interval (in ms) has elapsed
 
     // print sensor data to serial monitor
-    Serial.printf("Temperature: %.1f°C\n", temp);         // temperature in Celcius
-    Serial.printf("Humidity: %d%% RH\n", humi);           // humidity in percentage
-    Serial.printf("Vibration: %s\n", vibResult);          // vibration as string state
-    Serial.printf("Moisture: %d%%\n", moistureResult);    // moisture in percentage
-    Serial.printf("Light level: %d%%\n", lightResult);    // light in percentage
-    Serial.printf("Loudness: %d%%\n", loudnessResult);    // loudness in percentage
+    Serial.printf("Temperature: %.1f°C\n", temp);          // temperature in Celcius
+    Serial.printf("Humidity: %d%% RH\n", humi);            // humidity in percentage
+    Serial.printf("Vibration: %s\n", vibResult);           // vibration as string state
+    Serial.printf("Moisture: %d%%\n", moistureResult);     // moisture in percentage
+    Serial.printf("Light level: %d%%\n", lightResult);     // light in percentage
+    Serial.printf("Loudness: %d%%\n", loudnessResult);     // loudness in percentage
 
-    SEPARATOR;                                            // visual separator for serial monitor
+    SEPARATOR;                                             // visual separator for serial monitor
 
   // ***************************** DRAWING (LCD screen) ********************************** //
+
+    shouldUpdateOldScreen = true;                          // set to true by default (specific screen draw functions can set it to false) 
 
     // draw screen graphics on LCD
     drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult); 
     
-    oldScreen = screen;                                   // update oldScreen value 
-
+    if(shouldUpdateOldScreen) {                            // check whether oldScreen value should be updated
+      oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval
+    }
+    
   // ********************************** PUBLISHING *************************************** //
 
     // publish each sensor data to mqtt broker
