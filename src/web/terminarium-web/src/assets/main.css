@@ -1,9 +1,13 @@
+/* 
+Some parts were interfering with the Avatar component, thus they've been commented out for now.
+TODO: determine what parts of the boilerplate code are to be kept (if any) and delete the rest.
+*/
 @import './base.css';
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
 
   font-weight: normal;
 }
@@ -28,8 +32,8 @@ a,
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    /* display: grid; */
+    /* grid-template-columns: 2fr 2fr; */
+    /* padding: 0 2rem; */
   }
 }
