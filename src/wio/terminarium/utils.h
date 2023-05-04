@@ -110,23 +110,23 @@ bool updateSensorRanges(char* topic, char payload[], unsigned int length){
   }
 
   //updates the corresponding sensor range depending on topic
-  if(strcmp(topic, "/terminarium/app/conf/temperature") == 0 ){
+  if(strcmp(topic, "/terminarium/app/range/temperature") == 0 ){
     userDefinedRanges[0][0] = newSensorRanges[0];
     userDefinedRanges[0][1] = newSensorRanges[1];
     return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/humidity") == 0 ){
+  }else if(strcmp(topic, "/terminarium/app/range/humidity") == 0 ){
     userDefinedRanges[1][0] = newSensorRanges[0];
     userDefinedRanges[1][1] = newSensorRanges[1];
     return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/moisture") == 0 ){
+  }else if(strcmp(topic, "/terminarium/app/range/moisture") == 0 ){
     userDefinedRanges[2][0] = newSensorRanges[0];
     userDefinedRanges[2][1] = newSensorRanges[1];
     return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/light") == 0 ){
+  }else if(strcmp(topic, "/terminarium/app/range/light") == 0 ){
     userDefinedRanges[3][0] = newSensorRanges[0];
     userDefinedRanges[3][1] = newSensorRanges[1];
     return true;
-  }else if(strcmp(topic, "/terminarium/app/conf/loudness") == 0 ){
+  }else if(strcmp(topic, "/terminarium/app/range/loudness") == 0 ){
     userDefinedRanges[4][0] = newSensorRanges[0];
     userDefinedRanges[4][1] = newSensorRanges[1];
     return true;
