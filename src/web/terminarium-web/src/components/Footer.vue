@@ -17,8 +17,9 @@ export default {
 
 
 footer {
-  background-color:rgba(0, 100, 0, 0.534);
-  color: #fff;  
+  background-color:rgba(0, 0, 0, 0.301);
+  color: #ffffffc9;  
+  font-family: Cantora One;
   text-align: center;           
   height: auto;
   width: 100%;
