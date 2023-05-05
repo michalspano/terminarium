@@ -1,4 +1,4 @@
-<!----------------------------------------------------------------------------------
+<!------------------------*COMPONENT DESCRIPTION*-----------------------------------
     The "AccessButton" component is used to dynamically display the appropriate
     "log in" or "log out" -button. Depending on the User's current login status.
 ----------------------------------------------------------------------------------->
@@ -11,11 +11,9 @@
 
 
 <script>
-/**
- * Exports the "component definition object" for efficient re-use in other modules.
+/**Exports the "component definition object" for efficient re-use in other modules.
  * The additional in-line syntax following "export default" is automatically added by
- * the Vue-compiler for type inference / support.
- */
+ * the Vue-compiler for type inference / support. */
 export default {
     name: "AccessButton.vue",
     data () {
