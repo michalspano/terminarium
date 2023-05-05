@@ -1,20 +1,11 @@
 <script setup>
-  import Header from './components/Header.vue'
-  import Footer from './components/Footer.vue'
-  import Background from './components/Background.vue'
+import DefaultPageLayout from './components/DefaultPageLayout.vue';
 </script>
 
 <template>
   <div id="app">
-    <Background></Background>
-    <section class="container">
-      <Header></Header>
-    </section>
-    <section class="container">
-      <Footer></Footer>
-    </section>
+    <DefaultPageLayout></DefaultPageLayout>
   </div>
 </template>
 
-<style>
-</style>
+<style></style>
