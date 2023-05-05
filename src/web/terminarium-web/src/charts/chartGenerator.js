@@ -27,7 +27,8 @@ export function generateLineGraph(tempData, humiData, moistData, lightData, loud
             data: data[i],
             borderColor: lineLabel[i].color,
             backgroundColor: lineLabel[i].color,
-            axis: 'y'
+            axis: 'y',
+            fill: false
         })
     }
     const config = {
@@ -40,7 +41,7 @@ export function generateLineGraph(tempData, humiData, moistData, lightData, loud
             responsive: true,           //Resizes the chart canvas when its container does - see documentation
             interaction: {
                 mode: 'index',
-                intersect: true,
+                intersect: false,
             },
             plugins: {
                 title: {
@@ -57,5 +58,5 @@ export function generateLineGraph(tempData, humiData, moistData, lightData, loud
             },
         },
     };
-    return new Chart(context, config);
+    new Chart(context, config);
 }
