@@ -1,11 +1,8 @@
 <template>
-    <footer>
-        <div class="terminarium_footer">
-            <h1>Terrminarium</h1>
-        </div>
-        <div class="footer-bottom">
-            <p> &copy;2023 Copyright :) </p>
-        </div>
+    <footer class="footer" >
+      <div> 
+       <a> © 2023 Copyright: Terminarium.com</a>
+      </div>
     </footer>
 </template>
 
@@ -18,13 +15,11 @@ export default {
 
 <style scoped>                
 
-* {
-  outline: red dashed 1px;    
-}
 
 footer {
-  background-color: #437649;
-  color: #fff;             
+  background-color:rgba(0, 100, 0, 0.534);
+  color: #fff;  
+  text-align: center;           
   height: auto;
   width: 100%;
   position: fixed;
@@ -32,4 +27,6 @@ footer {
   left: 0;
   padding: 10px;
 }
+
+
 </style>

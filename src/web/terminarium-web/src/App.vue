@@ -1,13 +1,17 @@
 <script setup>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import Background from './components/Background.vue'
+import HomePage from './components/HomePage.vue'
 </script>
 
 <template>
   <div id="app">
+    <Background></Background>
     <section class="container">
       <Header></Header>
     </section>
+    <HomePage></HomePage>
     <section class="container">
       <Footer></Footer>
     </section>
@@ -16,3 +20,4 @@ import Footer from './components/Footer.vue'
 
 <style>
 </style>
+
