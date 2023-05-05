@@ -1,3 +1,6 @@
+// Module responsible for connecting to MQTT broker and writing data to database
+// I.e. collects sensor data from MQTT broker and writes it to the database
+
 import { writeToDB } from "./dataHandler.js";
 import { connect } from './mqtt.js';
 
