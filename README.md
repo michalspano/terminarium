@@ -63,7 +63,7 @@ TODO: provide a __demo__ of the system's usage.
 
 The __system's design__ is depicted in the following diagram (with an additional legend):
 
-![System Design](docs/images/system-design.jpg)
+![System Design](docs/images/system-design-new.jpg)
 
 \*view the __diagram__ in an __uncompressed__ form (full quality): [link](https://tinyurl.com/dit113-init-system-design)
 
