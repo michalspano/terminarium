@@ -7,8 +7,14 @@
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
+#ifndef UTILS_H
+#define UTILS_H                     // header guard
+
+#include "DHT_Async.h"              // import DHT library
 #define DHTTYPE DHT_TYPE_11         // type of DHT sensor (temp&humi)
 extern DHT_Async dht;               // include temp&humi sensor struct
+
+#include "screen_control.h"
 extern Screen screen;               // include global screen state variable in current scope 
 
 #define SERIAL_BAUD_RATE 9600       // baud rate for serial monitor
@@ -18,13 +24,7 @@ extern Screen screen;               // include global screen state variable in c
 #define DHT_INTERVAL 500            // interval (ms) 
 #define SEP_CHAR "="                // character used for visual separator
 
-int userDefinedRanges[5][2] = {
-  {15,10},   //Temperature max & min
-  {75,25},   //Humidity max & min
-  {75,25},   //Moisture
-  {75,25},   //Light
-  {75,25},   //Loudness
-  };
+extern int userDefinedRanges[5][2]; //array storing user defined min and max acceptable values for each sensor type 
 
 // ************************* FORMAT OUTPUT ******************************* //
 
@@ -35,18 +35,10 @@ int userDefinedRanges[5][2] = {
     Serial.println()
 
 // convert int to sequence of characters for mqtt publish
-char* toString (int value) {
-  static char strValue[5];
-  sprintf(strValue, "%d", value);
-  return(strValue);
-}
+extern char* toString (int value);
 
 // convert float to sequence of characters for mqtt publish
-char* toString (float value) {
-  static char strValue[6];
-  sprintf(strValue, "%.1f", value);
-  return(strValue);
-}
+extern char* toString (float value);
 
 // ************************ PROGRAM INTERVAL ***************************** //
 
@@ -54,14 +46,7 @@ char* toString (float value) {
 * Link: https://www.arduino.cc/en/Tutorial/BuiltInExamples/BlinkWithoutDelay */
 
 
-bool intervalPassed() {                                 // function for checking if interval has passed
-  static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
-  if (millis() - timeStamp >= LOOP_INTERVAL) {          // if currently elapsed time minus last interval timestamp >= desired interval
-    timeStamp = millis();                               // update timestamp of elapsed interval
-    return true;                                        // return affirmative
-  } 
-  return false;
-}
+extern bool intervalPassed();
 
 // ***************************SENSOR SUBROUTINES ***************************** //
 
@@ -71,89 +56,21 @@ bool intervalPassed() {                                 // function for checking
  * @param signal - the signal coming from the sensor
  * @return int - the mapped value
  */
-int mapToPercentage(int signal) {
-    return map(signal, MIN_READING, MAX_READING, 0, 100);
-}
+extern int mapToPercentage(int signal);
 
 /**
  * Parse the raw vibration signal to a human-readable string.
  * @param vibrationSignal - the raw vibration signal
  * @return String - the parsed vibration signal
  */
-char* parseVibrationValue(int vibrationSignal) {
-    if (vibrationSignal == 0) {
-        delay(350);                                     // arbitrary delay to prevent multiple readings
-        return "Vibrating";
-    }
-    return "Not Vibrating";
-}
+extern char* parseVibrationValue(int vibrationSignal);
 
 /* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
 * Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */
 
-float* readTempHumi() {                                 // read & parse temp&humi readings
-  static float temperature;
-  static float humidity;
-  static float tempHumi[2];
-  static unsigned long timeStamp = millis();            // store currently elapsed time since program start / last interval (in ms) 
-  if (millis() - timeStamp >= DHT_INTERVAL) {           // data is measured once per defined interval
-    if (dht.measure(&temperature, &humidity)) {     
-      timeStamp = millis();                             // update timestamp of elapsed interval 
-    }
-  }
-  tempHumi[0] = temperature;
-  tempHumi[1] = humidity;
-  return (tempHumi);                                    // return parsed temp&humi values in an array
-}
-
+extern float* readTempHumi();
 // ************************ UPDATE SENSOR RANGES ***************************** //
 
-bool updateSensorRanges(char* topic, char payload[], unsigned int length){
+extern bool updateSensorRanges(char* topic, char payload[], unsigned int length);
 
-  screen = UPDATE;                                      // set screen state to update screen
-
-  int newSensorRanges[1];
-
-  if (length != 5){return false;}                       // checking that received message is correct length
-  if (strncmp(&payload[2], ",", 1) != 0){return false;} // checking that ',' is in the proper space
-
-  for (int i = 0; i < length; i++){                     // checks that message is in following format: "##,##"
-    if(!isDigit(payload[i]) && i < 2 && i > 2 ){return false;}
-  }
-
-  //parses received payload 
-  char* token = strtok(payload, ",");
-
-  while (token != NULL){
-    newSensorRanges[0] = atoi(token);
-    token = strtok(NULL, ",");
-    newSensorRanges[1] = atoi(token);
-    token = strtok(NULL, ",");
-  }
-
-  //updates the corresponding sensor range depending on topic
-  if(strcmp(topic, "/terminarium/app/range/temperature") == 0 ){
-    userDefinedRanges[0][0] = newSensorRanges[0];
-    userDefinedRanges[0][1] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/range/humidity") == 0 ){
-    userDefinedRanges[1][0] = newSensorRanges[0];
-    userDefinedRanges[1][1] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/range/moisture") == 0 ){
-    userDefinedRanges[2][0] = newSensorRanges[0];
-    userDefinedRanges[2][1] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/range/light") == 0 ){
-    userDefinedRanges[3][0] = newSensorRanges[0];
-    userDefinedRanges[3][1] = newSensorRanges[1];
-    return true;
-  }else if(strcmp(topic, "/terminarium/app/range/loudness") == 0 ){
-    userDefinedRanges[4][0] = newSensorRanges[0];
-    userDefinedRanges[4][1] = newSensorRanges[1];
-    return true;
-  }else{
-    Serial.println("Unrecognized topic");
-    return false;
-  }
-}  
+#endif

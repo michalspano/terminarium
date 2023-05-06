@@ -20,7 +20,7 @@
 DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
 TFT_eSPI tft;                             // initialise wio terminal LCD
 TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
-Screen screen = CONNECT_GENERAL;          // initialise variable storing current screen to connection screen
+Screen screen = CONNECT_SELECT;           // initialise variable storing current screen to connection screen
 Screen oldScreen;                         // declare variable storing old screen (used for recognising if screen has changed)
 bool shouldUpdateOldScreen;               // declare flag if oldScreen should be updated - necessary for some unique draw functions
 bool isStartup = true;                    // declare flag that alters connection screen behavior after initialisation
@@ -35,7 +35,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnectScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnSelectScreen, FALLING);
 
   client.setServer(SERVER, 1883);       // set up mqtt server   
   client.setCallback(callback);         // set up behavior when new message received from mqtt broker
