@@ -37,7 +37,7 @@ export default {
 h1.description-header {
   
   color: rgb(219, 213, 204);
-  font-family: Cantora One;
+  font-family: Cantora One, Georgia;
   font-size: 3em;
   text-align: left;
   margin-bottom: 0.5em;
@@ -46,7 +46,7 @@ h1.description-header {
 
 p {
   color: rgb(219, 213, 204);
-  font-family:Cantora One;
+  font-family:Cantora One, Georgia;
   font-size: 1.1rem;
   margin-top: 5%;
   display: block;

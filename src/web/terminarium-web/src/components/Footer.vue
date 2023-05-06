@@ -19,7 +19,7 @@ export default {
 footer {
   background-color:rgba(0, 0, 0, 0.301);
   color: #ffffffc9;  
-  font-family: Cantora One;
+  font-family: Cantora One, Georgia;
   text-align: center;           
   height: auto;
   width: 100%;
