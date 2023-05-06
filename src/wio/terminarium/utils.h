@@ -106,19 +106,18 @@ float* readTempHumi() {                                 // read & parse temp&hum
   return (tempHumi);                                    // return parsed temp&humi values in an array
 }
 
-// ************************ UPDATING SENSOR RANGES *************************** //
+// ************************ UPDATE SENSOR RANGES ***************************** //
 
 bool updateSensorRanges(char* topic, char payload[], unsigned int length){
 
-  //oldScreen = screen;
-  goUpdateScreen();
+  screen = UPDATE;                                      // set screen state to update screen
 
   int newSensorRanges[1];
 
-  if (length != 5){return false;}                       //checking that received message is correct length
-  if (strncmp(&payload[2], ",", 1) != 0){return false;} //checking that ',' is in the proper space
+  if (length != 5){return false;}                       // checking that received message is correct length
+  if (strncmp(&payload[2], ",", 1) != 0){return false;} // checking that ',' is in the proper space
 
-  for (int i = 0; i < length; i++){                     //checks that message is in following format: "##,##"
+  for (int i = 0; i < length; i++){                     // checks that message is in following format: "##,##"
     if(!isDigit(payload[i]) && i < 2 && i > 2 ){return false;}
   }
 

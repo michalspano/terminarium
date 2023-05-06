@@ -20,9 +20,10 @@
 DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
 TFT_eSPI tft;                             // initialise wio terminal LCD
 TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
-Screen screen;                            // initialise variable storing current screen
-Screen oldScreen;                         // initialise variable storing old screen (used for recognising if screen has changed)
-bool shouldUpdateOldScreen;               // initialise flag if oldScreen should be updated - necessary for some unique draw functions
+Screen screen = CONNECT_GENERAL;          // initialise variable storing current screen to connection screen
+Screen oldScreen;                         // declare variable storing old screen (used for recognising if screen has changed)
+bool shouldUpdateOldScreen;               // declare flag if oldScreen should be updated - necessary for some unique draw functions
+bool isStartup = true;                    // declare flag that alters connection screen behavior after initialisation
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
@@ -34,11 +35,10 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnectScreen, FALLING);
 
-  setupWifi();                            // connect to wifi network
-  client.setServer(SERVER, 1883);         // set up mqtt server   
-  client.setCallback(callback);           // set up behavior when new message received from mqtt broker
-  setupClient();                          // connect to mqtt broker
+  client.setServer(SERVER, 1883);       // set up mqtt server   
+  client.setCallback(callback);         // set up behavior when new message received from mqtt broker
 
   drawHeader();                           // draw headder & background for all screens
 }
@@ -48,15 +48,28 @@ void loop() {
 
   // ******************************* CONNECT MQTT **************************************** //
   
-  if(WiFi.status() != WL_CONNECTED) {     // check if connected to wifi network
+  if(screen == CONNECT_WIFI) {
+    drawConnectScreen("WiFi network:", SSID); // draw wifi connection screen
+    setupWifi();                          // connect to wifi network
+  }
+  
+  if(screen == CONNECT_MQTT) {
+    drawConnectScreen("MQQT server:", SERVER);
+    setupClient();                        // connect to mqtt broker
+  }
+/*
+  if(!wifiConnected()) {    // check if connected to wifi network
+    drawConnectScreen("WiFi network:", SSID); // draw wifi connection screen
     reconnectWifi();                      // if not, attempt reconnect
   }
 
-  if (!client.connected()) {              // check if connected to mqtt server
+  if (!mqttConnected()) {                 // check if connected to mqtt server
+    drawConnectScreen("MQQT server:", SERVER);
     reconnectClient();                    // if not, attempt reconnect
-    }
-
-  client.loop();                          // stay connected and listening to mqtt broker 
+  } else {
+    client.loop();                          // stay connected and listening to mqtt broker 
+  } */
+  
 
   // ********************************* READING ******************************************* //
 
@@ -94,7 +107,7 @@ void loop() {
     shouldUpdateOldScreen = true;                          // set to true by default (specific screen draw functions can set it to false) 
 
     // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult); 
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup, mqttConnected());                             
     
     if(shouldUpdateOldScreen) {                            // check whether oldScreen value should be updated
       oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval

@@ -10,8 +10,8 @@
 #include "rpcWiFi.h"                                  // import wifi library
 #include "PubSubClient.h"                             // import mqtt library
 //#include "credentials.h" 
-                   
 
+extern Screen screen;                                 // include global screen state variable in current scope                  
 WiFiClient wioClient;                                 // initialise wifi client
 PubSubClient client(wioClient);                       // initialise mqtt client
 
@@ -19,9 +19,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 * Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "######";                    // wifi network name
-const char* PASSWORD   = "######";                    // wifi network password
-const char* SERVER     = "######";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "HUAWEI P30 Pro";                    // wifi network name
+const char* PASSWORD   = "12345678";                    // wifi network password
+const char* SERVER     = "192.168.43.86";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -30,30 +30,39 @@ const char* TOPIC_SUB = "/terminarium/app/signal";
 * Note: the format of the message shall be two integers < 100 & > 0 separated by a ',' and no spaces - '##,##'
 * Max value followed by min value
 * Single digit numbers must start with 0 - e.g 05, 06 */
-const char* TOPIC_SUB_TEMP = "/terminarium/app/range/temperature";
-const char* TOPIC_SUB_HUMI = "/terminarium/app/range/humidity";
+const char* TOPIC_SUB_TEMP  = "/terminarium/app/range/temperature";
+const char* TOPIC_SUB_HUMI  = "/terminarium/app/range/humidity";
 const char* TOPIC_SUB_MOIST = "/terminarium/app/range/moisture";
 const char* TOPIC_SUB_LIGHT = "/terminarium/app/range/light";
-const char* TOPIC_SUB_LOUD = "/terminarium/app/range/loudness";
+const char* TOPIC_SUB_LOUD  = "/terminarium/app/range/loudness";
 
 // topic for sending sensor data
-const char* TOPIC_PUB_TEMP = "/terminarium/sensor/temperature";
-const char* TOPIC_PUB_HUMI = "/terminarium/sensor/humidity";
-const char* TOPIC_PUB_VIB = "/terminarium/sensor/vibration";
+const char* TOPIC_PUB_TEMP  = "/terminarium/sensor/temperature";
+const char* TOPIC_PUB_HUMI  = "/terminarium/sensor/humidity";
+const char* TOPIC_PUB_VIB   = "/terminarium/sensor/vibration";
 const char* TOPIC_PUB_MOIST = "/terminarium/sensor/moisture";
 const char* TOPIC_PUB_LIGHT = "/terminarium/sensor/light";
-const char* TOPIC_PUB_LOUD = "/terminarium/sensor/loudness";
+const char* TOPIC_PUB_LOUD  = "/terminarium/sensor/loudness";
 
 
 // ************************ CONNECT WIFI ***************************** //
 
+bool wifiConnected() {
+  if(WiFi.status() == WL_CONNECTED) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 // connect to wifi network and print status to serial monitor
 void setupWifi() {
+
   WiFi.begin(SSID, PASSWORD);                         // connect to wifi network
   Serial.print("\nConnecting to Wi-Fi network: ");    // print name of wifi network in serial monitor
   Serial.print(SSID);
 
-  while (WiFi.status() != WL_CONNECTED) {             // loop while not connected to wifi
+  while (!wifiConnected()) {                          // loop while not connected to wifi
     Serial.print(".");                                // print dot..dot..dot... to serial monitor
     WiFi.begin(SSID, PASSWORD);                       // reattempt connection
   }
@@ -63,7 +72,7 @@ void setupWifi() {
   Serial.println(WiFi.localIP());                   
   SEPARATOR;                                          // visual separator for serial monitor   
 
-  delay(2000);                                        // arbitrary delay for readability of serial monitor
+  screen = CONNECT_MQTT;
 } 
 
 
@@ -76,13 +85,21 @@ void reconnectWifi() {
 
 // ************************** CONNECT MQTT ***************************** //
 
+bool mqttConnected() {
+  if (client.connected()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 // connect to mqtt broker and print status to serial monitor
 void setupClient() {                    
   Serial.println("Attempting MQTT connection...");  
   String clientID = "WioTerminal";                    // create a client ID
   client.connect(clientID.c_str());                   // connect to mqtt broker
 
-  while(!client.connected()) {                        // loop while not connected to broker
+  while(!client.connected()) {                           // loop while not connected to broker
     Serial.print("Failed, return code = ");           // print error message
     Serial.println(client.state());                   // print client state (error code as int value that represents additional info on specific error) 
     Serial.println("Try again in 5 seconds");      
@@ -103,7 +120,7 @@ void setupClient() {
   Serial.println(TOPIC_SUB);                      
   SEPARATOR;                                          // visual separator for serial monitor
 
-  delay(2000);                                        // arbitrary delay for readability in serial monitor
+  screen = DASHBOARD;
 } 
 
 

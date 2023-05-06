@@ -7,22 +7,67 @@
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
-/* Note: the code for the dashboard and header has been adapted from Seeed Studio's Smart Garden project from the Wio Terminal Classroom video series:
-* Link: https://github.com/lakshanthad/Wio_Terminal_Classroom_Arduino/tree/main/Classroom%2012/Smart_Garden */
+#define HEIGHT 240
+#define WIDTH 320
+#define CHAR_HEIGHT 24
+#define CHAR_WIDTH 18
 
 extern TFT_eSPI tft;                               // include wio terminal LCD screen variable in current scope 
 extern Screen screen;                              // include global screen state variable in current scope
 extern Screen oldScreen;                           // include global oldScreen state variable in current scope
 
+
+// *************************** MISC ********************************** //
+
+// function that clears screen for switching screen states
+extern void clearScreen() {
+  tft.fillRect(0,50,320,TFT_HEIGHT - 50, TFT_BLACK); // clear previous screen by overwriting it with black rectangle
+}
+
+
+// function that calculates centered x position for any given text
+int getCenterX(char* text) {
+    int textSize = strlen(text) * CHAR_WIDTH;
+    int xPosition = (WIDTH - textSize) / 2;
+    return xPosition;
+}
+
+
+/* @drawTriangles - draw triangle graphics (common in all sensor screens)
+ * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
+void drawTriangles() {                                        
+  tft.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);     // draw left triangle 
+  tft.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);  // draw right triangle 
+}
+
+
 // ************************** HEADER ********************************* //
 
-// draw headder & background for all screens
+/* Note: the code for the dashboard and header has been adapted from Seeed Studio's Smart Garden project from the Wio Terminal Classroom video series:
+ * Link: https://github.com/lakshanthad/Wio_Terminal_Classroom_Arduino/tree/main/Classroom%2012/Smart_Garden */
+
+// draw header & background for all screens
 void drawHeader() {
   tft.fillScreen(TFT_BLACK);                       // fill background with black color
   tft.fillRect(0,0,320,50,TFT_DARKGREEN);          // fill header rectangle with dark green 
   tft.setTextColor(TFT_WHITE);                     // set text color
   tft.setTextSize(3);                              // set text size 
-  tft.drawString("Terminarium",60,15);             // draw header String
+  char* text = "Terminarium";
+  tft.drawString(text, getCenterX(text), 14);      // draw header String
+}
+
+
+// draw icon in header indicating connectivity status 
+void drawConnStatus(bool mqttConnected) {
+  if(mqttConnected) {
+    tft.fillRoundRect(272, 10, 32, 32, 5, TFT_GREEN);
+    tft.setTextSize(2);
+    tft.setTextColor(TFT_DARKGREEN);
+    tft.drawString("MQ", 277, 11);
+    tft.drawString("TT", 277, 27);
+  } else {
+    tft.fillRoundRect(272, 10, 32, 32, 5, TFT_DARKGREEN);
+  }
 }
 
 
@@ -59,9 +104,9 @@ void drawDashboardElem(Screen type, String heading, int headingX, int headingY, 
 void drawDashboardScreen(int temp, int oldTemp, int humi, int oldHumi, int vib, int oldVib, int moist, int oldMoist, int light, int oldLight, int loud, int oldLoud) {
 
   // draw dashboard separator lines
-  tft.drawFastVLine(106,50,190,TFT_DARKGREEN);       // draw 1st vertical line
-  tft.drawFastVLine(212,50,190,TFT_DARKGREEN);       // draw 2nd veritcal line
-  tft.drawFastHLine(0,140,320,TFT_DARKGREEN);        // draw horizontal line
+  tft.fillRect(0,140,320,2,TFT_DARKGREEN);             // draw horizontal line
+  tft.fillRect(106,50,2,190,TFT_DARKGREEN);            // draw 1st vertical line    
+  tft.fillRect(212,50,2,190,TFT_DARKGREEN);            // draw 2nd veritcal line
 
   // draw sensor panel elements
   if(temp != oldTemp) {
@@ -106,14 +151,6 @@ void drawStatus(int value, int max, int min) {
 }
 
 
-/* @drawTriangles - draw triangle graphics (common in all sensor screens)
- * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
-void drawTriangles() {                                        
-  tft.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);     // draw left triangle 
-  tft.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);  // draw right triangle 
-}
-
-
 // draw individual sensor screens, which can be cycled through using button inputs
 void drawSensorScreen(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY) {
 
@@ -147,12 +184,8 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
   drawTriangles();                                   // call function to draw triangle graphics
 } 
 
-// **************************** GENERAL ****************************** //
 
-// function that clears screen for switching screen states
-extern void clearScreen() {
-  tft.fillRect(0,50,320,TFT_HEIGHT - 50, TFT_BLACK); // clear previous screen by overwriting it with black rectangle
-}
+// ******************** CONNECTIVITY SCREENS ************************* //
 
 void drawUpdateScreen() {
   clearScreen();                                     // call function to clear screen
@@ -170,8 +203,79 @@ void drawUpdateScreen() {
 }
 
 
+void drawConnGeneralScreen(bool isStartup) {
+  clearScreen();                                     // call function to clear screen
+
+  char* text;
+  tft.setTextSize(3);
+  tft.setTextColor(TFT_WHITE);
+  if(isStartup) {
+    text = "Welcome!";
+    tft.drawString(text, getCenterX(text), 63);
+  }
+
+  char* fullText = "Start MQTT";
+  text = "Start";
+  int length = strlen(text) * CHAR_WIDTH;
+  tft.drawString(text, getCenterX(fullText), 95);
+
+  tft.setTextColor(TFT_YELLOW);
+  text = "MQTT";
+  tft.drawString(text, getCenterX(fullText) + length + CHAR_WIDTH, 95);
+  
+  tft.setTextColor(TFT_WHITE);
+  text = "connection?";
+  tft.drawString(text, getCenterX(text), 127);
+
+  tft.fillTriangle(55, 180, 55, 200, 35, 190, TFT_WHITE);     // draw left triangle 
+  tft.setTextColor(TFT_RED);
+  tft.drawString("No", 65, 180);
+  tft.fillTriangle(265, 180, 265, 200, 285, 190, TFT_WHITE);  // draw right triangle 
+  tft.setTextColor(TFT_GREEN);
+  tft.drawString("Yes", 207, 179);
+}
+
+
+void drawConnectScreen(char* connectType, const char* connectValue) {
+  clearScreen();
+
+  char* text;
+  tft.setTextSize(3);
+  tft.setTextColor(TFT_WHITE);
+  text = "Connecting to";
+  tft.drawString(text, getCenterX(text), 73);
+  
+  text = connectType;
+  tft.drawString(text, getCenterX(text), 105);
+  
+  tft.setTextColor(TFT_YELLOW);
+  char charValue[strlen(connectValue) + 1];
+  strcpy(charValue, connectValue);
+  text = charValue;
+  tft.drawString(text, getCenterX(text), 137);
+
+  tft.setTextColor(TFT_WHITE);
+  for(int i = 0; i < strlen(text); i++) {
+    tft.drawString(".", getCenterX(text) + (i * CHAR_WIDTH), 169);
+    delay(300);
+  }
+  // TODO: Make it repeat if connection is slow
+
+  tft.fillRect(getCenterX(text), 169, (strlen(text) * CHAR_WIDTH), 24, TFT_BLACK);
+  tft.setTextColor(TFT_GREEN);
+  text = "Connected!";
+  tft.drawString(text, getCenterX(text), 169);
+
+  delay(1500);
+}
+
+
+// **************************** GENERAL ****************************** //
+
 // general function that draws all screens, called directly from main program loop
-void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
+void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup, bool mqttConnected) {
+
+  drawConnStatus(mqttConnected);                     // call function to draw UI element indicating no connection status
 
  /* declare oldValue variables to track sensor values from previous interval.
   * current sensor values will only be drawn if they != values from previous interval.
@@ -225,11 +329,14 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud) {
       drawSensorScreen(LOUD, "Loudness", 91, 75, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 132, 115, "%", 172, 115);
       }
       break;
+    case DASHBOARD:
+      drawDashboardScreen(temp, oldTemp, humi, oldHumi, vib, oldVib, moist, oldMoist, light, oldLight, loud, oldLoud);
+      break;
     case UPDATE:
       drawUpdateScreen();
       break;
-    default:
-      drawDashboardScreen(temp, oldTemp, humi, oldHumi, vib, oldVib, moist, oldMoist, light, oldLight, loud, oldLoud);
+    case CONNECT_GENERAL:
+      drawConnGeneralScreen(isStartup);
       break;
   }
 

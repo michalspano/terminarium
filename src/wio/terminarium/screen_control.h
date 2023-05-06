@@ -9,6 +9,9 @@
 
 enum Screen {                       // enums denoting screen state 
   DASHBOARD,
+  CONNECT_GENERAL,
+  CONNECT_WIFI,
+  CONNECT_MQTT,
   UPDATE,
   TEMP,
   HUMI,
@@ -20,9 +23,19 @@ enum Screen {                       // enums denoting screen state
 
 extern Screen screen;               // include global screen state variable in current scope 
 extern Screen oldScreen;            // include global oldScreen state variable in current scope
-extern bool shouldUpdateOldScreen;  // include boolean if oldScreen should be updated
+extern bool shouldUpdateOldScreen;  // include boolean for if oldScreen should be updated
+extern bool isStartup;              // include boolean for if program is at startup
 
-void goRightScreen() {              // function to cycle screen to the right depending on current screen state
+
+/* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
+ * this function is used to revert screen state and correctly update the oldScreen value */
+void goPrevScreen(Screen currentScreen) {
+  screen = oldScreen;               // set screen back to the previous screen
+  oldScreen = currentScreen;        // update oldScreen value
+  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
+}
+
+void goRightScreen() {              // function to cycle screen on right button press depending on current screen state
   switch(screen) {
     case TEMP:
       screen = HUMI;
@@ -42,13 +55,19 @@ void goRightScreen() {              // function to cycle screen to the right dep
     case LOUD:
       screen = DASHBOARD;
       break;
-    default:                        // default == dashboard
+    case DASHBOARD:
       screen = TEMP;
+      break;
+    case CONNECT_GENERAL:                       
+      screen = CONNECT_WIFI;       
+      isStartup = false;
+      break;
+    default:                        // by default do nothing on button press                
       break;
   }
 }
 
-void goLeftScreen() {               // function to cycle screen to the left depending on current screen state
+void goLeftScreen() {               // function to switch screen on left button press depending on current screen state
 
   switch(screen) {
     case TEMP:
@@ -69,8 +88,18 @@ void goLeftScreen() {               // function to cycle screen to the left depe
     case LOUD:
       screen = LIGHT;
       break;
-    default:                        // default == dashboard
+    case DASHBOARD:
       screen = LOUD;
+      break;
+    case CONNECT_GENERAL:
+      if(isStartup) {
+        screen = DASHBOARD;
+      } else {
+        screen = DASHBOARD;          // TODO: change to allow return to previous screen if not at startup
+      }
+      isStartup = false;
+      break;
+    default:                        // by default do nothing on button press                
       break;
   }
 }
@@ -79,14 +108,6 @@ void goDashScreen() {               // function to jump to dashboard from any sc
   screen = DASHBOARD;
 }
 
-void goUpdateScreen() {             // function to jump to update screen when receiving new sensor ranges
-  screen = UPDATE;
-}
-
-/* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
- * this function is used to revert screen state and correctly update the oldScreen value */
-void goPrevScreen(Screen currentScreen) {
-  screen = oldScreen;               // set screen back to the previous screen
-  oldScreen = currentScreen;        // update oldScreen value
-  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
+void goConnectScreen() {            // function to jump to connection screen
+  screen = CONNECT_GENERAL;
 }
