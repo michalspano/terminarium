@@ -26,6 +26,9 @@ int userDefinedRanges[5][2] = {
         Serial.print(SEP_CHAR);  \
     Serial.println()
 
+/* @toString() the below overloaded functions declare variables as static so they don't
+ * just return pointers to local variables that are invalid as soon as function returns*/
+ 
 // convert int to sequence of characters for mqtt publish
 char* toString (int value) {
   static char strValue[5];
@@ -38,6 +41,14 @@ char* toString (float value) {
   static char strValue[6];
   sprintf(strValue, "%.1f", value);
   return(strValue);
+}
+
+// convert const char* to char* for use in draw functions
+char* toString (const char* text) {
+  static char charValue[5];               
+  strcpy(charValue, text);
+  char* result = charValue;
+  return result;
 }
 
 // ************************ PROGRAM INTERVAL ***************************** //

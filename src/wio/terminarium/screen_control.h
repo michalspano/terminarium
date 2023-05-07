@@ -29,6 +29,13 @@ extern Screen oldScreen;            // include global oldScreen state variable i
 extern bool shouldUpdateOldScreen;  // include boolean for if oldScreen should be updated
 extern bool isStartup;              // include boolean for if program is at startup
 
+#include "mqtt.h"
+extern bool isConnecting;           // include flag indicating connection is currently being established
+extern bool wifiIsConnected;        // include temporary workaround for goLeftScreen() case CONNECT_SELECT
+extern bool mqttIsConnected;        // include temporary workaround for goLeftScreen() case CONNECT_SELECT
+extern bool wifiWasConnected;       // include flag indicating user was previously connected to wifi server
+extern bool mqttWasConnected;       // include flag indicating user was previously connected to mqtt server
+
 
 /* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
  * this function is used to revert screen state and correctly update the oldScreen value */

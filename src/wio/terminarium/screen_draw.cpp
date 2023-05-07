@@ -33,6 +33,16 @@ void drawTriangles() {
 }
 
 
+void drawDotDotDot(int length, int x, int y) {
+  tft.fillRect(0, y, WIDTH, CHAR_HEIGHT, TFT_BLACK);
+  tft.setTextColor(TFT_WHITE);
+  for(int i = 0; i < length; i++) {
+    tft.drawString(".", x + (i * CHAR_WIDTH), y);
+    delay(300);
+  }
+}
+
+
 // ************************** HEADER ********************************* //
 
 /* Note: the code for the dashboard and header has been adapted from Seeed Studio's Smart Garden project from the Wio Terminal Classroom video series:
@@ -50,15 +60,15 @@ void drawHeader() {
 
 
 // draw icon in header indicating connectivity status 
-void drawConnStatus(bool mqttConnected) {
-  if(mqttConnected) {
-    tft.fillRoundRect(272, 10, 32, 32, 5, TFT_GREEN);
+void drawConnStatus(bool connected, char* text1, char* text2, int x, int y) {
+  if(connected) {
+    tft.fillRoundRect(x, y, 32, 32, 5, TFT_GREEN);
     tft.setTextSize(2);
     tft.setTextColor(TFT_DARKGREEN);
-    tft.drawString("MQ", 277, 11);
-    tft.drawString("TT", 277, 27);
+    tft.drawString(text1, x + 5, y + 1);
+    tft.drawString(text2, x + 5, y + 17);
   } else {
-    tft.fillRoundRect(272, 10, 32, 32, 5, TFT_DARKGREEN);
+    tft.fillRoundRect(x, y, 32, 32, 5, TFT_DARKGREEN);
   }
 }
 
@@ -181,31 +191,54 @@ void drawSensorScreen(Screen type, String heading, int headingX, int headingY, i
 
 void drawUpdateScreen() {
   clearScreen();                                     // call function to clear screen
+
   tft.setTextSize(3);                                // set text size to 3                    
   tft.setTextColor(TFT_WHITE);                       // set text color to white
-  tft.drawString("New sensor", 70,65);               // draw text
-  tft.drawString("ranges received", 30, 105);
-  tft.drawString("UPDATING", 88, 150);
-  for(int i = 0; i < 46; i++) {
-    tft.drawString(".", 86 + (i*3), 190);
-    delay(75);
+  char* text = "Sensor ranges";
+  tft.drawString(text, getCenterX(text), 70);
+
+  text = "received!";
+  tft.drawString(text, getCenterX(text), 103);
+
+  tft.setTextColor(TFT_YELLOW);
+  text = "UPDATING";
+  tft.drawString(text, getCenterX(text), 150);
+
+  tft.setTextColor(TFT_WHITE);
+  for(int i = 0; i < 48; i++) {
+    tft.drawString(".", 80 + (i*3), 180);
+    delay(30);
   }
-  clearScreen();                                     // call function to clear screen
+  delay(1750);                                       // call function to clear screen
   goPrevScreen(screen);                              // call function to return to last screen before sensor range update
 }
 
 
 void drawConnSelectScreen(bool isStartup) {
-  char* text;
+  char* text = "";
   tft.setTextSize(3);
   tft.setTextColor(TFT_WHITE);
   if(isStartup) {
     text = "Welcome!";
-    tft.drawString(text, getCenterX(text), 63);
+  } else if(wifiWasConnected && !wifiConnected()) {
+    text = "WiFi conn. lost!";
+  } else if(mqttWasConnected && !mqttConnected()) {
+    text = "MQTT conn. lost!";
   }
+  tft.drawString(text, getCenterX(text), 63);
 
-  char* fullText = "Start MQTT";
-  text = "Start";
+  //char fullText[15];
+  //strcpy(fullText, ((wifiWasConnected || mqttWasConnected) ? "Restart MQTT" : "Start MQTT"));
+  //const char* fullText = wasConnected ? "Restart MQTT" : "Start MQTT";
+  char* fullText;
+  if(wifiWasConnected || mqttWasConnected) {
+    fullText = "Restart MQTT";
+    text = "Restart";
+  } else {
+    fullText = "Start MQTT";
+    text = "Start";
+  }
+  
   int length = strlen(text) * CHAR_WIDTH;
   tft.drawString(text, getCenterX(fullText), 95);
 
@@ -239,25 +272,17 @@ void drawConnectScreen(char* connectType, const char* connectValue) {
   tft.drawString(text, getCenterX(text), 105);
   
   tft.setTextColor(TFT_YELLOW);
-  char charValue[strlen(connectValue) + 1];
-  strcpy(charValue, connectValue);
-  text = charValue;
+  text = toString(connectValue);   
   tft.drawString(text, getCenterX(text), 137);
 
-  tft.setTextColor(TFT_WHITE);
-  for(int i = 0; i < strlen(text); i++) {
-    tft.drawString(".", getCenterX(text) + (i * CHAR_WIDTH), 169);
-    delay(300);
-  }
-  // TODO: Make it repeat if connection is slow
-  // delay(1500);
+  drawDotDotDot(strlen(text), getCenterX(text), 169);
 }
 
 
 void drawConnectedText() {
-  tft.fillRect(0, 169, TFT_WIDTH, CHAR_HEIGHT, TFT_BLACK);
+  tft.fillRect(0, 169, WIDTH, CHAR_HEIGHT, TFT_BLACK);
   tft.setTextColor(TFT_GREEN);
-  text = "Connected!";
+  char* text = "Connected!";
   tft.drawString(text, getCenterX(text), 169);
 }
 
@@ -265,9 +290,11 @@ void drawConnectedText() {
 // **************************** GENERAL ****************************** //
 
 // general function that draws all screens, called directly from main program loop
-void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup, bool mqttConnected) {
+void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup) {
 
-  drawConnStatus(mqttConnected);                     // call function to draw UI element indicating no connection status
+  // draw header element indicating connection status
+  drawConnStatus(wifiConnected(), "Wi", "Fi", 18, 10);
+  drawConnStatus((wifiConnected() && mqttConnected()), "MQ", "TT", 272, 10);
 
  /* declare oldValue variables to track sensor values from previous interval.
   * current sensor values will only be drawn if they != values from previous interval.
@@ -331,6 +358,12 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       if (screen != oldScreen) {                     // check so static screen isn't unnecessarily redrawn upon itself
         drawConnSelectScreen(isStartup);             // 
       }
+      break;
+    case CONNECT_WIFI:
+      drawConnectScreen("WiFi network:", SSID);
+      break;
+    case CONNECT_MQTT:
+      drawConnectScreen("MQTT server:", SERVER);
       break;
   }
 

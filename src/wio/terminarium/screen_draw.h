@@ -17,6 +17,12 @@ extern TFT_eSPI tft;                               // include wio terminal LCD s
 extern Screen screen;                              // include global screen state variable in current scope
 extern Screen oldScreen;                           // include global oldScreen state variable in current scope
 
+#include "mqtt.h"
+extern const char* SSID;                           // include wifi network name
+extern const char* SERVER;                         // include mqtt broker ip address
+extern bool wifiWasConnected;                      // include flag indicating user was previously connected to wifi server
+extern bool mqttWasConnected;                      // include flag indicating user was previously connected to mqtt server
+
 #include "utils.h"                                 // include utility functions
 
 #define HEIGHT 240                                 // define LCD screen pixel height
@@ -37,6 +43,8 @@ extern int getCenterX(char* text);
  * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
 extern void drawTriangles();
 
+extern void drawDotDotDot(int length, int x, int y);
+
 
 // ************************** HEADER ********************************* //
 
@@ -44,7 +52,7 @@ extern void drawTriangles();
 extern void drawHeader();
 
 // draw icon in header indicating connectivity status 
-extern void drawConnStatus(bool mqttConnected);
+void drawConnStatus(bool connected, char* text1, char* text2, int x, int y);
 
 
 // ************************* DASHBOARD ******************************* //
@@ -79,6 +87,6 @@ extern void drawConnectedText();
 // **************************** GENERAL ****************************** //
 
 // general function that draws all screens, called directly from main program loop
-extern void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup, bool mqttConnected);
+extern void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup);
 
 #endif

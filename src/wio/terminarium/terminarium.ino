@@ -23,7 +23,7 @@ TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using spri
 Screen screen = CONNECT_SELECT;           // initialise variable storing current screen to connection screen
 Screen oldScreen;                         // declare variable storing old screen (used for recognising if screen has changed)
 bool shouldUpdateOldScreen;               // declare flag if oldScreen should be updated - necessary for some unique draw functions
-bool isStartup = true;                    // declare flag that alters connection screen behavior after initialisation
+bool isStartup = true;                    // declare flag that alters connection screen behavior after first startup
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
@@ -45,31 +45,6 @@ void setup() {
 
 
 void loop() {
-
-  // ******************************* CONNECT MQTT **************************************** //
-  
-  if(screen == CONNECT_WIFI) {
-    drawConnectScreen("WiFi network:", SSID); // draw wifi connection screen
-    setupWifi();                          // connect to wifi network
-  }
-  
-  if(screen == CONNECT_MQTT) {
-    drawConnectScreen("MQQT server:", SERVER);
-    setupClient();                        // connect to mqtt broker
-  }
-/*
-  if(!wifiConnected()) {    // check if connected to wifi network
-    drawConnectScreen("WiFi network:", SSID); // draw wifi connection screen
-    reconnectWifi();                      // if not, attempt reconnect
-  }
-
-  if (!mqttConnected()) {                 // check if connected to mqtt server
-    drawConnectScreen("MQQT server:", SERVER);
-    reconnectClient();                    // if not, attempt reconnect
-  } else {
-    client.loop();                          // stay connected and listening to mqtt broker 
-  } */
-  
 
   // ********************************* READING ******************************************* //
 
@@ -97,30 +72,39 @@ void loop() {
     Serial.printf("Humidity: %d%% RH\n", humi);            // humidity in percentage
     Serial.printf("Vibration: %s\n", vibResult);           // vibration as string state
     Serial.printf("Moisture: %d%%\n", moistureResult);     // moisture in percentage
-    Serial.printf("Light level: %d%%\n", lightResult);     // light in percentage
+    Serial.printf("Light: %d%%\n", lightResult);           // light in percentage
     Serial.printf("Loudness: %d%%\n", loudnessResult);     // loudness in percentage
 
     SEPARATOR;                                             // visual separator for serial monitor
 
   // ***************************** DRAWING (LCD screen) ********************************** //
 
-    shouldUpdateOldScreen = true;                          // set to true by default (specific screen draw functions can set it to false) 
+    shouldUpdateOldScreen = true;                          // reset to true every interval (specific screen draw functions can set it to false) 
 
     // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup, mqttConnected());                             
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);                             
     
     if(shouldUpdateOldScreen) {                            // check whether oldScreen value should be updated
       oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval
     }
+
+  // ******************************* CONNECT MQTT **************************************** //
+
+    connect();                                             // call function to connect WiFi and MQTT according to screen state context
+
+    maintainConnection();                                  // call function to maintain or recover connection if it was established but lost
+
     
   // ********************************** PUBLISHING *************************************** //
 
-    // publish each sensor data to mqtt broker
-    client.publish(TOPIC_PUB_TEMP, toString(temp));
-    client.publish(TOPIC_PUB_HUMI, toString(humi));
-    client.publish(TOPIC_PUB_VIB, vibResult);
-    client.publish(TOPIC_PUB_MOIST, toString(moistureResult));
-    client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
-    client.publish(TOPIC_PUB_LOUD, toString(loudnessResult));
+    if(mqttConnected()) {
+      // if connected, publish each sensor data to mqtt broker
+      client.publish(TOPIC_PUB_TEMP, toString(temp));
+      client.publish(TOPIC_PUB_HUMI, toString(humi));
+      client.publish(TOPIC_PUB_VIB, vibResult);
+      client.publish(TOPIC_PUB_MOIST, toString(moistureResult));
+      client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
+      client.publish(TOPIC_PUB_LOUD, toString(loudnessResult));
+    }
   }
 }

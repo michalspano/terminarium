@@ -43,6 +43,7 @@ void goRightScreen() {              // function to cycle screen on right button 
     case CONNECT_SELECT:                       
       screen = CONNECT_WIFI;       
       isStartup = false;
+      isConnecting = true;
       break;
     default:                        // by default do nothing on button press                
       break;
@@ -74,12 +75,16 @@ void goLeftScreen() {               // function to switch screen on left button 
       screen = LOUD;
       break;
     case CONNECT_SELECT:
-      if(isStartup) {
-        screen = DASHBOARD;
-      } else {
-        screen = DASHBOARD;         // TODO: change to allow return to previous screen if not at startup
-      }
+      screen = DASHBOARD;
       isStartup = false;
+      
+      if(wifiIsConnected && !mqttIsConnected) {
+        mqttWasConnected = false;
+      } 
+      if(!wifiIsConnected) {
+        wifiWasConnected = false;
+        mqttWasConnected = false;
+      } 
       break;
     default:                        // by default do nothing on button press                
       break;
@@ -87,7 +92,9 @@ void goLeftScreen() {               // function to switch screen on left button 
 }
 
 void goDashScreen() {               // function to jump to dashboard from any screen state
-  screen = DASHBOARD;
+  if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {
+    screen = DASHBOARD;
+  }
 }
 
 void goConnSelectScreen() {         // function to jump to connection screen

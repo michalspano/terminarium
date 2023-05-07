@@ -40,6 +40,10 @@ extern char* toString (int value);
 // convert float to sequence of characters for mqtt publish
 extern char* toString (float value);
 
+// convert const char* to char* for use in draw functions
+extern char* toString (const char* text);
+
+
 // ************************ PROGRAM INTERVAL ***************************** //
 
 /* Note: The below function IntervalPassed() was adapted from example code "Blind Without Delay" on Arduino.cc

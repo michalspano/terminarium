@@ -23,7 +23,7 @@ extern Screen screen;                                 // include global screen s
 /***update these with values corresponding to your network***/
 extern const char* SSID;                              // wifi network name
 extern const char* PASSWORD;                          // wifi network password
-extern const char* SERVER;                            // mqtt broker ip address (use ipconfig command and see IPv4 address)
+extern const char* SERVER;                            // mqtt broker ip address
 
 // topic for receiving messages
 extern const char* TOPIC_SUB;
@@ -42,6 +42,28 @@ extern const char* TOPIC_PUB_VIB;
 extern const char* TOPIC_PUB_MOIST;
 extern const char* TOPIC_PUB_LIGHT;
 extern const char* TOPIC_PUB_LOUD;
+
+
+// ********************** CONNECT GENERAL **************************** //
+
+// include global flag indicating connection is currently being established
+extern bool isConnecting;
+
+/* global flags denoting current connectivity 
+ *NOTE: Only exists because of Fatal Error in screen_control when using the wifiConnected()/mqttConnected() functions */
+extern bool wifiIsConnected;
+extern bool mqttIsConnected;
+
+// global flag indicating previous connection to wifi network
+extern bool wifiWasConnected; 
+
+// global flag indicating previous connection to mqtt server
+extern bool mqttWasConnected;
+
+// function calls wifi or mqtt connection depending on screen state context
+extern void connect();
+
+void maintainConnection();
 
 
 // ************************ CONNECT WIFI ***************************** //

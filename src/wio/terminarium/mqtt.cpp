@@ -42,13 +42,45 @@ const char* TOPIC_PUB_LIGHT = "/terminarium/sensor/light";
 const char* TOPIC_PUB_LOUD  = "/terminarium/sensor/loudness";
 
 
+// ********************** CONNECT GENERAL **************************** //
+
+bool isConnecting = false;                // global flag denoting connection is currently being established
+bool wifiIsConnected = false;             // global flag denoting wifi connectivity **NOTE: Only exists because of Fatal Error in Screen Control when using wifiConnected() function**
+bool mqttIsConnected = false;             // global flag denoting mqtt connectivity **NOTE: Only exists because of Fatal Error in Screen Control when using mqttConnected() function**
+bool wifiWasConnected = false;            // global flag denoting previous connection to mqtt server, false by default
+bool mqttWasConnected = false;            // global flag denoting previous connection to wifi network, false by default
+
+void connect() {                          // call functions to connect to wifi or mqtt depending on screen state context
+  if(screen == CONNECT_WIFI) {
+    setupWifi();                          // connect to wifi network
+  } else if (screen == CONNECT_MQTT) {
+    setupClient();                        // connect to mqtt broker
+  }
+} 
+
+void maintainConnection() {               // maintain or recover connection if it was established but lost
+  if(mqttConnected()) {
+    client.loop();                        // stay connected and listening to mqtt broker
+  }
+  if(wifiWasConnected && !wifiConnected() & !isConnecting && screen != CONNECT_SELECT) {
+    Serial.print("Connection to Wi-Fi network lost.");  // print connection loss message to serial monitor
+    goConnSelectScreen();
+  } else if (mqttWasConnected && !mqttConnected() & !isConnecting && screen != CONNECT_SELECT) {
+    Serial.println("Connection to MQTT server lost");   // print connection loss message to serial monitor
+    goConnSelectScreen();
+  } 
+}
+
+
 // ************************ CONNECT WIFI ***************************** //
 
-// function returns boolean indicating connection status (used for readability)
+// return boolean indicating connection status (used for readability)
 bool wifiConnected() {
   if(WiFi.status() == WL_CONNECTED) {
+    wifiIsConnected = true;                           // temporary workaround
     return true;
   } else {
+    wifiIsConnected = false;                          // temporary workaround 
     return false;
   }
 }
@@ -56,26 +88,26 @@ bool wifiConnected() {
 // connect to wifi network and print status to serial monitor
 void setupWifi() {
 
-  drawConnectScreen("WiFi network:", SSID);           // draw wifi connection screen
-  WiFi.begin(SSID, PASSWORD);                         // connect to wifi network
   Serial.print("\nConnecting to Wi-Fi network: ");    // print name of wifi network in serial monitor
   Serial.print(SSID);
+  WiFi.begin(SSID, PASSWORD);                         // connect to wifi network
 
   while (!wifiConnected()) {                          // loop while not connected to wifi
+    drawDotDotDot(strlen(SSID), getCenterX(toString(SSID)), 169);
     Serial.print(".");                                // print dot..dot..dot... to serial monitor
     WiFi.begin(SSID, PASSWORD);                       // reattempt connection
   }
 
   drawConnectedText();                                // draw affirmative message on LCD screen upon succesful connection
+  wifiWasConnected = true;                            // udpate flag to indicate that wifi connection was previously established
   Serial.println("\nWiFi connected!");                // display affirmative message on serial monitor
   Serial.println("IP address: ");                     
   Serial.println(WiFi.localIP());                     // display local ip address on serial monitor
   SEPARATOR;                                          // visual separator for serial monitor   
   
-  drawTriangles();
+  delay(2000);
   screen = CONNECT_MQTT;                              // change screen state to proceed with connection
 } 
-
 
 // reconnect to wifi if connection lost during program loop
 void reconnectWifi() {
@@ -86,11 +118,13 @@ void reconnectWifi() {
 
 // ************************** CONNECT MQTT ***************************** //
 
-// function returns boolean indicating mqtt connection status (used for readability)
+// return boolean indicating mqtt connection status (used for readability)
 bool mqttConnected() {
   if (client.connected()) {
+    mqttIsConnected = true;                           // temporary workaround 
     return true;
   } else {
+    mqttIsConnected = false;                          // temporary workaround 
     return false;
   }
 }
@@ -101,16 +135,20 @@ void setupClient() {
   String clientID = "WioTerminal";                    // create a client ID
   client.connect(clientID.c_str());                   // connect to mqtt broker
 
-  while(!client.connected()) {                           // loop while not connected to broker
+  while(!client.connected()) {                        // loop while not connected to broker
+    drawDotDotDot(strlen(SERVER), getCenterX(toString(SERVER)), 169);
     Serial.print("Failed, return code = ");           // print error message
     Serial.println(client.state());                   // print client state (error code as int value that represents additional info on specific error) 
-    Serial.println("Try again in 5 seconds");      
-    delay(5000);                                      // wait 5 seconds before retrying
+    Serial.println("Trying again");      
+    Serial.print(".");                                // wait 5 seconds before retrying
     client.connect(clientID.c_str());                 // reattempt connection
   }
 
-  Serial.println("Connected!");                       // if succesful, print affirmative message
-  client.subscribe(TOPIC_SUB);                        // subscribe to topic
+  drawConnectedText();                                // draw affirmative message on LCD screen upon succesful connection
+  Serial.println("Connected!");                       // if succesful, print affirmative message to serial monitor
+  isConnecting = false;                               // update flag to indicate that connecting process is over
+  mqttWasConnected = true;                            // udpate flag to indicate that mqtt connection was previously established
+  client.subscribe(TOPIC_SUB);                        // subscribe to topics
   client.subscribe(TOPIC_SUB_TEMP);
   client.subscribe(TOPIC_SUB_HUMI);
   client.subscribe(TOPIC_SUB_MOIST);
@@ -122,15 +160,9 @@ void setupClient() {
   Serial.println(TOPIC_SUB);                      
   SEPARATOR;                                          // visual separator for serial monitor
 
+  delay(2000);
   screen = DASHBOARD;
 } 
-
-
-// reconnect to broker if connection lost during program loop
-void reconnectClient() {
-  Serial.println("MQTT connection lost.");            // print reconnect-specific message to serial monitor
-  setupClient();                                      // call mqtt broker connection function
-}
 
 
 // behavior when new message received from mqtt broker
