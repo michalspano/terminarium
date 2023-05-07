@@ -125,7 +125,7 @@ export default {
         if (min > 100 || max > 100) {           // Checks that no value is larger than 100 and sets helpful exception if true
           this.displayOnSaveMessage = true;     // The fields arrow buttons are constricted to 0 - 100 however manually entering a large number worked previously
                                                 // This can be refactored later if there is a better way.
-          this.onSaveMessage = "Save failed: Values must be > 100";
+          this.onSaveMessage = "Save failed: Values must be <= 100";
           this.resetSaveButton()
           return;
         }
@@ -222,8 +222,8 @@ p {
 
 .success_message {
   margin-top: 5px;
-  width: 60%;
-  height: 100%;
+  width: 100%;
+  height: 20px;
   border-radius: 20px;
   color: #ffffff;
   text-align: center;
