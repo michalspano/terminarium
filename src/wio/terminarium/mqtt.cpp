@@ -16,9 +16,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 * Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "HUAWEI P30 Pro";                    // wifi network name
-const char* PASSWORD   = "12345678";                    // wifi network password
-const char* SERVER     = "192.168.43.86";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "######";                    // wifi network name
+const char* PASSWORD   = "######";                    // wifi network password
+const char* SERVER     = "######";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";

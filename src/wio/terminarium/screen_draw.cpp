@@ -227,9 +227,6 @@ void drawConnSelectScreen(bool isStartup) {
   }
   tft.drawString(text, getCenterX(text), 63);
 
-  //char fullText[15];
-  //strcpy(fullText, ((wifiWasConnected || mqttWasConnected) ? "Restart MQTT" : "Start MQTT"));
-  //const char* fullText = wasConnected ? "Restart MQTT" : "Start MQTT";
   char* fullText;
   if(wifiWasConnected || mqttWasConnected) {
     fullText = "Restart MQTT";

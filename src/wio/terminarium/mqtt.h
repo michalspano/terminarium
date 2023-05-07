@@ -20,7 +20,7 @@ extern PubSubClient client;                           // mqtt client
 #include "screen_control.h"                           // include screen controlling functions
 extern Screen screen;                                 // include global screen state variable in current scope        
 
-/***update these with values corresponding to your network***/
+// user network credentials
 extern const char* SSID;                              // wifi network name
 extern const char* PASSWORD;                          // wifi network password
 extern const char* SERVER;                            // mqtt broker ip address
