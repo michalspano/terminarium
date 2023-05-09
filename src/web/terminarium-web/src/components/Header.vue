@@ -1,16 +1,22 @@
-<!-- Page header containing slot for logotype, navigation bar and a button -->
+<!------------------------------------------------------------------------------------------
+    Page header component containing slot for logotype, navigation bar and a Log in button.
+    The Log in button is a child component meaning it is its own component nested
+    within the header component.
+    The navbar of the header changes based on weather the page is is logged in or not.
+    Additional links appear to logged in users.
+    --------------------------------------------------------------------------------------->
 <template>
   <header class="terrminarium_header">
     <div class="logo_container">
       <img src="src/assets/terminarium-logo.png" alt="terminarium-logo">
     </div>
-    <nav class="header_nav_bar" v-if="!isLoggedIn">
+    <nav class="header_nav_bar" v-if="!isLoggedIn"> <!-- Checks if logged in = false -->
       <!-- TODO: Set links -->
       <a href="#" class="header_link">About</a>
       <a href="#" class="header_link">Help</a>
       <a href="#" class="header_link">Contact</a>
     </nav>
-    <nav class="header_nav_bar" v-if="isLoggedIn">
+    <nav class="header_nav_bar" v-else>
       <!-- TODO: Set links -->
       <a href="#" class="header_link">Home</a>
       <a href="#" class="header_link">About</a>
@@ -21,40 +27,34 @@
       <a href="#" class="header_link">Settings</a>
     </nav>
     <div class="header_button">
-      <!-- TODO: Implement button sign in / sign out button component -->
-      <button class="placeholder_button">Sign out</button>
+      <AccessButton></AccessButton>
     </div>
   </header>
 </template>
 
 
 <script>
-  //Only used during development to export and view component
+import AccessButton from "@/components/AccessButton.vue";
+
   export default {
     name: "Header.vue",
+    components: {AccessButton}, // Access to the child component.
     data: function () {
       return{
-
-        // Placeholder hard-coded value
-        isLoggedIn: true
         // TODO: actually implement logic to check if user is logged in
-        // (likely to be a computed value instead)
+        // I suggest we introduce a global variable 'isLoggedIn' to the app so that all components that need it can access it from root
+        isLoggedIn: true // This would then be isLoggedIn: this.$root.isLoggedIn
       }
     }
   }
 </script>
 
 <style scoped>                  /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
-* {
-
-  font-family: Cantora One, Georgia;
-}
-
 
 .terrminarium_header {
   background-color: rgba(0, 0, 0, 0.301);
   color: #fff;
-  display: flex;               /* Adapting to screen size rgba(0, 0, 0, 0.301)#437649*/
+  display: flex;               /* Adapting to screen size*/
   align-items: center;
   height: 100px;
   position: fixed;
@@ -90,13 +90,4 @@
   width: 250px;
 }
 
-.placeholder_button {        /* This will be replaced */
-  margin: 10px;
-  background-color: #000;
-  border: none;
-  color: #fff;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
 </style>

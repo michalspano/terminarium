@@ -51,9 +51,12 @@ export default {
 
 
 <style scoped>
-/* Outline that applies to all component elements - helpful during development process */
-/* TODO: Remove */
-* {
-    outline: red dashed 1px;
+.access {
+  border-radius: 20px;       /* Rounding the edges */
+  background-color: green;
+  border-color: gold;
+  font-size: 16px;
+  color: white;
+  display: flex;            /* Adapting to screen size */
 }
 </style>
