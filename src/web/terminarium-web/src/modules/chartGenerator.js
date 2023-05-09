@@ -5,11 +5,11 @@ import { Chart } from 'chart.js/auto';
  * @type {Object} graphColors
  */
 const graphColors = {
-    "temperature":  "#TODO",
-    "humidity":     "#TODO",
-    "moisture":     "#TODO",
-    "light":        "#TODO",
-    "loudness":     "#TODO"
+    "temperature":  "rgba(255, 99, 132, 0.75)", // red
+    "humidity":     "rgba(54, 162, 235, 0.75)", // blue
+    "moisture":     "rgba(75, 192, 192, 0.75)", // green
+    "light":        "rgba(255, 206, 86, 0.75)", // yellow
+    "loudness":     "rgba(153, 102, 255, 0.75)" // purple
 };
 
 /**
