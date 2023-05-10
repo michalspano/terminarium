@@ -17,7 +17,7 @@
     window.graphIdx = 0;
 
     export default {
-        name: 'Graph',
+        name: 'Chart',
         props: {
             // The id is optional; if not provided, it will be generated automatically
             id: {
