@@ -9,6 +9,7 @@ import Footer from './Footer.vue';
 import Background from './Background.vue';
 </script>
 
+
 <template>
     <div id="defaultLayout">
         <section class="container">
@@ -21,4 +22,9 @@ import Background from './Background.vue';
     </div>
 </template>
 
-<script></script>
+
+<script>
+export default {
+    name: "DefaultPageLayout"
+}
+</script>

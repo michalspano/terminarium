@@ -10,21 +10,22 @@
 <template>
     <div class="avatar" >
         <img 
-        v-bind:src="imageSrc" 
-        alt="Avatar picture"
-        v-bind:style="{width: size, height: size}"
-        @click="wasClicked"
+            v-bind:src="imageSrc" 
+            alt="Avatar picture"
+            v-bind:style="{width: size, height: size}"
+            @click="wasClicked"
         >
         <div class="terrariumName">{{ name }}</div>
     </div>
 </template>
+
 
 <script>
 /**Exports the "component definition object" for efficient re-use in other modules.
  * The additional in-line syntax following "export default" is automatically added by
  * the Vue-compiler for type inference / support. */
 export default {
-    name: "Avatar.vue",
+    name: "Avatar",
 
     /**"props:" declares which external props the child component accepts from its parent.
      * Here we are using the "object-syntax" for prop validation. 
@@ -74,6 +75,7 @@ export default {
 }
 </script>
 
+
 <style>
 /* Outline that applies to all component elements - helpful during development process */
 /* TODO: Remove */
@@ -93,5 +95,4 @@ img {
     border-radius: 33%;
     cursor: pointer;
 }
-
 </style>

@@ -1,9 +1,9 @@
 <!-- Page header containing slot for logotype, navigation bar and a button -->
 <template>
-  <header class="terrminarium_header">
+  <header class="terminarium_header">
     <div class="logotype">
       <!-- TODO: implement logo -->
-      <img src="" alt="Terrminarium logo">
+      <img src="" alt="Terminarium logo">
     </div>
     <nav class="header_nav_bar">
       <!-- TODO: Set links -->
@@ -22,9 +22,10 @@
 <script>
   //Only used during development to export and view component
   export default {
-    name: "Header.vue"
+    name: "Header"
   }
 </script>
+
 
 <style scoped>                 /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
 
@@ -32,7 +33,7 @@
   outline: red dashed 1px;    /* SUPER GOOD TIP!!! This outlines all your elements which makes it way easier to see effects and catch bugs.
                                Will be removed when doing final styling */
 }
-.terrminarium_header {
+.terminarium_header {
   background-color: #5A5A5A;
   color: #fff;
   display: flex;              /* Adapting to screen size */
