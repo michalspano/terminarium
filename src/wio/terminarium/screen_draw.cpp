@@ -289,7 +289,7 @@ void drawConnSelectScreen(bool isStartup) {
     text = "WiFi conn. lost!";
   } else if(mqttWasConnected && !mqttConnected()) {  // if mqtt previously connected but then disconnected, print contextual text
     text = "MQTT conn. lost!";
-  } else if(wifiConnected() && mqttConnected()) {
+  } else if(wifiConnected() && mqttConnected()) {    // if wifi and mqtt both connected, print contextual text
     text = "Already connected";
   }
   tft.drawString(text, getCenterX(text), 63);
@@ -322,7 +322,7 @@ void drawConnSelectScreen(bool isStartup) {
   tft.drawString("Yes", 207, 179);
 }
 
-// draw green "Connected" text upon establishing conneciton (wifi and mqtt)
+// draw wifi or mqtt connection screen depending on screen context
 void drawConnectScreen(char* connectType, const char* connectValue) {
   clearScreen();
 
@@ -358,14 +358,12 @@ extern void clearScreen() {
   tft.fillRect(0,50,320,TFT_HEIGHT - 50, TFT_BLACK); // clear previous screen by overwriting it with black rectangle
 }
 
-
 // function that calculates centered x starting position for any given text
 int getCenterX(char* text) {                         
     int textSize = strlen(text) * CHAR_WIDTH;        // get text pixel size by multiplying (number of characters in text) x (number of pixels per character)
     int xPosition = (TFT_WIDTH - textSize) / 2;      // calculate x starting position by (width of screen) - (text pixel size) / 2
     return xPosition;
 }
-
 
 /**
  * @drawTriangles: draw triangle graphics (common in all sensor screens)
@@ -375,7 +373,6 @@ void drawTriangles() {
   tft.fillTriangle(55, 115, 55, 135, 35, 125, TFT_WHITE);     // draw left triangle 
   tft.fillTriangle(260, 115, 260, 135, 280, 125, TFT_WHITE);  // draw right triangle 
 }
-
 
 // draw dot dot dot writing effect when establishing connectivity
 void drawDotDotDot(int length, int x, int y) {

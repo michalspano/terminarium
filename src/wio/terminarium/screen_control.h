@@ -1,5 +1,5 @@
 /***************************************************************************************************
- * Terminarium - LCD screen controller (header file)
+ * Terminarium - LCD screen controller
  * File: {@code screen_control.h} [header file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
@@ -36,10 +36,6 @@ extern bool wifiWasConnected;       // include flag indicating user was previous
 extern bool mqttWasConnected;       // include flag indicating user was previously connected to mqtt server
 
 
-/* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
- * this function is used to revert screen state and correctly update the oldScreen value */
-extern void goPrevScreen(Screen currentScreen);
-
 extern void goRightScreen();        // function to cycle screen on right button press depending on current screen state
 
 extern void goLeftScreen();         // function to switch screen on left button press depending on current screen state
@@ -47,5 +43,8 @@ extern void goLeftScreen();         // function to switch screen on left button 
 extern void goDashScreen();         // function to jump to dashboard from any screen state
 
 extern void goConnSelectScreen();   // function to jump to connection screen
+
+// function used to revert screen state and correctly update the oldScreen value
+extern void goPrevScreen(Screen currentScreen);
 
 #endif                              // end header guard  

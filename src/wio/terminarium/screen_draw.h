@@ -72,7 +72,7 @@ extern void drawUpdateScreen();
 // draw screen that prompts user with choice to connect or not
 extern void drawConnSelectScreen(bool isStartup);
 
-// draw screen indicating establishing connection (wifi and mqtt)
+// draw wifi or mqtt connection screen depending on screen context
 extern void drawConnectScreen(char* connectType, const char* connectValue); 
 
 // draw green "Connected" text upon establishing conneciton (wifi and mqtt)

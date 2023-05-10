@@ -9,15 +9,6 @@
 
 #include "screen_control.h"         // include corresponding header file
 
-/**
- * @goPrevScreen: some draw functions switch between 2 screen states within 1 interval.
- * this function is used to revert screen state and correctly update the oldScreen value 
- */
-void goPrevScreen(Screen currentScreen) {
-  screen = oldScreen;               // set screen back to the previous screen
-  oldScreen = currentScreen;        // update oldScreen value
-  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
-}
 
 void goRightScreen() {              // function to cycle screen on right button press depending on current screen state
   switch(screen) {
@@ -42,7 +33,7 @@ void goRightScreen() {              // function to cycle screen on right button 
     case DASHBOARD:
       screen = TEMP;
       break;
-    case CONNECT_SELECT:                       
+    case CONNECT_SELECT:            // right button press = choose to connect mqtt           
       screen = CONNECT_WIFI;       
       isStartup = false;            // after first connect select screen it will no longer be startup
       break;
@@ -75,7 +66,7 @@ void goLeftScreen() {               // function to switch screen on left button 
     case DASHBOARD:
       screen = LOUD;
       break;
-    case CONNECT_SELECT:
+    case CONNECT_SELECT:            // left button press = choose not to connect, return to dashboard
       screen = DASHBOARD;
       isStartup = false;            // after first connect select screen it will no longer be startup 
       wifiWasConnected = false;     // opting out of connecting sets this variable to false
@@ -94,4 +85,14 @@ void goDashScreen() {               // function to jump to dashboard from any sc
 
 void goConnSelectScreen() {         // function to jump to connection screen
   screen = CONNECT_SELECT;
+}
+
+/**
+ * @goPrevScreen: some draw functions switch between 2 screen states within 1 interval.
+ * this function is used to revert screen state and correctly update the oldScreen value 
+ */
+void goPrevScreen(Screen currentScreen) {
+  screen = oldScreen;               // set screen back to the previous screen
+  oldScreen = currentScreen;        // update oldScreen value
+  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
 }
