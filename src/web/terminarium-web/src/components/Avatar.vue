@@ -10,9 +10,9 @@
 <template>
     <div class="avatar" >
         <img 
-        :src="imageSrc" 
+        v-bind:src="imageSrc" 
         alt="Avatar picture"
-        :style="{width: size, height: size}"
+        v-bind:style="{width: size, height: size}"
         @click="wasClicked"
         >
         <div class="terrariumName">{{ name }}</div>
@@ -45,6 +45,11 @@ export default {
             required: true
         },
 
+        index: {                //The index of an Avatar instance in the parent component array.
+            type: Number,       //Passed back to the parent component when an event is triggered.
+            required: true
+        },
+
         isClickable: {          //Determines if the Avatar is interactable by clicking on it.
             type: Boolean,
             default: true       //By default the value is true; the parent component must pass a "false" value to disable it.
@@ -62,7 +67,7 @@ export default {
          * More information in official docs: https://vuejs.org/guide/components/events.html */
         wasClicked() {
             if (this.isClickable) {
-                this.$emit("avatarClicked");
+                this.$emit("avatarClicked", this.index);
             }
         }
     }
@@ -79,7 +84,8 @@ export default {
 .terrariumName {
     text-align: center;
     font-weight: bold;
-    cursor: pointer;
+    cursor: default;
+    color: white;
 }
 
 img {
