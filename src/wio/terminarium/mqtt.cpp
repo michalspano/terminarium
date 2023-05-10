@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - MQTT communication
- * File: {@code mqtt.h}
+ * File: {@code mqtt.cpp} [source file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -12,28 +12,27 @@
 WiFiClient wioClient;                                 // initialise wifi client
 PubSubClient client(wioClient);                       // initialise mqtt client
 
-/* Note: This code was adapted from "MQTT on Wio Terminal" by Salman Faris
-* Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 */
+/**
+ * Note: This code was adapted from "MQTT on Wio Terminal" by Salman Faris
+ * Link: https://www.hackster.io/Salmanfarisvp/mqtt-on-wio-terminal-4ea8f8 
+ */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "######";                    // wifi network name
-const char* PASSWORD   = "######";                    // wifi network password
-const char* SERVER     = "######";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "Bifteki";                    // wifi network name
+const char* PASSWORD   = "12345678";                    // wifi network password
+const char* SERVER     = "192.168.43.86";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
 
-/*These topics are to be used for receiving user defined sensor ranges 
-* Note: the format of the message shall be two integers < 100 & > 0 separated by a ',' and no spaces - '##,##'
-* Max value followed by min value
-* Single digit numbers must start with 0 - e.g 05, 06 */
+// topics used for receiving user defined sensor ranges 
 const char* TOPIC_SUB_TEMP  = "/terminarium/app/range/temperature";
 const char* TOPIC_SUB_HUMI  = "/terminarium/app/range/humidity";
 const char* TOPIC_SUB_MOIST = "/terminarium/app/range/moisture";
 const char* TOPIC_SUB_LIGHT = "/terminarium/app/range/light";
 const char* TOPIC_SUB_LOUD  = "/terminarium/app/range/loudness";
 
-// topics for sending sensor data
+// topics for publishing sensor data
 const char* TOPIC_PUB_TEMP  = "/terminarium/sensor/temperature";
 const char* TOPIC_PUB_HUMI  = "/terminarium/sensor/humidity";
 const char* TOPIC_PUB_VIB   = "/terminarium/sensor/vibration";
@@ -44,30 +43,36 @@ const char* TOPIC_PUB_LOUD  = "/terminarium/sensor/loudness";
 
 // ********************** CONNECT GENERAL **************************** //
 
-bool isConnecting = false;                // global flag denoting connection is currently being established
-bool wifiIsConnected = false;             // global flag denoting wifi connectivity **NOTE: Only exists because of Fatal Error in Screen Control when using wifiConnected() function**
-bool mqttIsConnected = false;             // global flag denoting mqtt connectivity **NOTE: Only exists because of Fatal Error in Screen Control when using mqttConnected() function**
 bool wifiWasConnected = false;            // global flag denoting previous connection to mqtt server, false by default
 bool mqttWasConnected = false;            // global flag denoting previous connection to wifi network, false by default
 
-void connect() {                          // call functions to connect to wifi or mqtt depending on screen state context
+/**
+ * @connect: call functions to either connect to wifi or mqtt depending on screen state context.
+ * It's either one or the other per interval, otherwise oldScreen won't update correctly. 
+ */
+void connect() {            
   if(screen == CONNECT_WIFI) {
-    setupWifi();                          // connect to wifi network
+    setupWifi();                          
   } else if (screen == CONNECT_MQTT) {
-    setupClient();                        // connect to mqtt broker
+    setupClient();                       
   }
 } 
 
-void maintainConnection() {               // maintain or recover connection if it was established but lost
-  if(mqttConnected()) {
-    client.loop();                        // stay connected and listening to mqtt broker
+void maintainConnection() {               // maintain or recover connection if it was first established but then lost
+  if(wifiConnected()) {
+    wifiWasConnected = true;              // maintain true value of variable so specific behaviors occur after connection lost
   }
-  if(wifiWasConnected && !wifiConnected() & !isConnecting && screen != CONNECT_SELECT) {
+  if(mqttConnected()) {
+    mqttWasConnected = true;              // maintain true value of variable so specific behaviors occur after connection lost
+    client.loop();                        // stay connected and listening to mqtt broker 
+  }
+  if(wifiWasConnected && !wifiConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
     Serial.print("Connection to Wi-Fi network lost.");  // print connection loss message to serial monitor
-    goConnSelectScreen();
-  } else if (mqttWasConnected && !mqttConnected() & !isConnecting && screen != CONNECT_SELECT) {
-    Serial.println("Connection to MQTT server lost");   // print connection loss message to serial monitor
-    goConnSelectScreen();
+    mqttWasConnected = false;                           // set to false so conditional below doesn't trigger when wifi is lost
+    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
+  } else if (mqttWasConnected && !mqttConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
+    Serial.println("Connection to MQTT server lost");   // print connection mqtt loss message to serial monitor
+    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
   } 
 }
 
@@ -77,10 +82,8 @@ void maintainConnection() {               // maintain or recover connection if i
 // return boolean indicating connection status (used for readability)
 bool wifiConnected() {
   if(WiFi.status() == WL_CONNECTED) {
-    wifiIsConnected = true;                           // temporary workaround
     return true;
   } else {
-    wifiIsConnected = false;                          // temporary workaround 
     return false;
   }
 }
@@ -99,13 +102,12 @@ void setupWifi() {
   }
 
   drawConnectedText();                                // draw affirmative message on LCD screen upon succesful connection
-  wifiWasConnected = true;                            // udpate flag to indicate that wifi connection was previously established
   Serial.println("\nWiFi connected!");                // display affirmative message on serial monitor
   Serial.println("IP address: ");                     
   Serial.println(WiFi.localIP());                     // display local ip address on serial monitor
   SEPARATOR;                                          // visual separator for serial monitor   
   
-  delay(2000);
+  delay(2000);                                        // arbitrary delay for visual "Connected" text on LCD screen 
   screen = CONNECT_MQTT;                              // change screen state to proceed with connection
 } 
 
@@ -121,10 +123,8 @@ void reconnectWifi() {
 // return boolean indicating mqtt connection status (used for readability)
 bool mqttConnected() {
   if (client.connected()) {
-    mqttIsConnected = true;                           // temporary workaround 
     return true;
   } else {
-    mqttIsConnected = false;                          // temporary workaround 
     return false;
   }
 }
@@ -146,8 +146,6 @@ void setupClient() {
 
   drawConnectedText();                                // draw affirmative message on LCD screen upon succesful connection
   Serial.println("Connected!");                       // if succesful, print affirmative message to serial monitor
-  isConnecting = false;                               // update flag to indicate that connecting process is over
-  mqttWasConnected = true;                            // udpate flag to indicate that mqtt connection was previously established
   client.subscribe(TOPIC_SUB);                        // subscribe to topics
   client.subscribe(TOPIC_SUB_TEMP);
   client.subscribe(TOPIC_SUB_HUMI);
@@ -160,7 +158,7 @@ void setupClient() {
   Serial.println(TOPIC_SUB);                      
   SEPARATOR;                                          // visual separator for serial monitor
 
-  delay(2000);
+  delay(2000);                                        // arbitrary delay for visual "Connected" text on LCD screen 
   screen = DASHBOARD;
 } 
 
@@ -177,14 +175,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
     buff_p[i] = (char)payload[i];
   }
-  //update array values
- if(updateSensorRanges(topic, buff_p, length)){
-   Serial.println(" Succesfully updated sensor ranges");
-   Serial.println(userDefinedRanges[0][0]);
- } else {
+    //update array values
+  if(updateSensorRanges(topic, buff_p, length)) {
+    Serial.println(" Succesfully updated sensor ranges");
+    Serial.println(userDefinedRanges[0][0]);
+  } else {
       Serial.println("Sensor ranges not updated succesfully");
- }
-
+  }
 
   Serial.println();
   buff_p[length] = '\0';

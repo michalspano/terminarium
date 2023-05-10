@@ -19,8 +19,7 @@
 // initializations
 DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
 TFT_eSPI tft;                             // initialise wio terminal LCD
-TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
-Screen screen = CONNECT_SELECT;           // initialise variable storing current screen to connection screen
+Screen screen = CONNECT_SELECT;           // initialise variable storing current screen to connection selection screen
 Screen oldScreen;                         // declare variable storing old screen (used for recognising if screen has changed)
 bool shouldUpdateOldScreen;               // declare flag if oldScreen should be updated - necessary for some unique draw functions
 bool isStartup = true;                    // declare flag that alters connection screen behavior after first startup
@@ -31,14 +30,14 @@ void setup() {
   tft.begin();                            // start terminal LCD
   tft.setRotation(3);                     // set terminal LCD rotation
 
-  // set buttons as input
+  // set buttons as input that interrupts program loop
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnSelectScreen, FALLING);
 
-  client.setServer(SERVER, 1883);       // set up mqtt server   
-  client.setCallback(callback);         // set up behavior when new message received from mqtt broker
+  client.setServer(SERVER, 1883);         // set up mqtt server   
+  client.setCallback(callback);           // set up behavior when new message received from mqtt broker
 
   drawHeader();                           // draw headder & background for all screens
 }
@@ -88,17 +87,16 @@ void loop() {
       oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval
     }
 
-  // ******************************* CONNECT MQTT **************************************** //
+  // ***************************** MQTT CONNECTIVITY ************************************* //
 
     connect();                                             // call function to connect WiFi and MQTT according to screen state context
 
     maintainConnection();                                  // call function to maintain or recover connection if it was established but lost
 
     
-  // ********************************** PUBLISHING *************************************** //
+  // ********************************* PUBLISHING **************************************** //
 
-    if(mqttConnected()) {
-      // if connected, publish each sensor data to mqtt broker
+    if(mqttConnected()) {                                  // if connected, publish each sensor data to mqtt broker
       client.publish(TOPIC_PUB_TEMP, toString(temp));
       client.publish(TOPIC_PUB_HUMI, toString(humi));
       client.publish(TOPIC_PUB_VIB, vibResult);

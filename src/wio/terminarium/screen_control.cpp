@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - LCD screen controller
- * File: {@code screen_control.h}
+ * File: {@code screen_control.cpp} [source file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -9,8 +9,10 @@
 
 #include "screen_control.h"         // include corresponding header file
 
-/* @goPrevScreen - some draw functions switch between 2 screen states within 1 interval.
- * this function is used to revert screen state and correctly update the oldScreen value */
+/**
+ * @goPrevScreen: some draw functions switch between 2 screen states within 1 interval.
+ * this function is used to revert screen state and correctly update the oldScreen value 
+ */
 void goPrevScreen(Screen currentScreen) {
   screen = oldScreen;               // set screen back to the previous screen
   oldScreen = currentScreen;        // update oldScreen value
@@ -42,8 +44,7 @@ void goRightScreen() {              // function to cycle screen on right button 
       break;
     case CONNECT_SELECT:                       
       screen = CONNECT_WIFI;       
-      isStartup = false;
-      isConnecting = true;
+      isStartup = false;            // after first connect select screen it will no longer be startup
       break;
     default:                        // by default do nothing on button press                
       break;
@@ -76,23 +77,17 @@ void goLeftScreen() {               // function to switch screen on left button 
       break;
     case CONNECT_SELECT:
       screen = DASHBOARD;
-      isStartup = false;
-      
-      if(wifiIsConnected && !mqttIsConnected) {
-        mqttWasConnected = false;
-      } 
-      if(!wifiIsConnected) {
-        wifiWasConnected = false;
-        mqttWasConnected = false;
-      } 
+      isStartup = false;            // after first connect select screen it will no longer be startup 
+      wifiWasConnected = false;     // opting out of connecting sets this variable to false
+      mqttWasConnected = false;     // opting out of connecting sets this variable to false
       break;
     default:                        // by default do nothing on button press                
       break;
   }
 }
 
-void goDashScreen() {               // function to jump to dashboard from any screen state
-  if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {
+void goDashScreen() {               // function to jump to dashboard from any screen state (if not currently connecting)
+  if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {   
     screen = DASHBOARD;
   }
 }

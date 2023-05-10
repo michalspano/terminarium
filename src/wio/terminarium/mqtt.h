@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - MQTT communication
- * File: {@code mqtt.h}
+ * File: {@code mqtt.h} [header file] 
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -46,14 +46,6 @@ extern const char* TOPIC_PUB_LOUD;
 
 // ********************** CONNECT GENERAL **************************** //
 
-// include global flag indicating connection is currently being established
-extern bool isConnecting;
-
-/* global flags denoting current connectivity 
- *NOTE: Only exists because of Fatal Error in screen_control when using the wifiConnected()/mqttConnected() functions */
-extern bool wifiIsConnected;
-extern bool mqttIsConnected;
-
 // global flag indicating previous connection to wifi network
 extern bool wifiWasConnected; 
 
@@ -63,6 +55,7 @@ extern bool mqttWasConnected;
 // function calls wifi or mqtt connection depending on screen state context
 extern void connect();
 
+// maintain or recover connection if it was first established but then lost
 void maintainConnection();
 
 
@@ -92,4 +85,4 @@ extern void reconnectClient();
 // behavior when new message received from mqtt broker
 extern void callback(char* topic, byte* payload, unsigned int length);
 
-#endif
+#endif                                                // end header guard  

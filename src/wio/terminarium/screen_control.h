@@ -1,6 +1,6 @@
 /***************************************************************************************************
- * Terminarium - LCD screen controller
- * File: {@code screen_control.h}
+ * Terminarium - LCD screen controller (header file)
+ * File: {@code screen_control.h} [header file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -12,16 +12,16 @@
 
 enum Screen {                       // enums denoting screen state 
   DASHBOARD,
-  CONNECT_SELECT,
-  CONNECT_WIFI,
-  CONNECT_MQTT,
-  UPDATE,
   TEMP,
   HUMI,
   VIB,
   MOIST,
   LIGHT,
-  LOUD
+  LOUD,
+  CONNECT_SELECT,
+  CONNECT_WIFI,
+  CONNECT_MQTT,
+  UPDATE
 };
 
 extern Screen screen;               // include global screen state variable in current scope 
@@ -30,7 +30,6 @@ extern bool shouldUpdateOldScreen;  // include boolean for if oldScreen should b
 extern bool isStartup;              // include boolean for if program is at startup
 
 #include "mqtt.h"
-extern bool isConnecting;           // include flag indicating connection is currently being established
 extern bool wifiIsConnected;        // include temporary workaround for goLeftScreen() case CONNECT_SELECT
 extern bool mqttIsConnected;        // include temporary workaround for goLeftScreen() case CONNECT_SELECT
 extern bool wifiWasConnected;       // include flag indicating user was previously connected to wifi server
@@ -49,4 +48,4 @@ extern void goDashScreen();         // function to jump to dashboard from any sc
 
 extern void goConnSelectScreen();   // function to jump to connection screen
 
-#endif
+#endif                              // end header guard  

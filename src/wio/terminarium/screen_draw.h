@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - LCD screen drawing functions
- * File: {@code screen_draw.h}
+ * File: {@code screen_draw.h} [header file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -25,25 +25,16 @@ extern bool mqttWasConnected;                      // include flag indicating us
 
 #include "utils.h"                                 // include utility functions
 
-#define HEIGHT 240                                 // define LCD screen pixel height
-#define WIDTH 320                                  // define LCD screen pixel width
+#define TFT_HEIGHT 240                             // define LCD screen pixel height
+#define TFT_WIDTH 320                              // define LCD screen pixel width
 #define CHAR_HEIGHT 24                             // define pixel height of one character
 #define CHAR_WIDTH 18                              // define pixel width of one character
 
 
-// *************************** MISC ********************************** //
+// **************************** GENERAL ****************************** //
 
-// function that clears screen for switching screen states
-extern void clearScreen();
-
-// function that calculates centered x position for any given text
-extern int getCenterX(char* text);
-
-/* @drawTriangles - draw triangle graphics (common in all sensor screens)
- * used to visually communicate that screens can be cycled through using left/right button inputs <..> */
-extern void drawTriangles();
-
-extern void drawDotDotDot(int length, int x, int y);
+// general function that draws all screens, called directly from main program loop
+extern void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup);
 
 
 // ************************** HEADER ********************************* //
@@ -57,36 +48,49 @@ void drawConnStatus(bool connected, char* text1, char* text2, int x, int y);
 
 // ************************* DASHBOARD ******************************* //
 
-// draw dashboard element (sensor panels)
-extern void drawDashboardElem(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY);
-
 // draw dashboard (main screen)
 extern void drawDashboardScreen(int temp, int oldTemp, int humi, int oldHumi, int vib, int oldVib, int moist, int oldMoist, int light, int oldLight, int loud, int oldLoud);
+
+// draw dashboard element (sensor panels)
+extern void drawDashboardElem(Screen type, String heading, int headingX, int headingY, int min, int max, int value, int valueX, int valueY, String unit, int unitX, int unitY);
 
 
 // ************************ SENSOR SCREENS *************************** //
 
-// draw status data (common for all individual sensor screens)
-extern void drawStatus(int value, int max, int min);
-
 // draw individual sensor screens, which can be cycled through using button inputs
-extern void drawSensorScreen(Screen type, String heading, int headingX, int headingY, int max, int min, int value, int valueX, int valueY, String unit, int unitX, int unitY);
+extern void drawSensorScreen(Screen type, String heading, int headingX, int headingY, int min, int max, int value, int valueX, int valueY, String unit, int unitX, int unitY);
+
+// draw status data (common for all individual sensor screens)
+extern void drawStatus(int value, int min, int max);
 
 
 // ******************** CONNECTIVITY SCREENS ************************* //
 
+// draw update screen indicating new sensor ranges are received
 extern void drawUpdateScreen();
 
+// draw screen that prompts user with choice to connect or not
 extern void drawConnSelectScreen(bool isStartup);
 
+// draw screen indicating establishing connection (wifi and mqtt)
 extern void drawConnectScreen(char* connectType, const char* connectValue); 
 
+// draw green "Connected" text upon establishing conneciton (wifi and mqtt)
 extern void drawConnectedText();
 
 
-// **************************** GENERAL ****************************** //
+// *************************** MISC ********************************** //
 
-// general function that draws all screens, called directly from main program loop
-extern void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, bool isStartup);
+// function that clears screen for switching screen states
+extern void clearScreen();
 
-#endif
+// function that calculates centered x starting position for any given text
+extern int getCenterX(char* text);
+
+// draw triangle graphics (common in all sensor screens)
+extern void drawTriangles();
+
+// draw dot dot dot writing effect when establishing connectivity
+extern void drawDotDotDot(int length, int x, int y);
+
+#endif                                             // end header guard  

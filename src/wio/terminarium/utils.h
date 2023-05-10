@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - utilities, macros, subroutines and constants
- * File: {@code utils.h}
+ * File: {@code utils.h} [header file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
@@ -24,9 +24,44 @@ extern Screen screen;               // include global screen state variable in c
 #define DHT_INTERVAL 500            // interval (ms) 
 #define SEP_CHAR "="                // character used for visual separator
 
-extern int userDefinedRanges[5][2]; //array storing user defined min and max acceptable values for each sensor type 
 
-// ************************* FORMAT OUTPUT ******************************* //
+// ************************* PROGRAM INTERVAL **************************** //
+
+// function for checking if interval has passed
+extern bool intervalPassed();
+
+
+// ************************ SENSOR SUBROUTINES *************************** //
+
+// map raw sensor data to a range of [1-100] percent
+extern int mapToPercentage(int signal);
+
+// parse raw vibration data into human-readable sensor
+extern char* parseVibrationValue(int vibrationSignal);
+
+// read temp&humi data from DHT sensor
+extern float* readTempHumi();
+
+
+// *********************** UPDATE SENSOR RANGES ************************** //
+
+//array storing user defined min and max acceptable values for each sensor type 
+extern int userDefinedRanges[5][2]; 
+
+// update array of max/min sensor ranges upon receiving new values via mqtt
+extern bool updateSensorRanges(char* topic, char payload[], unsigned int length);
+
+// checks that incoming message is formatted correctly ("###,###")
+bool validateFormat(char payload[], unsigned int length);
+
+// function to parse payload String
+void parsePayload(char payload[], int newSensorRanges[]);
+
+// check that neither min nor max ranges fall below 0 or exceed 100
+bool validateRanges(int min, int max);
+
+
+// ************************** FORMAT OUTPUT ****************************** //
 
 // visual separator for serial monitor
 #define SEPARATOR                \
@@ -43,38 +78,4 @@ extern char* toString (float value);
 // convert const char* to char* for use in draw functions
 extern char* toString (const char* text);
 
-
-// ************************ PROGRAM INTERVAL ***************************** //
-
-/* Note: The below function IntervalPassed() was adapted from example code "Blind Without Delay" on Arduino.cc
-* Link: https://www.arduino.cc/en/Tutorial/BuiltInExamples/BlinkWithoutDelay */
-
-
-extern bool intervalPassed();
-
-// ***************************SENSOR SUBROUTINES ***************************** //
-
-/**
- * Signal coming from sensor does not correspond to any real-world measure,
- * therefore we map the data to a range of [1-100] percent, as a way to intuitively gauge relative measure.
- * @param signal - the signal coming from the sensor
- * @return int - the mapped value
- */
-extern int mapToPercentage(int signal);
-
-/**
- * Parse the raw vibration signal to a human-readable string.
- * @param vibrationSignal - the raw vibration signal
- * @return String - the parsed vibration signal
- */
-extern char* parseVibrationValue(int vibrationSignal);
-
-/* Note: the below function readTempHumi() is adapted from the example code by Toan Nguyen and makes use of their DHT-Sensors-Non-Blocking library:
-* Link: https://github.com/toannv17/DHT-Sensors-Non-Blocking */
-
-extern float* readTempHumi();
-// ************************ UPDATE SENSOR RANGES ***************************** //
-
-extern bool updateSensorRanges(char* topic, char payload[], unsigned int length);
-
-#endif
+#endif                              // end header guard  
