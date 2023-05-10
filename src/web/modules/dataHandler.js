@@ -7,7 +7,7 @@ import { write } from './database.js'
  * Having the unique sensor topics as keys allows both retrieval of specific sensor 
  * data and overwriting it when new incoming data is received. */
 
-let sensorValues = new Map();                                        // declare map to contain sensor data
+var sensorValues = new Map();                                        // declare map to contain sensor data
 
 export function saveData(topic, message) {                           // function handling incoming messages (parameters are mqtt topic and contents of message)
 
@@ -16,9 +16,21 @@ export function saveData(topic, message) {                           // function
     timestamp: createTimestamp()                                     // call function to generate formatted timestamp
   };
 
+  if (typeof saveData.vibrationCount == 'undefined') {
+    saveData.vibrationCount = 0;
+  }
+
+  if (topic.endsWith('vibration')) {
+    if (message == 'true') {
+      saveData.vibrationCount++;
+    }
+  }
+
+  console.log(saveData.vibrationCount);
+
   sensorValues.set(topic, sensorData);                               // add newly received value into the map (topic as key, message contents as value)
   printToConsole(sensorValues);                                      // call function to print map entries to console
-}
+} 
 
 export function writeToDB() {                                        // function that sends sensor data 
   for (const [key, value] of sensorValues.entries()) {               // loop through each map entry
