@@ -19,10 +19,10 @@
 // initializations
 DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
 TFT_eSPI tft;                             // initialise wio terminal LCD
-TFT_eSprite spr = TFT_eSprite(&tft);      // initialise screen buffer using sprite function
-Screen screen;                            // initialise variable storing current screen
-Screen oldScreen;                         // initialise variable storing old screen (used for recognising if screen has changed)
-bool shouldUpdateOldScreen;               // initialise flag if oldScreen should be updated - necessary for some unique draw functions
+Screen screen = CONNECT_SELECT;           // initialise variable storing current screen to connection selection screen
+Screen oldScreen;                         // declare variable storing old screen (used for recognising if screen has changed)
+bool shouldUpdateOldScreen;               // declare flag if oldScreen should be updated - necessary for some unique draw functions
+bool isStartup = true;                    // declare flag that alters connection screen behavior after first startup
 
 void setup() {
   Serial.begin(SERIAL_BAUD_RATE);         // enable the serial monitor
@@ -30,33 +30,20 @@ void setup() {
   tft.begin();                            // start terminal LCD
   tft.setRotation(3);                     // set terminal LCD rotation
 
-  // set buttons as input
+  // set buttons as input that interrupts program loop
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnSelectScreen, FALLING);
 
-  setupWifi();                            // connect to wifi network
   client.setServer(SERVER, 1883);         // set up mqtt server   
   client.setCallback(callback);           // set up behavior when new message received from mqtt broker
-  setupClient();                          // connect to mqtt broker
 
   drawHeader();                           // draw headder & background for all screens
 }
 
 
 void loop() {
-
-  // ******************************* CONNECT MQTT **************************************** //
-  
-  if(WiFi.status() != WL_CONNECTED) {     // check if connected to wifi network
-    reconnectWifi();                      // if not, attempt reconnect
-  }
-
-  if (!client.connected()) {              // check if connected to mqtt server
-    reconnectClient();                    // if not, attempt reconnect
-    }
-
-  client.loop();                          // stay connected and listening to mqtt broker 
 
   // ********************************* READING ******************************************* //
 
@@ -84,30 +71,38 @@ void loop() {
     Serial.printf("Humidity: %d%% RH\n", humi);            // humidity in percentage
     Serial.printf("Vibration: %s\n", vibResult);           // vibration as string state
     Serial.printf("Moisture: %d%%\n", moistureResult);     // moisture in percentage
-    Serial.printf("Light level: %d%%\n", lightResult);     // light in percentage
+    Serial.printf("Light: %d%%\n", lightResult);           // light in percentage
     Serial.printf("Loudness: %d%%\n", loudnessResult);     // loudness in percentage
 
     SEPARATOR;                                             // visual separator for serial monitor
 
   // ***************************** DRAWING (LCD screen) ********************************** //
 
-    shouldUpdateOldScreen = true;                          // set to true by default (specific screen draw functions can set it to false) 
+    shouldUpdateOldScreen = true;                          // reset to true every interval (specific screen draw functions can set it to false) 
 
     // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult); 
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);                             
     
     if(shouldUpdateOldScreen) {                            // check whether oldScreen value should be updated
       oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval
     }
-    
-  // ********************************** PUBLISHING *************************************** //
 
-    // publish each sensor data to mqtt broker
-    client.publish(TOPIC_PUB_TEMP, toString(temp));
-    client.publish(TOPIC_PUB_HUMI, toString(humi));
-    client.publish(TOPIC_PUB_VIB, vibResult);
-    client.publish(TOPIC_PUB_MOIST, toString(moistureResult));
-    client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
-    client.publish(TOPIC_PUB_LOUD, toString(loudnessResult));
+  // ***************************** MQTT CONNECTIVITY ************************************* //
+
+    connect();                                             // call function to connect WiFi and MQTT according to screen state context
+
+    maintainConnection();                                  // call function to maintain or recover connection if it was established but lost
+
+    
+  // ********************************* PUBLISHING **************************************** //
+
+    if(mqttConnected()) {                                  // if connected, publish each sensor data to mqtt broker
+      client.publish(TOPIC_PUB_TEMP, toString(temp));
+      client.publish(TOPIC_PUB_HUMI, toString(humi));
+      client.publish(TOPIC_PUB_VIB, vibResult);
+      client.publish(TOPIC_PUB_MOIST, toString(moistureResult));
+      client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
+      client.publish(TOPIC_PUB_LOUD, toString(loudnessResult));
+    }
   }
 }

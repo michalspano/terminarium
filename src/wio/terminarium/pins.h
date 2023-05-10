@@ -1,6 +1,6 @@
 /***************************************************************************************************
  * Terminarium - pins setup
- * File: {@code pins.h}
+ * File: {@code pins.h} [header file]
  * Members: Michal Spano, Manely Abbasi, Erik Lindstrand, James Klouda,
  *          Konstantinos Rokanas, Jonathan Boman
  *
