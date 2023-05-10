@@ -18,9 +18,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
  */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "Bifteki";                    // wifi network name
-const char* PASSWORD   = "12345678";                    // wifi network password
-const char* SERVER     = "192.168.43.86";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "******";                    // wifi network name
+const char* PASSWORD   = "******";                    // wifi network password
+const char* SERVER     = "******";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
