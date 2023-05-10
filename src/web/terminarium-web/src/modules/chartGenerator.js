@@ -1,16 +1,16 @@
 import { Chart } from 'chart.js/auto';
 
 /**
- * A dictionary of colors for each sensor type
+ * An immutable object that maps sensor types to colors
  * @type {Object} graphColors
  */
-const graphColors = {
+const graphColors = Object.freeze({
     "temperature":  "rgba(255, 99, 132, 0.75)", // red
     "humidity":     "rgba(54, 162, 235, 0.75)", // blue
     "moisture":     "rgba(75, 192, 192, 0.75)", // green
     "light":        "rgba(255, 206, 86, 0.75)", // yellow
     "loudness":     "rgba(153, 102, 255, 0.75)" // purple
-};
+});
 
 /**
  * Function to generate a line graph using {@code Chart.js}
