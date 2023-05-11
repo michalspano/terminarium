@@ -14,11 +14,13 @@ cache:
     - .npm
 
 # The stages are the following:
-#   1. install_dependencies: Install all the dependencies for the npm pr
-#   2. build_project: Build the project
-#   3. TODO
+#   1. install-job: Install all the dependencies for the npm pr
+#   2. lint-job: Lint the project - catch syntax errors and bad practices
+#   3. build-job: Build the project
+#   4. TODO
 stages:
   - install
+  - lint
   - build
 
 # Define the image to use for the jobs
@@ -37,7 +39,17 @@ install-job:
     - npm install                             # Install the dependencies
     - echo "Dependencies installed!"          # Print a message
 
-# Job 2. Build the project
+# Job 2. Lint the project
+lint-job:
+  stage: lint
+  tags:
+    - docker
+  script:
+    - echo "Linting the project..."           # Print a message
+    - npm run lint                            # Lint the project
+    - echo "Project linted!"                  # Print a message
+
+# Job 3. Build the project
 build-job:
   stage: build
   tags: 
