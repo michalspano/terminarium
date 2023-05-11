@@ -164,9 +164,9 @@ export default {
       if (min > max) {                               // Checks if min is larger than max and sets helpful Error message if true
         this.validRange = false;
         this.onSaveMessage = "Save failed invalid range: Minimum value must be <= Maximum value";
-      } else if (min > 100 || max > 100) {           // Checks if values are larger than 100 and sets helpful Error message if true
+      } else if (min < 0 || min > 100 || max < 0 || max > 100) {           // Checks if values are larger than 100 and sets helpful Error message if true
         this.validRange = false;
-        this.onSaveMessage = "Save failed invalid range: Values must be <= 100";
+        this.onSaveMessage = "Save failed invalid range: Values must be 0 - 100";
       } else {                                       // Success case, range is valid. Sets success message
         this.validRange = true;
         this.onSaveMessage = "Your desired values were saved successfully!";
