@@ -8,7 +8,7 @@
 <template>
   <header class="terrminarium_header">
     <div class="logo_container">
-      <img src="src/assets/terminarium-logo.png" alt="terminarium-logo">
+      <img src="/src/assets/terminarium-logo.png" alt="terminarium-logo">
     </div>
     <nav class="header_nav_bar" v-if="!isLoggedIn"> <!-- Signed out user menu -->
       <!-- TODO: Set links -->
