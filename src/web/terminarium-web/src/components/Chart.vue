@@ -24,10 +24,12 @@
                 type: String,
                 default: undefined
             },
-            // The sensor type is required to fetch the correct data from the database
+            /* The sensor type is required to fetch the correct data from the database;
+             * permitted values: 'humidity', 'light', 'loudness', 'moisture', 'temperature', 'vibration'
+             * TODO: add proper support for the 'vibration' sensor type (due to its different data structure) */
             sensorType: {
                 type: String,
-                default: true
+                required: true
             },
             // The width and height are optional, but can be used to change the size of the graph
             // The default values are 200x200
