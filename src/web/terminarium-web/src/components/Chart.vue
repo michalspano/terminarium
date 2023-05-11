@@ -44,7 +44,7 @@
             // The range is optional, it is used to change the time range of the entries
             range: {
                 type: String,
-                default: 24
+                default: '24'
             }
         },
         mounted() {
