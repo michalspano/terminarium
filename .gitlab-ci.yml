@@ -1,0 +1,51 @@
+# Entry point for GitLab CI for terminarium-web
+
+# Variables are defined in the following order:
+variables:
+  SRC_PATH: src/web/terminarium-web
+
+# Define the docker image to use for the jobs - node:alpine
+image: node:alpine
+
+# Define the cache to use for the jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm
+
+# The stages are the following:
+#   1. install_dependencies: Install all the dependencies for the npm pr
+#   2. build_project: Build the project
+#   3. TODO
+stages:
+  - install
+  - build
+
+# Define the image to use for the jobs
+before_script:
+    - cd $SRC_PATH                          # Navigate to the source code (package-lock.json file is required)
+    - npm ci --cache .npm                   # Install the dependencies from the package-lock.json file
+    - apk add --no-cache bash git           # Install bash and git
+
+# Job 1. Install the dependencies
+install-job:
+  stage: install
+  tags: 
+    - docker
+  script:
+    - echo "Installing dependencies..."       # Print a message
+    - npm install                             # Install the dependencies
+    - echo "Dependencies installed!"          # Print a message
+
+# Job 2. Build the project
+build-job:
+  stage: build
+  tags: 
+    - docker
+  script:
+    - echo "Building the project..."          # Print a message
+    - npm run build                           # Build the project
+    - echo "Project built!"                   # Print a message
+  artifacts:
+    paths:
+      - $SRC_PATH/dist                        # Save the build folder as an artifact

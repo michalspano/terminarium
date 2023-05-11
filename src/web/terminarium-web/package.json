@@ -8,9 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "chart.js": "^4.3.0",
-    "vue": "^3.2.47",
     "@fontsource/cantora-one": "^4.5.11",
+    "chart.js": "^4.3.0",
+    "firebase": "^9.21.0",
+    "vue": "^3.2.47",
     "vue-plyr": "^7.0.0"
   },
   "devDependencies": {
