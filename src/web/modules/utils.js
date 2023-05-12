@@ -11,12 +11,12 @@ dotEnvConfig(); // initialize dotenv configuration
  * values are shared with the team members via a secure channel and/or obtained from the Google
  * Firebase Console. */
 export const firebaseConfig = {
-  apiKey: "AIzaSyCWIfIxCsDlNLQ6nCYULfo6mNGGYluhGcE",
-  authDomain: "terminariumdb.firebaseapp.com",
-  databaseURL: "https://terminariumdb-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "terminariumdb",
-  storageBucket: "terminariumdb.appspot.com",
-  messagingSenderId: "1081373991193",
-  appId: "1:1081373991193:web:cd7ae25f728527f5daa588",
-  measurementId: "G-9PJPD4TWZQ"
+  apiKey:             process.env.API_KEY,
+  authDomain:         process.env.AUTH_DOMAIN,
+  databaseURL:        process.env.DATABASE_URL,
+  projectId:          process.env.PROJECT_ID,
+  storageBucket:      process.env.STOREAGE_BUCKET,
+  messagingSenderId:  process.env.MESSAGING_SENDER_ID,
+  appId:              process.env.APP_ID,
+  measurementId:      process.env.MEASUREMENT_ID,
 };

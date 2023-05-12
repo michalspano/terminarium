@@ -3,7 +3,7 @@ import { saveData } from './dataHandler.js'                   // import function
 
 
 const options = {                                             // define the MQTT client and connect to the broker
-  host: '192.168.43.86',                                      // replace with the IP address of your MQTT broker
+  host: '***.***.**.**',                                      // replace with the IP address of your MQTT broker
   port: 1883                                                  // replace with the port number of your MQTT broker
 };
 

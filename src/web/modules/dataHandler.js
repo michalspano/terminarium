@@ -6,8 +6,14 @@ import { write } from './database.js'
  * sensor data and a timestamp of when the data is received.
  * Having the unique sensor topics as keys allows both retrieval of specific sensor 
  * data and overwriting it when new incoming data is received. */
-
 var sensorValues = new Map();                                        // declare map to contain sensor data
+
+/**@vibrationCount
+ * Vibration data is a boolean value, useful for real-time monitoring but not
+ * for data analysis. Therefore we separately store the number of vibration 
+ * occurrences (i.e. 'true' values) during each interval and write this number 
+ * to the database instead of the boolean value stored in the sensorValues map.*/
+var vibrationCount = 0;
 
 export function saveData(topic, message) {                           // function handling incoming messages (parameters are mqtt topic and contents of message)
 
@@ -16,28 +22,24 @@ export function saveData(topic, message) {                           // function
     timestamp: createTimestamp()                                     // call function to generate formatted timestamp
   };
 
-  if (typeof saveData.vibrationCount == 'undefined') {
-    saveData.vibrationCount = 0;
+  if (topic.endsWith('vibration') && message == 'true') {            // check if incoming message is from vibration sensor and message indicates vibration is occurring 
+    vibrationCount++;                                                // if so, increment the vibration counter by 1
   }
-
-  if (topic.endsWith('vibration')) {
-    if (message == 'true') {
-      saveData.vibrationCount++;
-    }
-  }
-
-  console.log(saveData.vibrationCount);
 
   sensorValues.set(topic, sensorData);                               // add newly received value into the map (topic as key, message contents as value)
-  printToConsole(sensorValues);                                      // call function to print map entries to console
+  printToConsole();                                                  // call function to print map entries to console
 } 
 
-export function writeToDB() {                                        // function that sends sensor data 
+export function writeToDB() {                                        // function that sends sensor data (called once every interval)
   for (const [key, value] of sensorValues.entries()) {               // loop through each map entry
     const nodeName = (`${ key }/${ value.timestamp }`);              // define node name as the mqtt topic plus the timestamp
-    write(nodeName, value.data);                                     // call write function from database.js using given parameters
+    if(!(key.endsWith('vibration'))) {                               // check if loop is on the vibration data entry
+      write(nodeName, value.data);                                   // if not, call write to DB function using data value from the map
+    } else {                                                         
+      write(nodeName, vibrationCount);                               // if so, call write to DB function using vibrationCount data instead
+    }
   }
-  // TODO: consider adding a 'last updated' child node of sensors 
+  vibrationCount = 0;                                                // reset the vibration counter for the next interval
 }
 
 function createTimestamp() {                                         // function returns formatted timestamp
@@ -63,4 +65,5 @@ function printToConsole() {                                          // function
   for (const [key, value] of sensorValues.entries()) {               // loop through each map entry
     console.log(`${ key }: ${ value.data } at ${ value.timestamp}`); // print key (topic) and value (sensor data) of entry to console
   }
+  console.log("Vibration count: " + vibrationCount);                 // print number of vibration occurrences so far
 }
