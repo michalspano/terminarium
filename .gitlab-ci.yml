@@ -16,11 +16,13 @@ cache:
 # The stages are the following:
 #   1. install-job: Install all the dependencies for the npm pr
 #   2. lint-job: Lint the project - catch syntax errors and bad practices
-#   3. build-job: Build the project
-#   4. TODO
+#   3. test-job: Test the project - run the unit tests
+#   4. build-job: Build the project
+#   5. TODO
 stages:
   - install
   - lint
+  - test
   - build
 
 # Define the image to use for the jobs
@@ -49,7 +51,17 @@ lint-job:
     - npm run lint                            # Lint the project
     - echo "Project linted!"                  # Print a message
 
-# Job 3. Build the project
+# Job 3. Test the project
+test-job:
+  stage: test
+  tags: 
+    - docker
+  script:
+    - echo "Testing the project..."           # Print a message
+    - npm run test:unit                       # Test the project (via unit tests)
+    - echo "Project tested!"                  # Print a message
+
+# Job 4. Build the project
 build-job:
   stage: build
   tags: 
