@@ -36,7 +36,7 @@
 import AccessButton from "@/components/AccessButton.vue";
 
 export default {
-  name: "Header",
+  name: "SiteHeader",
   components: {AccessButton}, // Access to the child component.
   data: function () {
     return{
