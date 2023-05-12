@@ -6,9 +6,9 @@
    Additional links appear to logged in users.
    --------------------------------------------------------------------------------------->
 <template>
-  <header class="terrminarium_header">
+  <header class="terminarium_header">
     <div class="logo_container">
-      <img src="/src/assets/terminarium-logo.png" alt="terminarium-logo">
+      <img src="/src/assets/terminarium-logo.png" alt="Terminarium logo">
     </div>
     <nav class="header_nav_bar" v-if="!isLoggedIn"> <!-- Signed out user menu -->
       <!-- TODO: Set links -->
@@ -36,7 +36,7 @@
 import AccessButton from "@/components/AccessButton.vue";
 
 export default {
-  name: "Header.vue",
+  name: "SiteHeader",
   components: {AccessButton}, // Access to the child component.
   data: function () {
     return{
@@ -50,7 +50,7 @@ export default {
 
 <style scoped>                  /* Style scoped applies css properties to HTML elements but only targets the elements of the component it is in. */
 
-.terrminarium_header {
+.terminarium_header {
   background-color: rgba(0, 0, 0, 0.301);
   color: #fff;
   display: flex;               /* Adapting to screen size*/

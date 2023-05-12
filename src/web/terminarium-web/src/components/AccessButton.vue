@@ -4,9 +4,11 @@
 ----------------------------------------------------------------------------------->
 
 <template>
-    <button @click="accessButtonAction" 
-    type="button" 
-    class="access">{{ accessButtonDescription }}</button>
+    <button 
+        @click="accessButtonAction" 
+        type="button" 
+        class="access">{{ accessButtonDescription }}
+    </button>
 </template>
 
 
@@ -15,7 +17,7 @@
  * The additional in-line syntax following "export default" is automatically added by
  * the Vue-compiler for type inference / support. */
 export default {
-    name: "AccessButton.vue",
+    name: "AccessButton",
     data () {
         return {
             // Placeholder hard-coded value

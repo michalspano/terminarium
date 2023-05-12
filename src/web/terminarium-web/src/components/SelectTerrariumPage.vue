@@ -57,6 +57,7 @@ import Avatar from './Avatar.vue';
 
 <script>
 export default {
+    name: "SelectTerrarium",
     components: {
         Avatar
     },
@@ -137,7 +138,10 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+
+    /* TODO: investigate! 
+     * Somehow this seems to be related to the issue with the "grey bar" appearing at the bottom of screen */
+    height: 100vh; 
 }
 
 .terrariums {
@@ -151,7 +155,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: calc(5vw + 15px);
+    gap: calc(7vw);
 }
 
 .manage-terrariums {

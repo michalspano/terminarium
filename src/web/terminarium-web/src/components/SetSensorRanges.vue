@@ -1,5 +1,5 @@
 <!----------------------------------------------------------------------------------
-   The "ChooseEnvironment" component is used to
+   The "SetSensorRanges" component is used to
    set the desired environment ranges for the terrarium enclosures.
 ----------------------------------------------------------------------------------->
 <template>
@@ -100,7 +100,7 @@
 
 <script>
 export default {
-  name: "ChooseEnvironment",
+  name: "SetSensorRanges",
   data: function () {
     return {
       minValue: 0,                /* Minimum allowed input value */

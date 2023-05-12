@@ -9,7 +9,7 @@
 <script>
 
 export default {
-  name: 'Footer.vue'
+  name: "SiteFooter"
 }
 </script>
 

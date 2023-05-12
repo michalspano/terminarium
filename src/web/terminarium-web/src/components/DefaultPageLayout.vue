@@ -4,21 +4,27 @@
 ----------------------------------------------------------------------------------------------->
 
 <script setup>
-import Header from './Header.vue';
-import Footer from './Footer.vue';
+import SiteHeader from './Header.vue';
+import SiteFooter from './Footer.vue';
 import Background from './Background.vue';
 </script>
+
 
 <template>
     <div id="defaultLayout">
         <section class="container">
-            <Header></Header>
+            <SiteHeader/>
         </section>
         <section class="container">
-            <Footer></Footer>
+            <SiteFooter/>
         </section>
         <Background></Background>
     </div>
 </template>
 
-<script></script>
+
+<script>
+export default {
+    name: "DefaultPageLayout"
+}
+</script>
