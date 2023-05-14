@@ -10,7 +10,7 @@
 #include "screen_control.h"         // include corresponding header file
 
 
-void goRightScreen() {              // function to cycle screen on right button press depending on current screen state
+void rightButton() {                // function to cycle screen on right button press depending on current screen state
   switch(screen) {
     case TEMP:
       screen = HUMI;
@@ -34,15 +34,17 @@ void goRightScreen() {              // function to cycle screen on right button 
       screen = TEMP;
       break;
     case CONNECT_SELECT:            // right button press = choose to connect mqtt           
-      screen = CONNECT_WIFI;       
+      screen = CONNECT_CONFIRM;       
       isStartup = false;            // after first connect select screen it will no longer be startup
       break;
+    case CONNECT_CONFIRM:
+      screen = CONNECT_WIFI;
     default:                        // by default do nothing on button press                
       break;
   }
 }
 
-void goLeftScreen() {               // function to switch screen on left button press depending on current screen state
+void leftButton() {                 // function to switch screen on left button press depending on current screen state
 
   switch(screen) {
     case TEMP:
@@ -72,20 +74,30 @@ void goLeftScreen() {               // function to switch screen on left button 
       wifiWasConnected = false;     // opting out of connecting sets this variable to false
       mqttWasConnected = false;     // opting out of connecting sets this variable to false
       break;
+    case CONNECT_CONFIRM:
+      screen = CONNECT_SELECT;
     default:                        // by default do nothing on button press                
       break;
   }
 }
 
-void goDashScreen() {               // function to jump to dashboard from any screen state (if not currently connecting)
+void midButton() {               // function to jump to dashboard from any screen state (if not currently connecting)
   if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {   
     screen = DASHBOARD;
   }
 }
 
-void goConnSelectScreen() {         // function to jump to connection screen
+void pressJoystick() {         // function to jump to connection screen
   screen = CONNECT_SELECT;
 }
+
+void rightJoystick() {}
+
+void leftJoystick() {}
+
+void upJoystick() {}
+
+void downJoystick() {}
 
 /**
  * @goPrevScreen: some draw functions switch between 2 screen states within 1 interval.

@@ -82,11 +82,15 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       drawSensorScreen(LOUD, "Loudness", 91, 75, userDefinedRanges[4][0], userDefinedRanges[4][1], loud, 132, 115, "%", 172, 115);
       }
       break;
-    case CONNECT_SELECT:
-      if (screen != oldScreen) {                     // check so static screen isn't unnecessarily redrawn upon itself 
+    case CONNECT_SELECT: 
+      if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself 
         drawConnSelectScreen(isStartup);             // draw connect selection screen and inform whether it is startup (to print "Welcome" message)
       }
       break;
+    case CONNECT_CONFIRM:
+      if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself 
+        // drawConnConfirmScreen();                       
+      }
     case CONNECT_WIFI:
       drawConnectScreen("WiFi network:", SSID);      // draw connect wifi screen and pass SSID data to show on screen
       break;
@@ -321,6 +325,16 @@ void drawConnSelectScreen(bool isStartup) {
   tft.setTextColor(TFT_GREEN);
   tft.drawString("Yes", 207, 179);
 }
+/*
+void drawConnConfirmScreen() {
+  clearScreen();
+
+  char* text;
+  tft.setTextSize(3);
+  tft.setTextColor(TFT_WHITE);
+  text = "Proceed with"
+  
+} */
 
 // draw wifi or mqtt connection screen depending on screen context
 void drawConnectScreen(char* connectType, const char* connectValue) {

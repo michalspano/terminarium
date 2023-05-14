@@ -19,6 +19,8 @@ enum Screen {                       // enums denoting screen state
   LIGHT,
   LOUD,
   CONNECT_SELECT,
+  CONNECT_CONFIRM,
+  CONNECT_USER_INPUT,
   CONNECT_WIFI,
   CONNECT_MQTT,
   UPDATE
@@ -36,13 +38,21 @@ extern bool wifiWasConnected;       // include flag indicating user was previous
 extern bool mqttWasConnected;       // include flag indicating user was previously connected to mqtt server
 
 
-extern void goRightScreen();        // function to cycle screen on right button press depending on current screen state
+extern void rightButton();          // function to cycle screen on right button press depending on current screen state
 
-extern void goLeftScreen();         // function to switch screen on left button press depending on current screen state
+extern void leftButton();           // function to switch screen on left button press depending on current screen state
 
-extern void goDashScreen();         // function to jump to dashboard from any screen state
+extern void midButton();            // function to jump to dashboard from any screen state
 
-extern void goConnSelectScreen();   // function to jump to connection screen
+extern void pressJoystick();        // function to jump to connection screen
+
+extern void rightJoystick();
+
+extern void leftJoystick();
+
+extern void upJoystick();
+
+extern void downJoystick();
 
 // function used to revert screen state and correctly update the oldScreen value
 extern void goPrevScreen(Screen currentScreen);

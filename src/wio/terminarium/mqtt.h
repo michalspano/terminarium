@@ -11,6 +11,7 @@
 #define MQTT_H                                        // header guard
 
 #include "rpcWiFi.h"                                  // import wifi library
+#include ""
 #include "PubSubClient.h"                             // import mqtt library
 //#include "credentials.h"    
 extern WiFiClient wioClient;                          // wifi client 
@@ -21,9 +22,9 @@ extern PubSubClient client;                           // mqtt client
 extern Screen screen;                                 // include global screen state variable in current scope        
 
 // user network credentials
-extern const char* SSID;                              // wifi network name
-extern const char* PASSWORD;                          // wifi network password
-extern const char* SERVER;                            // mqtt broker ip address
+extern char* SSID;                                    // wifi network name
+extern char* PASSWORD;                                // wifi network password
+extern char* SERVER;                                  // mqtt broker ip address
 
 // topic for receiving messages
 extern const char* TOPIC_SUB;

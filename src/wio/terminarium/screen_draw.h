@@ -18,8 +18,8 @@ extern Screen screen;                              // include global screen stat
 extern Screen oldScreen;                           // include global oldScreen state variable in current scope
 
 #include "mqtt.h"
-extern const char* SSID;                           // include wifi network name
-extern const char* SERVER;                         // include mqtt broker ip address
+extern char* SSID;                                 // include wifi network name
+extern char* SERVER;                               // include mqtt broker ip address
 extern bool wifiWasConnected;                      // include flag indicating user was previously connected to wifi server
 extern bool mqttWasConnected;                      // include flag indicating user was previously connected to mqtt server
 

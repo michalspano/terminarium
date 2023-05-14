@@ -18,9 +18,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
  */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "******";                    // wifi network name
-const char* PASSWORD   = "******";                    // wifi network password
-const char* SERVER     = "******";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+char* SSID       = "******";                          // wifi network name
+char* PASSWORD   = "******";                          // wifi network password
+char* SERVER     = "******";                          // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -43,8 +43,8 @@ const char* TOPIC_PUB_LOUD  = "/terminarium/sensor/loudness";
 
 // ********************** CONNECT GENERAL **************************** //
 
-bool wifiWasConnected = false;            // global flag denoting previous connection to mqtt server, false by default
-bool mqttWasConnected = false;            // global flag denoting previous connection to wifi network, false by default
+bool wifiWasConnected = false;                        // global flag denoting previous connection to mqtt server, false by default
+bool mqttWasConnected = false;                        // global flag denoting previous connection to wifi network, false by default
 
 /**
  * @connect: call functions to either connect to wifi or mqtt depending on screen state context.
@@ -69,10 +69,10 @@ void maintainConnection() {               // maintain or recover connection if i
   if(wifiWasConnected && !wifiConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
     Serial.print("Connection to Wi-Fi network lost.");  // print connection loss message to serial monitor
     mqttWasConnected = false;                           // set to false so conditional below doesn't trigger when wifi is lost
-    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
+    screen = CONNECT_SELECT;                            // change screen to ask if user wants to reconnect
   } else if (mqttWasConnected && !mqttConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
     Serial.println("Connection to MQTT server lost");   // print connection mqtt loss message to serial monitor
-    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
+    screen = CONNECT_SELECT;                            // change screen to ask if user wants to reconnect
   } 
 }
 
