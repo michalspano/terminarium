@@ -6,7 +6,7 @@
   <!----------------------------------------------------------------------------------
    The page uses a grid structure(defined in css).
    v-model is used to bind the input fields with their respective data properties.
-   The elements are styled in the using css.
+   The elements are styled using css.
 ----------------------------------------------------------------------------------->
   <div class="Choose_ranges_box">
     <div class="grid-container">
@@ -92,7 +92,7 @@
     <button class="save_button" @click="saveSensorRanges">Save</button> <!-- @click binds the button to a method in script -->
 
     <div class="success_message" v-if="displayOnSaveMessage">           <!-- v-if is only displayed if the data property is true -->
-      <p>{{ onSaveMessage }}</p>
+      <p>{{ onSaveMessage }}</p>                                        <!-- Dynamic message, displayed when user clicks save button -->
     </div>
 
   </div>
@@ -124,8 +124,15 @@ export default {
       validRange: false,
     }
   },
-
+    // Mounted runs after all components have been fixed to the DOM (rendered) meaning that as soon as the page is ready to interact
+    // the values will be retrieved from local storage.
   mounted() {
+    for (const sensorName of this.sensorNames) {                        // Looks at every sensor and gets the min and max values from local storage
+      this[`${sensorName}_min`] = localStorage[`${sensorName}_min`];
+      this[`${sensorName}_max`] = localStorage[`${sensorName}_max`];
+    }
+
+
     // TODO: Implement "cookies" so the users last saved values are start values in input fields
   },
 
@@ -133,43 +140,53 @@ export default {
     // Saves the user input values to the wio terminal and handles potential error cases
     saveSensorRanges: function () {
       try {
-        for (const sensorName of this.sensorNames) {// Looks at every sensor and gets the min and max values
-          const min = this[`${sensorName}_min`];
-          const max = this[`${sensorName}_max`];
+        for (const sensorName of this.sensorNames) {                   // Goes through every sensor.
+          const min = this[`${sensorName}_min`];                       // Immutable variable min declared and set to the current sensors min value.
+          const max = this[`${sensorName}_max`];                       // immutable value max is declared and set to the current sensors Max value.
 
-          this.validateRanges(min, max);
+          this.validateRanges(min, max);                               // The range is validated.
 
-          if (!this.validRange) {
+          if (!this.validRange) {                                      // Invalid range throws an Error with message explaining why data can not be saved.
             throw new Error(this.onSaveMessage);
           }
         }
         // TODO: Send data to wio terminal here
+        this.saveRangesToLocalStorage();
         this.displayOnSaveMessage = true;
         this.resetSaveButton();
       }
       catch (error) {
-        console.error(error);                        // Logs error to the console
-        this.displayOnSaveMessage = true;            // Error message is displayed to the user
+        console.error(error);                                           // Logs error to the console
+        this.displayOnSaveMessage = true;                               // Error message is displayed to the user
         this.resetSaveButton();
       }
     },
     // Resets isDataSaved to false so success/Error message will be displayed again on click
     resetSaveButton() {
-      setTimeout(() => {                      // The function will be executed 2,5 seconds after its called
+      setTimeout(() => {                                         // The function will be executed 2,5 seconds after its called
         this.displayOnSaveMessage = false;
       }, 2500);
     },
-
+    // Verifies that the ranges follow the following rules
     validateRanges(min, max) {
-      if (min > max) {                               // Checks if min is larger than max and sets helpful Error message if true
+      if (min > max) {                                                  // Min can not be larger Max. If it is an error message explaining why range is invalid is set.
         this.validRange = false;
         this.onSaveMessage = "Save failed invalid range: Minimum value must be <= Maximum value";
-      } else if (min < 0 || min > 100 || max < 0 || max > 100) {           // Checks if values are larger than 100 and sets helpful Error message if true
+      } else if (min < 0 || min > 100 || max < 0 || max > 100) {        // Min or max can not be smaller than zero or larger than 100. If it is an error message explaining why range is invalid is set.
         this.validRange = false;
         this.onSaveMessage = "Save failed invalid range: Values must be 0 - 100";
-      } else {                                       // Success case, range is valid. Sets success message
+      } else {                                                          // Success case, range is valid. Sets success message.
         this.validRange = true;
         this.onSaveMessage = "Your desired values were saved successfully!";
+      }
+    },
+    // Saves sensor values to local storage. Local storage is persistent meaning the values are saved between sessions.
+    // The local storage us browser specific and values can not be shared between browsers or devices.
+    // The data is stored as key-value pairs in the : key -> value.
+    saveRangesToLocalStorage() {
+      for (const sensorName of this.sensorNames) {                      // Goes through every sensor
+        localStorage[`${sensorName}_min`] = this[`${sensorName}_min`];  // Saves min to local storage
+        localStorage[`${sensorName}_max`] = this[`${sensorName}_max`];  // Saves max to local storage
       }
     }
   },
