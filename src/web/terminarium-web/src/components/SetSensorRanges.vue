@@ -131,9 +131,6 @@ export default {
       this[`${sensorName}_min`] = localStorage[`${sensorName}_min`];
       this[`${sensorName}_max`] = localStorage[`${sensorName}_max`];
     }
-
-
-    // TODO: Implement "cookies" so the users last saved values are start values in input fields
   },
 
   methods: {
