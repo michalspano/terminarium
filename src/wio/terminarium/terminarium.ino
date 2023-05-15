@@ -64,7 +64,7 @@ void loop() {
 
   // *************************** PRINTING (serial monitor) ******************************* //
 
-  if(intervalPassed()) {                                   // run code if desired interval (in ms) has elapsed
+  if(intervalPassed()) {                                   // run code block if desired interval (in ms) has elapsed
 
     // print sensor data to serial monitor
     Serial.printf("Temperature: %.1f°C\n", temp);          // temperature in Celcius
@@ -76,24 +76,6 @@ void loop() {
 
     SEPARATOR;                                             // visual separator for serial monitor
 
-  // ***************************** DRAWING (LCD screen) ********************************** //
-
-    shouldUpdateOldScreen = true;                          // reset to true every interval (specific screen draw functions can set it to false) 
-
-    // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);                             
-    
-    if(shouldUpdateOldScreen) {                            // check whether oldScreen value should be updated
-      oldScreen = screen;                                  // update oldScreen value, used to determine drawing behavior on next interval
-    }
-
-  // ***************************** MQTT CONNECTIVITY ************************************* //
-
-    connect();                                             // call function to connect WiFi and MQTT according to screen state context
-
-    maintainConnection();                                  // call function to maintain or recover connection if it was established but lost
-
-    
   // ********************************* PUBLISHING **************************************** //
 
     if(mqttConnected()) {                                  // if connected, publish each sensor data to mqtt broker
@@ -104,5 +86,24 @@ void loop() {
       client.publish(TOPIC_PUB_LIGHT, toString(lightResult));
       client.publish(TOPIC_PUB_LOUD, toString(loudnessResult));
     }
+
+  // ***************************** DRAWING (LCD screen) ********************************** //
+
+    // draw screen graphics on LCD
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);    
+
+    oldScreen = screen;                                    // update oldScreen value, used to determine drawing behavior on next interval                         
+
+  // ***************************** CONNECTING (MQTT) ************************************* //
+
+    connect();                                             // call function to connect WiFi and MQTT according to screen state context
+  }                                                        // end code block that runs only per desired interval (ms)
+    
+  maintainConnection();                                    // call function to maintain or recover connection if it was established but lost
+
+  // check if sensor range update ongoing and if time since last update exceeds defined limit (ms)
+  if(isUpdating && (millis() - lastUpdateTime > LOOP_INTERVAL)) {    
+    screen = DASHBOARD;                                    // if interval has passed since last update, change screen to dashboard
+    isUpdating = false;                                    // set flag to indicate updating has finished
   }
 }

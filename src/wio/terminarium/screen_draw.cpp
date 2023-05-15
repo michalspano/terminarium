@@ -94,7 +94,7 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       drawConnectScreen("MQTT server:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
       break;
     case UPDATE:
-      if(screen != oldScreen) {
+      if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself
         drawUpdateScreen();                            
       }
       break;
@@ -276,7 +276,7 @@ void drawUpdateScreen() {
     tft.drawString(".", 80 + (i*3), 180);
     delay(30);
   }
-  delay(1750);                                       // arbtirary delay
+  //delay(1750);                                       // arbtirary delay
 }
 
 // draw screen indicating establishing connection (wifi and mqtt)

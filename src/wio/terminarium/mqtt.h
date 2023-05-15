@@ -82,6 +82,12 @@ extern void setupClient();
 // reconnect to broker if connection lost during program loop
 extern void reconnectClient();
 
+// global boolean indicating whether update is ongoing
+extern boolean isUpdating;
+
+// global timestamp indicating the last time (in ms) update occurred
+extern unsigned long lastUpdateTime;
+
 // behavior when new message received from mqtt broker
 extern void callback(char* topic, byte* payload, unsigned int length);
 

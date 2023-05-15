@@ -18,9 +18,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
  */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "Bifteki";                    // wifi network name
-const char* PASSWORD   = "12345678";                    // wifi network password
-const char* SERVER     = "broker.hivemq.com";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SSID       = "******";                    // wifi network name
+const char* PASSWORD   = "******";                    // wifi network password
+const char* SERVER     = "******";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -162,17 +162,14 @@ void setupClient() {
   screen = DASHBOARD;
 } 
 
-
+boolean isUpdating = false;                           // global boolean indicating whether update is ongoing
+unsigned long lastUpdateTime = 0;                     // global timestamp indicating the last time (in ms) update occurred
 
 // behavior when new message received from mqtt broker
 void callback(char* topic, byte* payload, unsigned int length) {
-  static int rangeCounter = 0;
-  Screen currentScreen;
-  if(rangeCounter == 0) {
-    currentScreen = screen;
-    screen = UPDATE;
-  }
-  rangeCounter++;
+
+  isUpdating = true;                                  // set flag to indicate that update is ongoing
+  screen = UPDATE;                                    // set corresponding update screen
 
   // print affirmative message 
   Serial.print("Message arrived [" + String(topic) + "]: ");  
@@ -194,8 +191,5 @@ void callback(char* topic, byte* payload, unsigned int length) {
   buff_p[length] = '\0';
   String message = String(buff_p);
 
-  if(rangeCounter == 5) {
-    goPrevScreen(currentScreen);           // call function to return to last screen before sensor range update
-    rangeCounter = 0;
-  }
+  lastUpdateTime = millis();                          // update timestamp for last update time
 }
