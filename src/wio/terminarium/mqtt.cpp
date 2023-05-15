@@ -96,7 +96,7 @@ void setupWifi() {
   WiFi.begin(SSID, PASSWORD);                         // connect to wifi network
 
   while (!wifiConnected()) {                          // loop while not connected to wifi
-    drawDotDotDot(strlen(SSID), getCenterX(toString(SSID)), 169);
+    drawDotDotDot(strlen(SSID), getCenterX(toString(SSID), 3), 169);
     Serial.print(".");                                // print dot..dot..dot... to serial monitor
     WiFi.begin(SSID, PASSWORD);                       // reattempt connection
   }
@@ -136,7 +136,7 @@ void setupClient() {
   client.connect(clientID.c_str());                   // connect to mqtt broker
 
   while(!client.connected()) {                        // loop while not connected to broker
-    drawDotDotDot(strlen(SERVER), getCenterX(toString(SERVER)), 169);
+    drawDotDotDot(strlen(SERVER), getCenterX(toString(SERVER), 3), 169);
     Serial.print("Failed, return code = ");           // print error message
     Serial.println(client.state());                   // print client state (error code as int value that represents additional info on specific error) 
     Serial.println("Trying again");      

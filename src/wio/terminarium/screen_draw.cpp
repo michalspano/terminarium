@@ -89,8 +89,9 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       break;
     case CONNECT_CONFIRM:
       if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself 
-        // drawConnConfirmScreen();                       
+        drawConnConfirmScreen();                       
       }
+      break;
     case CONNECT_WIFI:
       drawConnectScreen("WiFi network:", SSID);      // draw connect wifi screen and pass SSID data to show on screen
       break;
@@ -126,7 +127,7 @@ void drawHeader() {
   tft.setTextColor(TFT_WHITE);                       // set text color
   tft.setTextSize(3);                                // set text size 
   char* text = "Terminarium";
-  tft.drawString(text, getCenterX(text), 14);        // draw header String
+  tft.drawString(text, getCenterX(text, 3), 14);        // draw header String
 }
 
 // draw icon in header indicating connectivity status 
@@ -264,14 +265,14 @@ void drawUpdateScreen() {
   tft.setTextSize(3);                                // set text size to 3                    
   tft.setTextColor(TFT_WHITE);                       // set text color to white
   char* text = "Sensor ranges";
-  tft.drawString(text, getCenterX(text), 70);        // draw text 
+  tft.drawString(text, getCenterX(text, 3), 70);        // draw text 
 
   text = "received!";
-  tft.drawString(text, getCenterX(text), 103);       // draw text
+  tft.drawString(text, getCenterX(text, 3), 103);       // draw text
 
   tft.setTextColor(TFT_YELLOW);
   text = "UPDATING";
-  tft.drawString(text, getCenterX(text), 150);       // draw text
+  tft.drawString(text, getCenterX(text, 3), 150);       // draw text
 
   tft.setTextColor(TFT_WHITE);
   for(int i = 0; i < 48; i++) {                      // draw progress bar
@@ -296,7 +297,7 @@ void drawConnSelectScreen(bool isStartup) {
   } else if(wifiConnected() && mqttConnected()) {    // if wifi and mqtt both connected, print contextual text
     text = "Already connected";
   }
-  tft.drawString(text, getCenterX(text), 63);
+  tft.drawString(text, getCenterX(text, 3), 63);
 
   char* fullText;
   if(wifiWasConnected || mqttWasConnected) {         // if previously connected but then disconnected, print contextual "Restart" text
@@ -307,34 +308,66 @@ void drawConnSelectScreen(bool isStartup) {
     text = "Start";                                  // first half of fulltext to be printed in white color
   }
   
-  int length = strlen(text) * CHAR_WIDTH;
-  tft.drawString(text, getCenterX(fullText), 95);    // draw only first half of fulltext but center it as though it were whole fullText
+  int length = strlen(text) * CHAR_WIDTH_3;
+  tft.drawString(text, getCenterX(fullText, 3), 95);    // draw only first half of fulltext but center it as though it were whole fullText
 
   tft.setTextColor(TFT_YELLOW);
   text = "MQTT";                                     // second half of fullText to be printed in yellow
-  tft.drawString(text, getCenterX(fullText) + length + CHAR_WIDTH, 95); // draw second half at fullText x starting position + its own size + size of an empty space
+  tft.drawString(text, getCenterX(fullText, 3) + length + CHAR_WIDTH_3, 95); // draw second half at fullText x starting position + its own size + size of an empty space
   
   tft.setTextColor(TFT_WHITE);
   text = "connection?";
-  tft.drawString(text, getCenterX(text), 127);
+  tft.drawString(text, getCenterX(text, 3), 127);
 
-  tft.fillTriangle(55, 180, 55, 200, 35, 190, TFT_WHITE);     // draw left triangle 
+  tft.fillTriangle(40, 180, 40, 200, 20, 190, TFT_WHITE);     // draw left triangle 
   tft.setTextColor(TFT_RED);
-  tft.drawString("No", 65, 180);
-  tft.fillTriangle(265, 180, 265, 200, 285, 190, TFT_WHITE);  // draw right triangle 
+  tft.drawString("No", 50, 180);
+  tft.fillTriangle(280, 180, 280, 200, 300, 190, TFT_WHITE);  // draw right triangle 
   tft.setTextColor(TFT_GREEN);
-  tft.drawString("Yes", 207, 179);
+  tft.drawString("Yes", 222, 179);
 }
-/*
-void drawConnConfirmScreen() {
-  clearScreen();
 
+void drawConnConfirmScreen() {
   char* text;
-  tft.setTextSize(3);
+  tft.setTextSize(2);
   tft.setTextColor(TFT_WHITE);
-  text = "Proceed with"
-  
-} */
+  text = "Proceed with";
+  tft.drawString(text, getCenterX(text, 2), 60);
+
+  text = "these details?";
+  tft.drawString(text, getCenterX(text, 2), 84);
+
+  tft.setTextSize(2);
+  tft.setTextColor(TFT_WHITE);
+  text = "SSID:";
+  tft.drawString(text, 20, 118);
+
+  tft.setTextColor(TFT_YELLOW);
+  int length = strlen(text) * 12;
+  tft.drawString(SSID, 20 + length + CHAR_WIDTH_2, 118);
+
+  tft.setTextColor(TFT_WHITE);
+  text = "Broker:";
+  tft.drawString(text, 20, 142);
+
+  tft.setTextColor(TFT_YELLOW);
+  length = strlen(text) * 12;
+  tft.drawString(SERVER, 20 + length + CHAR_WIDTH_2, 142);
+
+  tft.setTextSize(3);
+  tft.fillTriangle(40, 180, 40, 200, 20, 190, TFT_WHITE);     // draw left triangle 
+  tft.setTextColor(TFT_RED);
+  tft.drawString("No", 50, 180);
+  tft.fillTriangle(280, 180, 280, 200, 300, 190, TFT_WHITE);  // draw right triangle 
+  tft.setTextColor(TFT_GREEN);
+  tft.drawString("Yes", 222, 179);
+
+  tft.setTextSize(2);
+  tft.setTextColor(TFT_YELLOW);
+  text = "Modify";
+  tft.drawString(text, getCenterX(text, 2), 183);
+  tft.fillTriangle(148, 210, 172, 210, 160, 230, TFT_WHITE);
+}
 
 // draw wifi or mqtt connection screen depending on screen context
 void drawConnectScreen(char* connectType, const char* connectValue) {
@@ -344,25 +377,27 @@ void drawConnectScreen(char* connectType, const char* connectValue) {
   tft.setTextSize(3);
   tft.setTextColor(TFT_WHITE);
   text = "Connecting to";
-  tft.drawString(text, getCenterX(text), 73);
+  tft.drawString(text, getCenterX(text, 3), 73);
   
   text = connectType;
-  tft.drawString(text, getCenterX(text), 105);
+  tft.drawString(text, getCenterX(text, 3), 105);
   
   tft.setTextColor(TFT_YELLOW);
   text = toString(connectValue);   
-  tft.drawString(text, getCenterX(text), 137);
+  tft.drawString(text, getCenterX(text, 3), 137);
 
-  drawDotDotDot(strlen(text), getCenterX(text), 169);
+  drawDotDotDot(strlen(text), getCenterX(text, 3), 169);
 }
 
 // draw green "Connected" text upon establishing conneciton (wifi and mqtt)
 void drawConnectedText() {
-  tft.fillRect(0, 169, TFT_WIDTH, CHAR_HEIGHT, TFT_BLACK);
+  tft.fillRect(0, 169, TFT_WIDTH, CHAR_HEIGHT_3, TFT_BLACK);
+  tft.setTextSize(3);
   tft.setTextColor(TFT_GREEN);
   char* text = "Connected!";
-  tft.drawString(text, getCenterX(text), 169);
+  tft.drawString(text, getCenterX(text, 3), 169);
 }
+
 
 
 // *************************** MISC ********************************** //
@@ -373,10 +408,16 @@ extern void clearScreen() {
 }
 
 // function that calculates centered x starting position for any given text
-int getCenterX(char* text) {                         
-    int textSize = strlen(text) * CHAR_WIDTH;        // get text pixel size by multiplying (number of characters in text) x (number of pixels per character)
-    int xPosition = (TFT_WIDTH - textSize) / 2;      // calculate x starting position by (width of screen) - (text pixel size) / 2
-    return xPosition;
+int getCenterX(char* text, int textSize) {  
+  int pixelWidth;              
+  if(textSize == 2) {
+    pixelWidth = CHAR_WIDTH_2;
+  } else if(textSize == 3) {
+    pixelWidth = CHAR_WIDTH_3;
+  }
+  int textWidth = strlen(text) * pixelWidth;         // get text pixel size by multiplying (number of characters in text) x (number of pixels per character)
+  int xPosition = (TFT_WIDTH - textWidth) / 2;       // calculate x starting position by (width of screen) - (text pixel size) / 2
+  return xPosition;
 }
 
 /**
@@ -390,10 +431,10 @@ void drawTriangles() {
 
 // draw dot dot dot writing effect when establishing connectivity
 void drawDotDotDot(int length, int x, int y) {
-  tft.fillRect(0, y, TFT_WIDTH, CHAR_HEIGHT, TFT_BLACK);
+  tft.fillRect(0, y, TFT_WIDTH, CHAR_HEIGHT_3, TFT_BLACK);
   tft.setTextColor(TFT_WHITE);
   for(int i = 0; i < length; i++) {
-    tft.drawString(".", x + (i * CHAR_WIDTH), y);
+    tft.drawString(".", x + (i * CHAR_WIDTH_3), y);
     delay(300);
   }
 }

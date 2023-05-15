@@ -37,22 +37,17 @@ extern bool mqttIsConnected;        // include temporary workaround for goLeftSc
 extern bool wifiWasConnected;       // include flag indicating user was previously connected to wifi server
 extern bool mqttWasConnected;       // include flag indicating user was previously connected to mqtt server
 
-
 extern void rightButton();          // function to cycle screen on right button press depending on current screen state
 
 extern void leftButton();           // function to switch screen on left button press depending on current screen state
 
-extern void midButton();            // function to jump to dashboard from any screen state
+extern void upButton();
 
-extern void pressJoystick();        // function to jump to connection screen
+extern void downButton();
 
-extern void rightJoystick();
+extern void midButton();        // function to jump to connection screen
 
-extern void leftJoystick();
-
-extern void upJoystick();
-
-extern void downJoystick();
+extern void topButton();            // function to jump to dashboard from any screen state
 
 // function used to revert screen state and correctly update the oldScreen value
 extern void goPrevScreen(Screen currentScreen);

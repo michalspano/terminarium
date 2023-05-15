@@ -11,7 +11,6 @@
 #define MQTT_H                                        // header guard
 
 #include "rpcWiFi.h"                                  // import wifi library
-#include ""
 #include "PubSubClient.h"                             // import mqtt library
 //#include "credentials.h"    
 extern WiFiClient wioClient;                          // wifi client 

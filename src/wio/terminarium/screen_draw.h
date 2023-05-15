@@ -27,8 +27,10 @@ extern bool mqttWasConnected;                      // include flag indicating us
 
 #define TFT_HEIGHT 240                             // define LCD screen pixel height
 #define TFT_WIDTH 320                              // define LCD screen pixel width
-#define CHAR_HEIGHT 24                             // define pixel height of one character
-#define CHAR_WIDTH 18                              // define pixel width of one character
+#define CHAR_HEIGHT_2 14                           // define pixel height of one character (size 2)
+#define CHAR_WIDTH_2 12                            // define pixel width of one character (size 2)
+#define CHAR_HEIGHT_3 24                           // define pixel height of one character (size 3)
+#define CHAR_WIDTH_3 18                            // define pixel width of one character (size 3)
 
 
 // **************************** GENERAL ****************************** //
@@ -72,6 +74,8 @@ extern void drawUpdateScreen();
 // draw screen that prompts user with choice to connect or not
 extern void drawConnSelectScreen(bool isStartup);
 
+void drawConnConfirmScreen();
+
 // draw wifi or mqtt connection screen depending on screen context
 extern void drawConnectScreen(char* connectType, const char* connectValue); 
 
@@ -85,7 +89,7 @@ extern void drawConnectedText();
 extern void clearScreen();
 
 // function that calculates centered x starting position for any given text
-extern int getCenterX(char* text);
+extern int getCenterX(char* text, int textSize);
 
 // draw triangle graphics (common in all sensor screens)
 extern void drawTriangles();

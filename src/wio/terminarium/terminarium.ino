@@ -31,14 +31,12 @@ void setup() {
   tft.setRotation(3);                     // set terminal LCD rotation
 
   // set buttons as input that interrupts program loop
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), rightButton, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), leftButton, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), midButton, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), pressJoystick, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_RIGHT), rightJoystick, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_LEFT), leftJoystick, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_UP), upJoystick, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_DOWN), downJoystick, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_RIGHT), rightButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_LEFT), leftButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_UP), upButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_DOWN), downButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), midButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), topButton, FALLING);
 
   client.setServer(SERVER, 1883);         // set up mqtt server   
   client.setCallback(callback);           // set up behavior when new message received from mqtt broker
