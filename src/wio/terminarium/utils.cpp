@@ -123,16 +123,6 @@ bool updateSensorRanges(char* topic, char payload[], unsigned int length) {
     Serial.println("Unrecognized topic");
     return false;
   }
-  Serial.println(userDefinedRanges[0][0]);
-  Serial.println(userDefinedRanges[0][1]);
-  Serial.println(userDefinedRanges[1][0]);
-  Serial.println(userDefinedRanges[1][1]);
-  Serial.println(userDefinedRanges[2][0]);
-  Serial.println(userDefinedRanges[2][1]);
-  Serial.println(userDefinedRanges[3][0]);
-  Serial.println(userDefinedRanges[4][1]);
-  Serial.println(userDefinedRanges[5][0]);
-  Serial.println(userDefinedRanges[5][1]);
 }  
 
 // checks that incoming message is formatted correctly ("###,###")
