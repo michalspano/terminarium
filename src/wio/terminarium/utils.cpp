@@ -87,8 +87,6 @@ int userDefinedRanges[5][2] = {
  * @param length - length of payload String
  */
 bool updateSensorRanges(char* topic, char payload[], unsigned int length) {
-  screen = UPDATE;                                      // set screen state to update screen
-
   if(!validateFormat(payload, length)) {                // call function to validate String payload format
     return false;
   }
@@ -125,6 +123,16 @@ bool updateSensorRanges(char* topic, char payload[], unsigned int length) {
     Serial.println("Unrecognized topic");
     return false;
   }
+  Serial.println(userDefinedRanges[0][0]);
+  Serial.println(userDefinedRanges[0][1]);
+  Serial.println(userDefinedRanges[1][0]);
+  Serial.println(userDefinedRanges[1][1]);
+  Serial.println(userDefinedRanges[2][0]);
+  Serial.println(userDefinedRanges[2][1]);
+  Serial.println(userDefinedRanges[3][0]);
+  Serial.println(userDefinedRanges[4][1]);
+  Serial.println(userDefinedRanges[5][0]);
+  Serial.println(userDefinedRanges[5][1]);
 }  
 
 // checks that incoming message is formatted correctly ("###,###")
@@ -162,6 +170,7 @@ bool validateRanges(int min, int max) {
   if(min > max) {                                       // check that min value is not greater than max value
     return false;
   }
+  return true;
 }
 
 

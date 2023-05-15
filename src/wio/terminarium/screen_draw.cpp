@@ -94,7 +94,9 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       drawConnectScreen("MQTT server:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
       break;
     case UPDATE:
-      drawUpdateScreen();                            
+      if(screen != oldScreen) {
+        drawUpdateScreen();                            
+      }
       break;
   }
 
@@ -275,7 +277,6 @@ void drawUpdateScreen() {
     delay(30);
   }
   delay(1750);                                       // arbtirary delay
-  goPrevScreen(screen);                              // call function to return to last screen before sensor range update
 }
 
 // draw screen indicating establishing connection (wifi and mqtt)

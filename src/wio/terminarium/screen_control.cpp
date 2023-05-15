@@ -92,7 +92,7 @@ void goConnSelectScreen() {         // function to jump to connection screen
  * this function is used to revert screen state and correctly update the oldScreen value 
  */
 void goPrevScreen(Screen currentScreen) {
-  screen = oldScreen;               // set screen back to the previous screen
-  oldScreen = currentScreen;        // update oldScreen value
+  oldScreen = screen;
+  screen = currentScreen;           // set screen back to the previous screen
   shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
 }
