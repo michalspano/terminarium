@@ -93,7 +93,13 @@ void leftButton() {                 // function to switch screen on left button 
 
 void upButton() {}
 
-void downButton() {}
+void downButton() {
+  unsigned long inputTime = millis();
+  if(inputTime - prevInputTime > 200) {
+    
+  }
+  prevInputTime = inputTime;
+}
 
 void midButton() {         // function to jump to connection screen
   screen = CONNECT_SELECT;
