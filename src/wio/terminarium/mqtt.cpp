@@ -20,7 +20,7 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 /***update these with values corresponding to your network***/
 const char* SSID       = "******";                    // wifi network name
 const char* PASSWORD   = "******";                    // wifi network password
-const char* SERVER     = "******";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SERVER     = "broker.hivemq.com";         // mqtt broker address
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -162,13 +162,10 @@ void setupClient() {
   screen = DASHBOARD;
 } 
 
-boolean isUpdating = false;                           // global boolean indicating whether update is ongoing
 unsigned long lastUpdateTime = 0;                     // global timestamp indicating the last time (in ms) update occurred
 
 // behavior when new message received from mqtt broker
 void callback(char* topic, byte* payload, unsigned int length) {
-
-  isUpdating = true;                                  // set flag to indicate that update is ongoing
   screen = UPDATE;                                    // set corresponding update screen
 
   // print affirmative message 

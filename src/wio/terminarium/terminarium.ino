@@ -102,8 +102,7 @@ void loop() {
   maintainConnection();                                    // call function to maintain or recover connection if it was established but lost
 
   // check if sensor range update ongoing and if time since last update exceeds defined limit (ms)
-  if(isUpdating && (millis() - lastUpdateTime > LOOP_INTERVAL)) {    
+  if(screen == UPDATE && (millis() - lastUpdateTime > LOOP_INTERVAL)) {    
     screen = DASHBOARD;                                    // if interval has passed since last update, change screen to dashboard
-    isUpdating = false;                                    // set flag to indicate updating has finished
   }
 }

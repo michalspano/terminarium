@@ -91,7 +91,7 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       drawConnectScreen("WiFi network:", SSID);      // draw connect wifi screen and pass SSID data to show on screen
       break;
     case CONNECT_MQTT:
-      drawConnectScreen("MQTT server:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
+      drawConnectScreen("MQTT broker:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
       break;
     case UPDATE:
       if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself
