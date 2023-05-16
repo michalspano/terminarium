@@ -106,24 +106,28 @@ export default {
     return {
       sensorNames: ["moisture", "light", "loudness", "temperature", "humidity"],
 
-      moisture_min: null,         /* Minimum and maximum values for all sensors */
-      moisture_max: null,
-      light_min: null,
-      light_max: null,
-      loudness_min: null,
+      /*--- Minimum and maximum values for all sensors--- */
+      moisture_min: null,
+      moisture_max: null,         /* The data properties are initialized as null and will be populated immediately by the created lifecycle hook that runs when the component  */
+      light_min: null,            /* has been created and initialized. Read about created lifecycle here: https://vuejs.org/api/options-lifecycle.html#created                 */
+      light_max: null,            /* The data properties are populated with 0's if no previous values have been saved. In the case that user have saved values previously      */
+      loudness_min: null,         /* they will be retrieved from local storage and assigned to the data properties.                                                            */
       loudness_max: null,
       temperature_min: null,
       temperature_max: null,
       humidity_min: null,
-      humidity_max: null,         /*-------------------------------------------- */
+      humidity_max: null,
+      /*--------------------------------------------------*/
 
       displayOnSaveMessage: false,/* Boolean used in v-if to display successful save message if the save button has been clicked */
-      onSaveMessage: "",          /* The onSaveMessage is different depending on weather the saveData() was successful or not */
+      onSaveMessage: "",          /* The onSaveMessage is different depending on weather the saveData() was successful or not    */
       validRange: false,
     }
   },
 
-    // When the component is created it will attempt to retrieve previously saved values from local storage.
+
+    // The created lifecycle hook runs when the component has been created and initialized, but prior to mounting to the DOM.
+    // Created() will attempt to retrieve previously saved values from local storage and if no prior values exist set 0.
   created() {
     for (const sensorName of this.sensorNames) {                         // iterates over every sensor.
       this[`${sensorName}_min`] = localStorage[`${sensorName}_min`] || 0;// if previous ranges are saved retrieve 'sensorname'min from local storage else set 0.
