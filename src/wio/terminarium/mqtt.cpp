@@ -20,7 +20,7 @@ PubSubClient client(wioClient);                       // initialise mqtt client
 /***update these with values corresponding to your network***/
 const char* SSID       = "******";                    // wifi network name
 const char* PASSWORD   = "******";                    // wifi network password
-const char* SERVER     = "******";                    // mqtt broker ip address (use ipconfig command and see IPv4 address)
+const char* SERVER     = "broker.hivemq.com";         // mqtt broker address
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -132,7 +132,7 @@ bool mqttConnected() {
 // connect to mqtt broker and print status to serial monitor
 void setupClient() {                    
   Serial.println("Attempting MQTT connection...");  
-  String clientID = "WioTerminal";                    // create a client ID
+  String clientID = "Terminarium-wio-terminal";       // create a client ID
   client.connect(clientID.c_str());                   // connect to mqtt broker
 
   while(!client.connected()) {                        // loop while not connected to broker
@@ -162,9 +162,11 @@ void setupClient() {
   screen = DASHBOARD;
 } 
 
+unsigned long lastUpdateTime = 0;                     // global timestamp indicating the last time (in ms) update occurred
 
 // behavior when new message received from mqtt broker
 void callback(char* topic, byte* payload, unsigned int length) {
+  screen = UPDATE;                                    // set corresponding update screen
 
   // print affirmative message 
   Serial.print("Message arrived [" + String(topic) + "]: ");  
@@ -177,8 +179,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
     //update array values
   if(updateSensorRanges(topic, buff_p, length)) {
-    Serial.println(" Succesfully updated sensor ranges");
-    Serial.println(userDefinedRanges[0][0]);
+    Serial.println("Succesfully updated sensor ranges");
   } else {
       Serial.println("Sensor ranges not updated succesfully");
   }
@@ -186,4 +187,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
   buff_p[length] = '\0';
   String message = String(buff_p);
+
+  lastUpdateTime = millis();                          // update timestamp for last update time
 }

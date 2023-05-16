@@ -91,10 +91,12 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
       drawConnectScreen("WiFi network:", SSID);      // draw connect wifi screen and pass SSID data to show on screen
       break;
     case CONNECT_MQTT:
-      drawConnectScreen("MQTT server:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
+      drawConnectScreen("MQTT broker:", SERVER);     // draw connect mqtt screen and pass ip address to show on screen
       break;
     case UPDATE:
-      drawUpdateScreen();                            
+      if(screen != oldScreen) {                      // check so static screen isn't unnecessarily redrawn upon itself
+        drawUpdateScreen();                            
+      }
       break;
   }
 
@@ -274,8 +276,7 @@ void drawUpdateScreen() {
     tft.drawString(".", 80 + (i*3), 180);
     delay(30);
   }
-  delay(1750);                                       // arbtirary delay
-  goPrevScreen(screen);                              // call function to return to last screen before sensor range update
+  //delay(1750);                                       // arbtirary delay
 }
 
 // draw screen indicating establishing connection (wifi and mqtt)
