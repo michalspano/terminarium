@@ -5,69 +5,99 @@
     <div class="row-name">
       <img class="avatar" src="@/assets/avatar-lizard.png" alt="avatar">
       <div class="form-name">
-        <label for="name" class="label-name">Name:</label>
-        <input class="input-name" name="name" id="name" type="text">
+        <label for="nameID" class="label-name">Name:</label>
+        <input class="input-name" name="name" id="nameID" type="text" v-model="name">
       </div> 
     </div>
     <!-- 2nd row: username row -->
     <div class="row-form-user">
-      <label for="username" class="label-user-pass">Username:</label>
-      <input class="input-user" name="username" id="username" type="text">
+      <label for="usernameID" class="label-user-pass">Username:</label>
+      <input class="input-user" name="username" id="usernameID" type="text" v-model="username">
     </div>
     <!-- 3rd row: password row -->
     <div class="row-form-user">
-      <label for="password" class="label-user-pass">Password:</label>
-      <input class="input-user" name="password" id="password" type="password">
+      <label for="passwordID" class="label-user-pass">Password:</label>
+      <input class="input-user" name="password" id="passwordID" type="password" v-model="password">
     </div>
     <!-- 4th row: button -->
     <div class="button-container"> 
       <button class="btn" type="button" @click="saveButton()">Save</button>
-      <p v-if="isSaved" class="success_message">Changes saved successfully!</p>
     </div>  
+
+    <div class="saved-message-container">
+      <p v-if="isSaved && !isEmpty" class="saved-message">Changes saved succesfully!</p>
+      <p v-if="isSaved && isEmpty" class="saved-message">No changes saved!</p>  
+    </div>
 
     
   </div>
 </template>
  
  <script>
+
   export default {
     name: 'UserSettings',
     data() {
-    return {
-      name: '',
-      username: '',
-      password: '',
-      isSaved:false
-    };
-  },
+      return {
+        name: '',
+        username: '',
+        password: '',
+        isSaved:false,
+        isEmpty:false
+      };
+    },
+    created() {
+      this.name = localStorage['name'];
+      this.username = localStorage['username'];
+      this.password = localStorage['password'];
+    },
     methods:{
+
+      /* This method gets the values entered in the name, username, and password input fields and
+      checks if the new value is not empty and different from the current value stored in the data.
+      If so, it updates the current value with the new value.*/
+
       saveButton(){
-        const newName = document.getElementById("name").value;
-        const newUsername = document.getElementById("username").value;
-        const newPassword = document.getElementById("password").value;
+        this.isSaved = true;
 
-      if (newName !== '' && newName !== this.name) {
-        this.name = newName;
-      }
+        const newName = this.name;
+        const newUsername = this.username;
+        const newPassword = this.password;
 
-      if (newUsername !== '' && newUsername !== this.username) {
-        this.username = newUsername;
-      }
+        console.log("Name: " + this.name);
+        console.log("Username: " + this.username);
+        console.log("Password: " + this.password); 
 
-      if (newPassword !== '' && newPassword !== this.password) {
-        this.password = newPassword;
-      }
+ 
+        this.isEmpty = newName === '' && newUsername === '' && newPassword  === '';
+
+        if (!this.isEmpty){
+          if (newName !== '' && newName !== this.name) {
+            this.name = newName;
+          }
+          if (newUsername !== '' && newUsername !== this.username) {
+            this.username = newUsername;
+          }
+          if (newPassword !== '' && newPassword !== this.password) {
+            this.password = newPassword;
+          }
+
+        this.saveToLocalStorage();
 
         console.log("Name: " + this.name);
         console.log("Username: " + this.username);
         console.log("Password: " + this.password);
-
-      this.isSaved = true;
-
       }
+    }, 
+    saveToLocalStorage() {
+      localStorage['name'] = this.name;
+      localStorage['username'] = this.username;
+      localStorage['password'] = this.password; 
     }
   }
- </script>
+}
+
+</script>
 
 <style scoped>
 
@@ -162,10 +192,20 @@
     font-family: Cantora One, Georgia;
     cursor: pointer;
   }
-  .success_message {
-  color: black;
+
+  /* Styling for the message container */
+  .saved-message-container{
+    display: flex;
+    display: row;
+    gap: 30px;
+    justify-content: center;
+    padding-top: 2%;
+  }
+
+  /* Styling for the message */
+  .saved-message {
+  color: white;
   font-family: Cantora One, Georgia;
- 
 }
 
 </style>
