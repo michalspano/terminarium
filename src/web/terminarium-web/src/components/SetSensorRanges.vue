@@ -106,16 +106,16 @@ export default {
     return {
       sensorNames: ["moisture", "light", "loudness", "temperature", "humidity"],
 
-      moisture_min: 0,            /* Minimum and maximum values for all sensors */
-      moisture_max: 0,
-      light_min: 0,
-      light_max: 0,
-      loudness_min: 0,
-      loudness_max: 0,
-      temperature_min: 0,
-      temperature_max: 0,
-      humidity_min: 0,
-      humidity_max: 0,            /*-------------------------------------------- */
+      moisture_min: null,         /* Minimum and maximum values for all sensors */
+      moisture_max: null,
+      light_min: null,
+      light_max: null,
+      loudness_min: null,
+      loudness_max: null,
+      temperature_min: null,
+      temperature_max: null,
+      humidity_min: null,
+      humidity_max: null,         /*-------------------------------------------- */
 
       displayOnSaveMessage: false,/* Boolean used in v-if to display successful save message if the save button has been clicked */
       onSaveMessage: "",          /* The onSaveMessage is different depending on weather the saveData() was successful or not */
