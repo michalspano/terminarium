@@ -19,19 +19,53 @@
       <label for="password" class="label-user-pass">Password:</label>
       <input class="input-user" name="password" id="password" type="password">
     </div>
-    <!-- 4th row: buttons -->
+    <!-- 4th row: button -->
     <div class="button-container"> 
-      <!--TODO: handleClick to be implemented -->
-      <button class="btn" @click="handleClick">Cancel</button>
-      <button class="btn" @click="handleClick">Save</button>
+      <button class="btn" type="button" @click="saveButton()">Save</button>
+      <p v-if="isSaved" class="success_message">Changes saved successfully!</p>
     </div>  
+
+    
   </div>
 </template>
  
  <script>
-  // TODO: handleClick to be implemented
   export default {
-    name: 'UserSettings'
+    name: 'UserSettings',
+    data() {
+    return {
+      name: '',
+      username: '',
+      password: '',
+      isSaved:false
+    };
+  },
+    methods:{
+      saveButton(){
+        const newName = document.getElementById("name").value;
+        const newUsername = document.getElementById("username").value;
+        const newPassword = document.getElementById("password").value;
+
+      if (newName !== '' && newName !== this.name) {
+        this.name = newName;
+      }
+
+      if (newUsername !== '' && newUsername !== this.username) {
+        this.username = newUsername;
+      }
+
+      if (newPassword !== '' && newPassword !== this.password) {
+        this.password = newPassword;
+      }
+
+        console.log("Name: " + this.name);
+        console.log("Username: " + this.username);
+        console.log("Password: " + this.password);
+
+      this.isSaved = true;
+
+      }
+    }
   }
  </script>
 
@@ -112,14 +146,26 @@
     gap: 30px;
     justify-content: center;
     padding-top: 2%;
-  }
+}
 
-  /* Styling for the buttons */
+ /* Movement for the button */
+  button:active {
+   transform: translate(0em, 0.2em);
+}
+
+  /* Styling for the button */
   .btn {
     color: black;
     font-size: 2.5vh;
     border: #45C059;
     background-color: #45C059;
     font-family: Cantora One, Georgia;
+    cursor: pointer;
   }
+  .success_message {
+  color: black;
+  font-family: Cantora One, Georgia;
+ 
+}
+
 </style>
