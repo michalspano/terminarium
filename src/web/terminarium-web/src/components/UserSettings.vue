@@ -19,11 +19,12 @@
       <label for="passwordID" class="label-user-pass">Password:</label>
       <input class="input-user" name="password" id="passwordID" type="password" v-model="password">
     </div>
-    <!-- 4th row: button -->
+    <!-- 4th row: save changes button -->
     <div class="button-container"> 
       <button class="btn" type="button" @click="saveButton()">Save</button>
     </div>  
 
+    <!-- confirmation text indicating changes were saved or not -->
     <div class="saved-message-container">
       <p v-if="isSaved && !isEmpty" class="saved-message">Changes saved succesfully!</p>
       <p v-if="isSaved && isEmpty" class="saved-message">No changes saved!</p>  
@@ -46,51 +47,36 @@
         isEmpty:false
       };
     },
+    // populate variables with values saved in local storage
     created() {
-      this.name = localStorage['name'];
-      this.username = localStorage['username'];
-      this.password = localStorage['password'];
+      this.name = localStorage['name'] || '' ;
+      this.username = localStorage['username'] || '' ;
+      this.password = localStorage['password'] || '' ;
     },
     methods:{
-
-      /* This method gets the values entered in the name, username, and password input fields and
-      checks if the new value is not empty and different from the current value stored in the data.
-      If so, it updates the current value with the new value.*/
-
+      /* this method gets the values entered in the name, username, and password 
+      input fields and, as long as they are not empty, updates the current value with the new value.*/
       saveButton(){
-        this.isSaved = true;
+        this.isSaved = true;                  // flag for the confirmation text to print when save button is pressed
 
+        // assign field values to new variables
         const newName = this.name;
         const newUsername = this.username;
         const newPassword = this.password;
 
-        console.log("Name: " + this.name);
-        console.log("Username: " + this.username);
-        console.log("Password: " + this.password); 
+        // isEmpty boolean is true if not a single field is empty
+        this.isEmpty = newName === '' && 
+                       newUsername === '' && 
+                       newPassword  === '';
 
- 
-        this.isEmpty = newName === '' && newUsername === '' && newPassword  === '';
+        if (!this.isEmpty){                   // if at least 1 field isn't empty
+          this.saveToLocalStorage();          // save values to local storage
 
-        if (!this.isEmpty){
-          if (newName !== '' && newName !== this.name) {
-            this.name = newName;
-          }
-          if (newUsername !== '' && newUsername !== this.username) {
-            this.username = newUsername;
-          }
-          if (newPassword !== '' && newPassword !== this.password) {
-            this.password = newPassword;
-          }
-
-        this.saveToLocalStorage();
-
-        console.log("Name: " + this.name);
-        console.log("Username: " + this.username);
-        console.log("Password: " + this.password);
       }
     }, 
+    // save current values to local storage
     saveToLocalStorage() {
-      localStorage['name'] = this.name;
+      localStorage['name'] = this.name; 
       localStorage['username'] = this.username;
       localStorage['password'] = this.password; 
     }
