@@ -1,6 +1,7 @@
 <!----------------------------------------------------------------------------------
    The "SetSensorRanges" component is used to
    set the desired environment ranges for the terrarium enclosures.
+   The component validates the ranges and saves them in local storage.
 ----------------------------------------------------------------------------------->
 <template>
   <!----------------------------------------------------------------------------------
@@ -17,13 +18,13 @@
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="min">Minimum:</label>
-        <input class="set_field" type="number" id="moisture_min" v-model="moisture_min" min="0" max="100">
+        <label class="set_label" for="minimum_moisture_value">Minimum:</label>
+        <input class="set_field" type="number" id="minimum_moisture_value" v-model="moisture_min" min="0" max="100">
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="max">Maximum:</label>
-        <input class="set_field" type="number" id="moisture_max" v-model="moisture_max" min="0" max="100">
+        <label class="set_label" for="maximum_moisture_value">Maximum:</label>
+        <input class="set_field" type="number" id="maximum_moisture_value" v-model="moisture_max" min="0" max="100">
       </div>
 
 
@@ -33,13 +34,13 @@
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="min">Minimum:</label>
-        <input class="set_field" type="number" id="light_min" v-model="light_min" min="0" max="100">
+        <label class="set_label" for="minimum_light_value">Minimum:</label>
+        <input class="set_field" type="number" id="minimum_light_value" v-model="light_min" min="0" max="100">
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="max">Maximum:</label>
-        <input class="set_field" type="number" id="light_max" v-model="light_max" min="0" max="100">
+        <label class="set_label" for="maximum_light_value">Maximum:</label>
+        <input class="set_field" type="number" id="maximum_light_value" v-model="light_max" min="0" max="100">
       </div>
 
       <!-------------------------------------------------*LOUDNESS*--------------------------------------------------->
@@ -48,13 +49,13 @@
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="min">Minimum:</label>
-        <input class="set_field" type="number" id="noise_min" v-model="noise_min" min="0" max="100">
+        <label class="set_label" for="minimum_noise_value">Minimum:</label>
+        <input class="set_field" type="number" id="minimum_noise_value" v-model="loudness_min" min="0" max="100">
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="max">Maximum:</label>
-        <input class="set_field" type="number" id="noise_max" v-model="noise_max" min="0" max="100">
+        <label class="set_label" for="maximum_noise_value">Maximum:</label>
+        <input class="set_field" type="number" id="maximum_noise_value" v-model="loudness_max" min="0" max="100">
       </div>
 
       <!------------------------------------------------*TEMPERATURE*------------------------------------------------->
@@ -63,13 +64,13 @@
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="min">Minimum:</label>
-        <input class="set_field" type="number" id="temperature_min" v-model="temperature_min" min="0" max="100">
+        <label class="set_label" for="minimum_temperature_value">Minimum:</label>
+        <input class="set_field" type="number" id="minimum_temperature_value" v-model="temperature_min" min="0" max="100">
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="max">Maximum:</label>
-        <input class="set_field" type="number" id="temperature_max" v-model="temperature_max" min="0" max="100">
+        <label class="set_label" for="maximum_temperature_value">Maximum:</label>
+        <input class="set_field" type="number" id="maximum_temperature_value" v-model="temperature_max" min="0" max="100">
       </div>
 
       <!-------------------------------------------------*HUMIDITY*--------------------------------------------------->
@@ -78,13 +79,13 @@
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="min">Minimum:</label>
-        <input class="set_field" type="number" id="humidity_min" v-model="humidity_min" min="0" max="100">
+        <label class="set_label" for="minimum_humidity_value">Minimum:</label>
+        <input class="set_field" type="number" id="minimum_humidity_value" v-model="humidity_min" min="0" max="100">
       </div>
 
       <div class="grid-item">
-        <label class="set_label" for="max">Maximum:</label>
-        <input class="set_field" type="number" id="humidity_max" v-model="humidity_max" min="0" max="100">
+        <label class="set_label" for="maximum_humidity_value">Maximum:</label>
+        <input class="set_field" type="number" id="maximum_humidity_value" v-model="humidity_max" min="0" max="100">
       </div>
 
     </div>
@@ -103,17 +104,14 @@ export default {
   name: "SetSensorRanges",
   data: function () {
     return {
-      minValue: 0,                /* Minimum allowed input value */
-      maxValue: 100,              /* Maximum allowed input value */
-
-      sensorNames: ["moisture", "light", "noise", "temperature", "humidity"],
+      sensorNames: ["moisture", "light", "loudness", "temperature", "humidity"],
 
       moisture_min: 0,            /* Minimum and maximum values for all sensors */
       moisture_max: 0,
       light_min: 0,
       light_max: 0,
-      noise_min: 0,
-      noise_max: 0,
+      loudness_min: 0,
+      loudness_max: 0,
       temperature_min: 0,
       temperature_max: 0,
       humidity_min: 0,
@@ -124,12 +122,12 @@ export default {
       validRange: false,
     }
   },
-    // Mounted runs after all components have been fixed to the DOM (rendered) meaning that as soon as the page is ready to interact
-    // the values will be retrieved from local storage.
-  mounted() {
-    for (const sensorName of this.sensorNames) {                        // Looks at every sensor and gets the min and max values from local storage
-      this[`${sensorName}_min`] = localStorage[`${sensorName}_min`];
-      this[`${sensorName}_max`] = localStorage[`${sensorName}_max`];
+
+    // When the component is created it will attempt to retrieve previously saved values from local storage.
+  created() {
+    for (const sensorName of this.sensorNames) {                         // iterates over every sensor.
+      this[`${sensorName}_min`] = localStorage[`${sensorName}_min`] || 0;// if previous ranges are saved retrieve 'sensorname'min from local storage else set 0.
+      this[`${sensorName}_max`] = localStorage[`${sensorName}_max`] || 0;// if previous ranges are saved retrieve 'sensorname'max from local storage else set 0.
     }
   },
 
@@ -137,13 +135,13 @@ export default {
     // Saves the user input values to the wio terminal and handles potential error cases
     saveSensorRanges: function () {
       try {
-        for (const sensorName of this.sensorNames) {                   // Goes through every sensor.
-          const min = this[`${sensorName}_min`];                       // Immutable variable min declared and set to the current sensors min value.
-          const max = this[`${sensorName}_max`];                       // immutable value max is declared and set to the current sensors Max value.
+        for (const sensorName of this.sensorNames) {                     // Goes through every sensor.
+          const min = this[`${sensorName}_min`];                         // Immutable variable min declared and set to the current sensors min value.
+          const max = this[`${sensorName}_max`];                         // immutable value max is declared and set to the current sensors Max value.
 
-          this.validateRanges(min, max);                               // The range is validated.
+          this.validateRanges(min, max);                                 // The range is validated.
 
-          if (!this.validRange) {                                      // Invalid range throws an Error with message explaining why data can not be saved.
+          if (!this.validRange) {                                        // Invalid range throws an Error with message explaining why data can not be saved.
             throw new Error(this.onSaveMessage);
           }
         }
@@ -153,37 +151,37 @@ export default {
         this.resetSaveButton();
       }
       catch (error) {
-        console.error(error);                                           // Logs error to the console
-        this.displayOnSaveMessage = true;                               // Error message is displayed to the user
+        console.error(error);                                            // Logs error to the console
+        this.displayOnSaveMessage = true;                                // Error message is displayed to the user
         this.resetSaveButton();
       }
     },
     // Resets isDataSaved to false so success/Error message will be displayed again on click
     resetSaveButton() {
-      setTimeout(() => {                                         // The function will be executed 2,5 seconds after its called
+      setTimeout(() => {                                          // The function will be executed 2,5 seconds after its called
         this.displayOnSaveMessage = false;
       }, 2500);
     },
     // Verifies that the ranges follow the following rules
     validateRanges(min, max) {
-      if (min > max) {                                                  // Min can not be larger Max. If it is an error message explaining why range is invalid is set.
+      if (min > max) {                                                   // Min can not be larger Max. If it is an error message explaining why range is invalid is set.
         this.validRange = false;
         this.onSaveMessage = "Save failed invalid range: Minimum value must be <= Maximum value";
-      } else if (min < 0 || min > 100 || max < 0 || max > 100) {        // Min or max can not be smaller than zero or larger than 100. If it is an error message explaining why range is invalid is set.
+      } else if (min < 0 || min > 100 || max < 0 || max > 100) {         // Min or max can not be smaller than zero or larger than 100. If it is an error message explaining why range is invalid is set.
         this.validRange = false;
         this.onSaveMessage = "Save failed invalid range: Values must be 0 - 100";
-      } else {                                                          // Success case, range is valid. Sets success message.
+      } else {                                                           // Success case, range is valid. Sets success message.
         this.validRange = true;
         this.onSaveMessage = "Your desired values were saved successfully!";
       }
     },
     // Saves sensor values to local storage. Local storage is persistent meaning the values are saved between sessions.
     // The local storage us browser specific and values can not be shared between browsers or devices.
-    // The data is stored as key-value pairs in the : key -> value.
+    // The data is stored as key-value pairs: key -> value.
     saveRangesToLocalStorage() {
-      for (const sensorName of this.sensorNames) {                      // Goes through every sensor
-        localStorage[`${sensorName}_min`] = this[`${sensorName}_min`];  // Saves min to local storage
-        localStorage[`${sensorName}_max`] = this[`${sensorName}_max`];  // Saves max to local storage
+      for (const sensorName of this.sensorNames) {                       // iterates over every sensor
+        localStorage[`${sensorName}_min`] = this[`${sensorName}_min`];   // Saves min to local storage
+        localStorage[`${sensorName}_max`] = this[`${sensorName}_max`];   // Saves max to local storage
       }
     }
   },
