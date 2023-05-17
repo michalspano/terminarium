@@ -17,6 +17,7 @@
     "@vue/test-utils": "^2.3.2",
     "chart.js": "^4.3.0",
     "firebase": "^9.21.0",
+    "paho-mqtt": "^1.1.0",
     "netlify-cli": "^15.0.3",
     "vue": "^3.2.47",
     "vue-plyr": "^7.0.0"

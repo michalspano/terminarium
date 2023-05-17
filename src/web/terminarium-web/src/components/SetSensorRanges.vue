@@ -45,7 +45,7 @@
 
       <!-------------------------------------------------*LOUDNESS*--------------------------------------------------->
       <div class="grid-item">
-        <p><b>Set</b> your desired <b>minimum </b> and <b> maximum </b><b style="color: gold">Noise level </b></p>
+        <p><b>Set</b> your desired <b>minimum </b> and <b> maximum </b><b style="color: gold">Loudness level</b></p>
       </div>
 
       <div class="grid-item">
@@ -100,6 +100,12 @@
 </template>
 
 <script>
+
+// Imports for the MQTT functionality
+import { threeDigitFormat, MQTTClientInit } from '@/modules/utils.js';
+
+const client = MQTTClientInit(); // Initialize the MQTT client (see utils.js)
+
 export default {
   name: "SetSensorRanges",
   data: function () {
@@ -138,6 +144,7 @@ export default {
   methods: {
     // Saves the user input values to the wio terminal and handles potential error cases
     saveSensorRanges: function () {
+      let rangeBuffer = new Map(); // Buffer for the sensor data to be sent to the wio terminal
       try {
         for (const sensorName of this.sensorNames) {                     // Goes through every sensor.
           const min = this[`${sensorName}_min`];                         // Immutable variable min declared and set to the current sensors min value.
@@ -145,20 +152,41 @@ export default {
 
           this.validateRanges(min, max);                                 // The range is validated.
 
-          if (!this.validRange) {                                        // Invalid range throws an Error with message explaining why data can not be saved.
-            throw new Error(this.onSaveMessage);
-          }
+          // If an error is thrown, the entry is not added to the buffer
+          // Furthermore, the consecutive entries are not added to the buffer
+          if (!this.validRange) throw new Error(this.onSaveMessage);
+
+          // Otherwise the entry is added to the buffer
+          rangeBuffer.set(sensorName, { min, max });
         }
-        // TODO: Send data to wio terminal here
-        this.saveRangesToLocalStorage();
-        this.displayOnSaveMessage = true;
-        this.resetSaveButton();
+      } catch (error) {
+        console.error(error); // Logs error to the console
       }
-      catch (error) {
-        console.error(error);                                            // Logs error to the console
-        this.displayOnSaveMessage = true;                                // Error message is displayed to the user
-        this.resetSaveButton();
-      }
+      
+      /* Displays the message to the user and resets the save button's state
+       * Moreover, save the ranges to the local storage, so that they can be retrieved later */
+      this.saveRangesToLocalStorage();
+      this.displayOnSaveMessage = true;
+      this.resetSaveButton();
+
+      // ==================== MQTT ====================
+
+      client.connect({
+        onSuccess: () => {
+          console.log(`Connected to broker @ ${client.host}:${client.port}`);
+
+          // Iterate over the rangeBuffer and send the data to the wio terminal
+          for (const [sensorName, { min, max }] of rangeBuffer) {
+            const TOPIC = `/terminarium/app/range/${sensorName}`;                 // The topic the data is sent to
+            const PAYLOAD = `${threeDigitFormat(min)},${threeDigitFormat(max)}`;  // The data that is sent to the wio terminal
+            client.send(TOPIC, PAYLOAD);                                          // Send the data to the wio terminal
+          }
+
+          client.disconnect();  // Disconnect from the broker after the data has been sent
+        },
+        // If the connection fails, an error is logged to the console
+        onFailure: (err) => console.error(err)
+      });
     },
     // Resets isDataSaved to false so success/Error message will be displayed again on click
     resetSaveButton() {
