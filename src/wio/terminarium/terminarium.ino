@@ -36,7 +36,6 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(WIO_5S_UP), upButton, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_5S_DOWN), downButton, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), midButton, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), topButton, FALLING);
 
   client.setServer(SERVER, 1883);         // set up mqtt server   
   client.setCallback(callback);           // set up behavior when new message received from mqtt broker

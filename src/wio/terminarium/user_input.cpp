@@ -23,8 +23,8 @@ char inputPSWD[32];                           // declare the character array tha
 char inputMQTT[32];                           // declare the character array that stores the user inputted mqtt broker address
 
 // variables indicating currently highlighted character
-int currentXY[2] = { 25, KEY_Y + 80 };        // x, y coords of highlighted character (initialized pointing to DEL key)
-int currentChar[2] = { 4, 1 };                // index values to retrieve highlighted character from keyboard array (initialized pointing to DEL key)
+int currentXY[2] = {KEY_X + 13, KEY_Y + 80};  // x, y coords of highlighted character (initialized pointing to DEL key)
+int currentChar[2] = {4, 1};                  // index values to retrieve highlighted character from keyboard array (initialized pointing to DEL key)
 
 // function called on right button press in user input screen
 void keyboardRight() {
@@ -104,24 +104,27 @@ extern void keyboardMiddle() {
   if (currentChar[0] == KEY_ROWS && currentChar[1] < 6) {    
     removeChar();
     buttonPressed = true;
+    
   // if selecting the SPACE key, call function to add space at the end of input String
   } else if (currentChar[0] == KEY_ROWS && currentChar[1] > 5 && currentChar[1] < 16) {
     addChar(' ');
     buttonPressed = true;
+
   // if selecting the ENTER key, save user input string and proceed until all network info is confirmed
   } else if (currentChar[0] == KEY_ROWS && currentChar[1] > 15) {
-    saveUserInput();
+    saveUserInput();                          // save user input             
     if(screen == USER_INPUT_SSID) {
-      initUserInput(PASSWORD);
-      screen = USER_INPUT_PSWD;
+      screen = USER_INPUT_PSWD;               // if at input SSID screen, change to input password screen       
+      initUserInput(PASSWORD);                // fetch existing password and reset the highlighted character
       buttonPressed = true;
     } else if (screen == USER_INPUT_PSWD) {
-      initUserInput(SERVER);
-      screen = USER_INPUT_MQTT;
+      screen = USER_INPUT_MQTT;               // if at input wifi password screen, change to input mqtt address screen 
+      initUserInput(SERVER);                  // fetch existing broker address and reset the highlighted character
       buttonPressed = true;
-    } else if (screen == USER_INPUT_MQTT) {
-      screen = CONNECT_CONFIRM;  
+    } else if (screen == USER_INPUT_MQTT) {   
+      screen = CONNECT_CONFIRM;               // if at input broker address screen, go back to confirm network info screen
     }
+
   // if selecting a keyboard character, call function to add it to end of input String
   } else {
     addChar(keyboard[currentChar[0]][currentChar[1]]);
@@ -189,7 +192,7 @@ void initUserInput(char* currentVal) {
   }
 
   // reset position to highlight DEL key
-  currentXY[0] = 25;                          // reset x coordinate of highlighted key 
+  currentXY[0] = KEY_X + 13;                  // reset x coordinate of highlighted key 
   currentXY[1] = KEY_Y + 80;                  // reset y coordinate of highlighted key 
   currentChar[0] = 4;                         // reset keyboard array index value (row)
   currentChar[1] = 1;                         // reset keyboard array index value (column)
@@ -199,13 +202,13 @@ void initUserInput(char* currentVal) {
 void saveUserInput() {
   switch(screen) {
     case USER_INPUT_SSID:
-      SSID = inputSSID;
+      SSID = inputSSID;                       // make the SSID pointer point to new user inputted character array
       break;
     case USER_INPUT_PSWD:
-      PASSWORD = inputPSWD;
+      PASSWORD = inputPSWD;                   // make the password pointer point to new user inputted character array
       break;
     case USER_INPUT_MQTT:
-      SERVER = inputMQTT;
+      SERVER = inputMQTT;                     // make the broker address pointer point to new user inputted character array
       break;
   }
 }

@@ -95,6 +95,7 @@ extern void drawUpdateScreen();
 // draw screen that prompts user with choice to connect or not
 extern void drawConnSelectScreen(bool isStartup);
 
+// draw screen to confirm that network info is correct
 void drawConnConfirmScreen();
 
 // draw wifi or mqtt connection screen depending on screen context

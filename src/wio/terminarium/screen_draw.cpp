@@ -28,8 +28,8 @@ void drawScreen(int temp, int humi, int vib, int moist, int light, int loud, boo
   drawConnStatus(wifiConnected(), "Wi", "Fi", 18, 10);     
   drawConnStatus((wifiConnected() && mqttConnected()), "MQ", "TT", 272, 10);  // check both wifi & mqtt to prevent instances of mqtt up & wifi down due to latency
 
-    if(screen != oldScreen) {                        // check if screen state has changed
-      clearScreen();                                 // if so, call function to clear screen by drawing black rectangle
+  if(screen != oldScreen) {                          // check if screen state has changed
+    clearScreen();                                   // if so, call function to clear screen by drawing black rectangle
   }
 
   /**
@@ -451,77 +451,73 @@ void drawConnSelectScreen(bool isStartup) {
   tft.drawString("Yes", 222, 179);
 }
 
+// draw screen to confirm that network info is correct
 void drawConnConfirmScreen() {
-  char* text;
-  tft.setTextSize(2);
-  tft.setTextColor(TFT_WHITE);
+  char* text;                                        
+  tft.setTextSize(2);                                // set text size 
+  tft.setTextColor(TFT_WHITE);                       // set text color to white
   text = "Proceed with";
-  tft.drawString(text, getCenterX(text, 2), 60);
+  tft.drawString(text, getCenterX(text, 2), 60);     // draw text, first line
 
   text = "these details?";
-  tft.drawString(text, getCenterX(text, 2), 84);
+  tft.drawString(text, getCenterX(text, 2), 84);     // draw text, second line
 
-  tft.setTextSize(2);
-  tft.setTextColor(TFT_WHITE);
-  text = "SSID:";
-  tft.drawString(text, 20, 118);
+  text = "SSID:";                         
+  tft.drawString(text, 20, 118);                     // draw SSID heading
 
-  tft.setTextColor(TFT_YELLOW);
-  int length = strlen(text) * 12;
-  tft.drawString(SSID, 20 + length + (CHAR_WIDTH_2 / 2), 118);
+  tft.setTextColor(TFT_YELLOW);                      // set text color to yellow
+  int length = strlen(text) * 12;                    // determine pixel width of heading text
+  tft.drawString(SSID, 20 + length + (CHAR_WIDTH_2 / 2), 118); // draw current SSID value
 
-  tft.setTextColor(TFT_WHITE);
+  tft.setTextColor(TFT_WHITE);                       // set text color to white
   text = "Broker:";
-  tft.drawString(text, 20, 142);
+  tft.drawString(text, 20, 142);                     // draw mqtt address heading
 
-  tft.setTextColor(TFT_YELLOW);
-  length = strlen(text) * 12;
-  tft.drawString(SERVER, 20 + length + (CHAR_WIDTH_2 / 2), 142);
+  tft.setTextColor(TFT_YELLOW);                      // set text color to yellow
+  length = strlen(text) * 12;                        // determine pixel width of heading text
+  tft.drawString(SERVER, 20 + length + (CHAR_WIDTH_2 / 2), 142); // draw current mqtt address value
 
-  tft.setTextSize(3);
-  tft.fillTriangle(40, 180, 40, 200, 20, 190, TFT_WHITE);     // draw left triangle 
-  tft.setTextColor(TFT_RED);
-  tft.drawString("No", 50, 180);
-  tft.fillTriangle(280, 180, 280, 200, 300, 190, TFT_WHITE);  // draw right triangle 
-  tft.setTextColor(TFT_GREEN);
-  tft.drawString("Yes", 222, 179);
+  tft.setTextSize(3);                                         // set text size
+  tft.fillTriangle(40, 180, 40, 200, 20, 190, TFT_WHITE);     // draw left triangle indicating user can go back 
+  tft.setTextColor(TFT_RED);                                  // set text color to red
+  tft.drawString("No", 50, 180);                              // draw "No" next to left triangle
+  tft.fillTriangle(280, 180, 280, 200, 300, 190, TFT_WHITE);  // draw right triangle indicating user can proceed with connection
+  tft.setTextColor(TFT_GREEN);                                // set text color to green
+  tft.drawString("Yes", 222, 179);                            // draw "Yes" next to right triangle
 
-  tft.setTextSize(2);
-  tft.setTextColor(TFT_YELLOW);
+  tft.setTextSize(2);                                         // set text size
+  tft.setTextColor(TFT_YELLOW);                               // set text color to yellow
+  tft.fillTriangle(148, 210, 172, 210, 160, 230, TFT_WHITE);  // draw downward facing triangle indicating user can modify network info
   text = "Modify";
-  tft.drawString(text, getCenterX(text, 2), 183);
-  tft.fillTriangle(148, 210, 172, 210, 160, 230, TFT_WHITE);
+  tft.drawString(text, getCenterX(text, 2), 183);             // draw centered "No" above downward facing triangle
 }
 
 // draw wifi or mqtt connection screen depending on screen context
 void drawConnectScreen(char* connectType, const char* connectValue) {
-  clearScreen();
-
   char* text;
-  tft.setTextSize(3);
-  tft.setTextColor(TFT_WHITE);
+  tft.setTextSize(3);                                         // set text size 
+  tft.setTextColor(TFT_WHITE);                                // set text color to white
   text = "Connecting to";
-  tft.drawString(text, getCenterX(text, 3), 73);
+  tft.drawString(text, getCenterX(text, 3), 73);              // draw centered text
   
-  text = connectType;
-  tft.drawString(text, getCenterX(text, 3), 105);
+  text = connectType;                                         // assign current connection context (wifi or moqtt) to a text variable
+  tft.drawString(text, getCenterX(text, 3), 105);             // draw centered text variable
   
-  tft.setTextColor(TFT_YELLOW);
-  text = toString(connectValue);   
-  tft.drawString(text, getCenterX(text, 3), 137);
+  tft.setTextColor(TFT_YELLOW);                               // set text color to yellow
+  text = toString(connectValue);                              // assign current value of network info (wifi or mqtt)
+  tft.drawString(text, getCenterX(text, 3), 137);             // draw centered current value of network info
 
-  drawDotDotDot(strlen(text), getCenterX(text, 3), 169);
+  drawDotDotDot(strlen(text), getCenterX(text, 3), 169);      // draw dot..dot...dot animation indicating currently connecting
 }
 
 // draw green "Connected" text upon establishing conneciton (wifi and mqtt)
 void drawConnectedText() {
-  tft.fillRect(0, 169, TFT_WIDTH, CHAR_HEIGHT_3, TFT_BLACK);
-  tft.setTextSize(3);
-  tft.setTextColor(TFT_GREEN);
+  tft.fillRect(0, 169, TFT_WIDTH, CHAR_HEIGHT_3, TFT_BLACK);  // draw black rectangle to overwrite dot...dot...dot progress indicator
+  tft.setTextSize(3);                                         // set text size
+  tft.setTextColor(TFT_GREEN);                                // set text color to green
   char* text = "Connected!";
-  tft.drawString(text, getCenterX(text, 3), 169);
+  tft.drawString(text, getCenterX(text, 3), 169);             // draw centered 'Connected' message
 }
-
 
 
 // *************************** MISC ********************************** //

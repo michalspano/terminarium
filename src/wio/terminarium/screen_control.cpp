@@ -13,6 +13,13 @@ unsigned long prevInputTime = 0;      // variable tracking the last time an inpu
 
 boolean buttonPressed = false;        // boolean indicating button press, used to determine when to redraw screen user-input screen
 
+/**
+ * Button presses interrupt the program flow for responsiveness. Button-triggered events
+ * are specific to the context of the current screen state. Each button has a debouncing
+ * operation that reduces the occurrence of unwanted double /triple inputs that arise from 
+ * the ordinary use of the hardware.
+*/
+
 // function called when right button is pressed
 void rightButton() {                  
   unsigned long inputTime = millis();
@@ -47,16 +54,16 @@ void rightButton() {
         screen = CONNECT_WIFI;
         break;
       case USER_INPUT_SSID:
-        buttonPressed = true;
-        keyboardRight();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardRight();              // if at user input screen, call the user input-specific keyboard function
         break;
       case USER_INPUT_PSWD:
-        buttonPressed = true;
-        keyboardRight();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardRight();              // if at user input screen, call the user input-specific keyboard function
         break;
       case USER_INPUT_MQTT:
-        buttonPressed = true;
-        keyboardRight();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardRight();              // if at user input screen, call the user input-specific keyboard function
         break;
       default:                        // by default do nothing on button press                
         break;
@@ -101,16 +108,16 @@ void leftButton() {
         screen = CONNECT_SELECT;
         break;
       case USER_INPUT_SSID:
-        buttonPressed = true;
-        keyboardLeft();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardLeft();               // if at user input screen, call the user input-specific keyboard function
         break;
       case USER_INPUT_PSWD:
-        buttonPressed = true;
-        keyboardLeft();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardLeft();               // if at user input screen, call the user input-specific keyboard function  
         break;
       case USER_INPUT_MQTT:
-        buttonPressed = true;
-        keyboardLeft();
+        buttonPressed = true;         // flag that keyboard button has been pressed to render the keyboard
+        keyboardLeft();               // if at user input screen, call the user input-specific keyboard function
         break;
       default:                        // by default do nothing on button press                
         break;
@@ -124,8 +131,10 @@ void upButton() {
   unsigned long inputTime = millis();
   if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
     if(screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
-      buttonPressed = true;
-      keyboardUp();
+      buttonPressed = true;           // flag that keyboard button has been pressed to render the keyboard
+      keyboardUp();                   // if at a user input screen, call the user input-specific keyboard function
+    } else if (screen != CONNECT_SELECT && screen != CONNECT_CONFIRM && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
+      screen = DASHBOARD;             // jump to dashboard from any non-connection/user input screen state
     }
   }
   prevInputTime = inputTime;
@@ -135,13 +144,15 @@ void upButton() {
 void downButton() {
   unsigned long inputTime = millis();
   if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
-    if (screen == CONNECT_CONFIRM) {
-      screen = USER_INPUT_SSID;
-      initUserInput(SSID);
-      buttonPressed = true;
+    if (screen == CONNECT_CONFIRM) {  
+      screen = USER_INPUT_SSID;       // if at connect confirm screen, pressing down button switches to user input screen to modify network info
+      initUserInput(SSID);            // fetch existing SSID and reset the highlighted character
+      buttonPressed = true;           // flag that keyboard button has been pressed to render the keyboard
     } else if (screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
-      keyboardDown();
-      buttonPressed = true;
+      keyboardDown();                 // if at a user input screen, call the user input-specific keyboard function  
+      buttonPressed = true;           // flag that keyboard button has been pressed to render the keyboard
+    } else if (screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
+      screen = DASHBOARD;             // jump to dashboard from any non-connection/user input screen state
     }
   }
   prevInputTime = inputTime;
@@ -152,18 +163,11 @@ void midButton() {
   unsigned long inputTime = millis();
   if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
     if(screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
-      keyboardMiddle();
-      buttonPressed = true;
-    } else {
+      keyboardMiddle();               // if at a user input screen, call the user input-specific keyboard function
+      buttonPressed = true;           // flag that keyboard button has been pressed to render the keyboard
+    } else if (screen != CONNECT_WIFI && screen != CONNECT_MQTT && screen != CONNECT_CONFIRM){
       screen = CONNECT_SELECT;        // by default, switch to screen for starting mqtt connection
     }
-  }
-}
-
-// function to jump to dashboard from any screen state (if not currently connecting)
-void topButton() {               
-  if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {   
-    screen = DASHBOARD;
   }
 }
 
