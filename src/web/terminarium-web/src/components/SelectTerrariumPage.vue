@@ -9,14 +9,11 @@
 --------------------------------------------------------------------------------------->
 
 <script setup>
-import DefaultPageLayout from './DefaultPageLayout.vue';
 import Avatar from './Avatar.vue';
+import MonitorTerrarium from './MonitorTerrarium.vue';
 </script>
 
 <template>
-    <!--Perhaps the default-layout component should instead be defined 
-        only once within the root component of the website?-->
-    <DefaultPageLayout/>
     <div class="page-content">
         <div class="terrariums">
             <div class="avatar-container">
@@ -33,6 +30,7 @@ import Avatar from './Avatar.vue';
                     v-bind:key="index"
                     v-bind:image="terrarium.avatarImage"
                     v-bind:name="terrarium.avatarName"
+                    v-bind:size="'100px'"
                     v-bind:index="index"
                     v-on:avatarClicked="handleAvatarClicked"
                 />   
@@ -51,6 +49,7 @@ import Avatar from './Avatar.vue';
             <div class="manage-terrariums">
                 <button class="button" @click="manageTerrariums">manage terrariums</button>
             </div>
+            <MonitorTerrarium/>
         </div>
     </div>
 </template>
@@ -131,17 +130,20 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 /* TODO: supply this section with proper code commenting in a follow-up commit. */
 
 .page-content {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
+    margin-top: 5vh;
+
 
     /* TODO: investigate! 
      * Somehow this seems to be related to the issue with the "grey bar" appearing at the bottom of screen */
-    height: 100vh; 
+    height: 90vh; 
 }
 
 .terrariums {
@@ -159,7 +161,8 @@ export default {
 }
 
 .manage-terrariums {
-    margin-top: 25px;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
 }
 
 #add-button-text {
@@ -175,8 +178,8 @@ export default {
 }
 
 img {
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
 }
 
 </style>
