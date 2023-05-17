@@ -1,5 +1,7 @@
 // *** Utility functions ***
 
+import Paho from 'paho-mqtt';
+
 /**
  * Function to format date and time from the convention used in the database to the default format
  * It is needed to calculate the time difference between the current time and the time of the last 
@@ -16,3 +18,35 @@ export const formatDateTime = (raw_date) => {
 
     return new Date(year, month, day, hour, minute);
 }
+
+/**
+ * A function that ensures that the number is always three digits long
+ * @param {number} num - a number to be formatted
+ * @returns {string} a string of three digits
+ */
+export const threeDigitFormat = (num) => {
+    return num.toString().padStart(3, '0');
+};
+
+/**
+ * This function is used to initialize the MQTT client based on the hiveMQ public broker
+ * and the Paho library (https://www.eclipse.org/paho/clients/js/)
+ * @returns {Paho.Client} a new MQTT client
+ */
+export const MQTTClientInit = () => {
+    return new Paho.Client(
+            'broker.hivemq.com',
+            Number(8000),
+            `client-id-${generateUniqueID()}`
+    );
+};
+
+/**
+ * This function is used to generate a pseudo-unique number to be used as a client ID for the MQTT client
+ * A further justification of why the function is sufficient can be found here: {@link docs/generateUniqueID.md}.
+ * @returns {number} a pseudo-unique number
+ */
+const generateUniqueID = () => {
+    const randomN = Math.floor(Math.random() * 1000) + 1;
+    return Math.floor(Date.now() / randomN);
+};
