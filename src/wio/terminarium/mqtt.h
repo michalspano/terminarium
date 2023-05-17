@@ -16,8 +16,8 @@
 extern WiFiClient wioClient;                          // wifi client 
 extern PubSubClient client;                           // mqtt client 
 
-#include "screen_draw.h"                              // include screen drawing functions
-#include "screen_control.h"                           // include screen controlling functions
+#include "screen_draw.h"                              // import screen drawing functions
+#include "screen_control.h"                           // import screen controlling functions
 extern Screen screen;                                 // include global screen state variable in current scope        
 
 // user network credentials

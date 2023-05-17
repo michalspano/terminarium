@@ -13,17 +13,23 @@
 #include "TFT_eSPI.h"                              // import TFT LCD library 
 extern TFT_eSPI tft;                               // include wio terminal LCD screen variable in current scope 
 
-#include "screen_control.h"                        // include screen control functions
+#include "screen_control.h"                        // import screen control functions
 extern Screen screen;                              // include global screen state variable in current scope
 extern Screen oldScreen;                           // include global oldScreen state variable in current scope
+extern boolean buttonPressed;                      // boolean indicating button press, used to determine when to redraw screen user-input screen  
 
-#include "mqtt.h"
+#include "mqtt.h"                                  // import mqtt connectivity functions
 extern char* SSID;                                 // include wifi network name
-extern char* SERVER;                               // include mqtt broker ip address
+extern char* SERVER;                               // include mqtt broker address
 extern bool wifiWasConnected;                      // include flag indicating user was previously connected to wifi server
 extern bool mqttWasConnected;                      // include flag indicating user was previously connected to mqtt server
 
-#include "utils.h"                                 // include utility functions
+#include "user_input.h"                            // import user input functions
+extern char inputSSID[32];                         // include character array that stores the user inputted Wifi SSID
+extern char inputPSWD[32];                         // include character array that that stores the user inputted Wifi password
+extern char inputMQTT[32];                         // include character array that stores the user inputted mqtt broker address    
+
+#include "utils.h"                                 // import utility functions
 
 #define TFT_HEIGHT 240                             // define LCD screen pixel height
 #define TFT_WIDTH 320                              // define LCD screen pixel width
@@ -64,6 +70,21 @@ extern void drawSensorScreen(Screen type, String heading, int headingX, int head
 
 // draw status data (common for all individual sensor screens)
 extern void drawStatus(int value, int min, int max);
+
+
+// ********************* USER INPUT SCREENS ************************** //
+
+// function to draw user input screen and its components
+extern void drawInputScreen(char* userInput);
+
+// function to draw keyboard
+extern void drawKeyboard();
+
+// function to draw character currently highlighted on keyboard
+extern void drawSelection();
+
+// draw user inputted String as it being typed
+extern void drawUserInput(char* userInput);
 
 
 // ******************** CONNECTIVITY SCREENS ************************* //

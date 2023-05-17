@@ -7,13 +7,16 @@
  * DIT113 Systems Development, SEM @ CSE.
  ***************************************************************************************************/
 
-#include "screen_control.h"         // include corresponding header file
+#include "screen_control.h"           // include corresponding header file
 
-static unsigned long prevInputTime = 0;
+unsigned long prevInputTime = 0;      // variable tracking the last time an input was registered (used for debouncing unwanted repeat inputs)
 
-void rightButton() {                // function to cycle screen on right button press depending on current screen state
+boolean buttonPressed = false;        // boolean indicating button press, used to determine when to redraw screen user-input screen
+
+// function called when right button is pressed
+void rightButton() {                  
   unsigned long inputTime = millis();
-  if(inputTime - prevInputTime > 200) {
+  if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
     switch(screen) {
       case TEMP:
         screen = HUMI;
@@ -43,6 +46,18 @@ void rightButton() {                // function to cycle screen on right button 
       case CONNECT_CONFIRM:
         screen = CONNECT_WIFI;
         break;
+      case USER_INPUT_SSID:
+        buttonPressed = true;
+        keyboardRight();
+        break;
+      case USER_INPUT_PSWD:
+        buttonPressed = true;
+        keyboardRight();
+        break;
+      case USER_INPUT_MQTT:
+        buttonPressed = true;
+        keyboardRight();
+        break;
       default:                        // by default do nothing on button press                
         break;
     }
@@ -50,9 +65,10 @@ void rightButton() {                // function to cycle screen on right button 
   prevInputTime = inputTime;
 }
 
-void leftButton() {                 // function to switch screen on left button press depending on current screen state
+// function called when left button is pressed
+void leftButton() {                   
   unsigned long inputTime = millis();
-  if(inputTime - prevInputTime > 200) {
+  if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
     switch(screen) {
       case TEMP:
         screen = DASHBOARD;
@@ -84,6 +100,18 @@ void leftButton() {                 // function to switch screen on left button 
       case CONNECT_CONFIRM:
         screen = CONNECT_SELECT;
         break;
+      case USER_INPUT_SSID:
+        buttonPressed = true;
+        keyboardLeft();
+        break;
+      case USER_INPUT_PSWD:
+        buttonPressed = true;
+        keyboardLeft();
+        break;
+      case USER_INPUT_MQTT:
+        buttonPressed = true;
+        keyboardLeft();
+        break;
       default:                        // by default do nothing on button press                
         break;
     }
@@ -91,21 +119,49 @@ void leftButton() {                 // function to switch screen on left button 
   prevInputTime = inputTime;
 }
 
-void upButton() {}
-
-void downButton() {
+// function called when up button is pressed
+void upButton() {                     
   unsigned long inputTime = millis();
-  if(inputTime - prevInputTime > 200) {
-    
+  if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
+    if(screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
+      buttonPressed = true;
+      keyboardUp();
+    }
   }
   prevInputTime = inputTime;
 }
 
-void midButton() {         // function to jump to connection screen
-  screen = CONNECT_SELECT;
+// function called when down button is pressed
+void downButton() {
+  unsigned long inputTime = millis();
+  if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
+    if (screen == CONNECT_CONFIRM) {
+      screen = USER_INPUT_SSID;
+      initUserInput(SSID);
+      buttonPressed = true;
+    } else if (screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
+      keyboardDown();
+      buttonPressed = true;
+    }
+  }
+  prevInputTime = inputTime;
 }
 
-void topButton() {               // function to jump to dashboard from any screen state (if not currently connecting)
+// function called when middle button is pressed
+void midButton() {         
+  unsigned long inputTime = millis();
+  if(inputTime - prevInputTime > DEBOUNCE_LIMIT) {
+    if(screen == USER_INPUT_SSID || screen == USER_INPUT_PSWD || screen == USER_INPUT_MQTT) {
+      keyboardMiddle();
+      buttonPressed = true;
+    } else {
+      screen = CONNECT_SELECT;        // by default, switch to screen for starting mqtt connection
+    }
+  }
+}
+
+// function to jump to dashboard from any screen state (if not currently connecting)
+void topButton() {               
   if(screen != CONNECT_WIFI || screen != CONNECT_MQTT) {   
     screen = DASHBOARD;
   }
