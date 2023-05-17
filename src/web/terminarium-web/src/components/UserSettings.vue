@@ -64,7 +64,7 @@
         const newUsername = this.username;
         const newPassword = this.password;
 
-        // isEmpty boolean is true if not a single field is empty
+        // isEmpty boolean is true if each field is empty
         this.isEmpty = newName === '' && 
                        newUsername === '' && 
                        newPassword  === '';
@@ -74,11 +74,12 @@
 
       }
     }, 
-    // save current values to local storage
+    // save new valid String values to local storage
     saveToLocalStorage() {
-      localStorage['name'] = this.name; 
-      localStorage['username'] = this.username;
-      localStorage['password'] = this.password; 
+      this.name !== '' ? localStorage['name'] = this.name : '';
+      this.username !== '' ? localStorage['username'] = this.username : '';
+      this.password !== '' ? localStorage['password'] = this.password : '';
+
     }
   }
 }
