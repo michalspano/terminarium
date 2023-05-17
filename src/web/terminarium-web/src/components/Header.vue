@@ -8,26 +8,27 @@
 <template>
   <header class="terminarium_header">
     <div class="logo_container">
+      <!-- TODO: make logo clickable and return User to "Home" -->
       <img src="/src/assets/terminarium-logo.png" alt="Terminarium logo">
     </div>
-    <nav class="header_nav_bar" v-if="!isLoggedIn"> <!-- Signed out user menu -->
+    <nav class="header_nav_bar" v-if="!isLoggedIn.value"> <!-- Signed out user menu -->
       <!-- TODO: Set links -->
-      <a href="#" class="header_link">About</a>
-      <a href="#" class="header_link">Help</a>
-      <a href="#" class="header_link">Contact</a>
+      <a href="#/about" class="header_link">About</a>
+      <a href="#/help" class="header_link">Help</a>
+      <a href="#/contact" class="header_link">Contact</a>
     </nav>
     <nav class="header_nav_bar" v-else>             <!-- Signed in user menu -->
       <!-- TODO: Set links -->
-      <a href="#" class="header_link">Home</a>
-      <a href="#" class="header_link">About</a>
-      <a href="#" class="header_link">Help</a>
-      <a href="#" class="header_link">Contact</a>
-      <a href="#" class="header_link">Your Terrariums</a>
-      <a href="#" class="header_link">Monitor Terrarium</a>
-      <a href="#" class="header_link">Settings</a>
+      <a href="#/" class="header_link">Home</a>
+      <a href="#/about" class="header_link">About</a>
+      <a href="#/help" class="header_link">Help</a>
+      <a href="#/contact" class="header_link">Contact</a>
+      <a href="#/your-terrariums" class="header_link">Your Terrariums</a>
+      <a href="#/settings" class="header_link">Settings</a>
     </nav>
     <div class="header_button">
-      <AccessButton></AccessButton>                 <!-- The 'AccessButton' is imported component and serves as a sign in/out button -->
+      <!-- The 'AccessButton' component serves as a sign in/out button -->
+      <AccessButton @accessButtonEvent="$emit('accessButtonEvent')" />
     </div>
   </header>
 </template>
@@ -38,13 +39,7 @@ import AccessButton from "@/components/AccessButton.vue";
 export default {
   name: "SiteHeader",
   components: {AccessButton}, // Access to the child component.
-  data: function () {
-    return{
-      // TODO: actually implement logic to check if user is logged in
-      // I suggest we introduce a global variable 'isLoggedIn' to the app so that all components that need it can access it from root
-      isLoggedIn: true // This would then be isLoggedIn: this.$root.isLoggedIn
-    }
-  }
+  inject: ['isLoggedIn'], // Prop injected from "App.vue"
 }
 </script>
 
