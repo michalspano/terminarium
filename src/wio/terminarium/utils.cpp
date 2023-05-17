@@ -87,8 +87,6 @@ int userDefinedRanges[5][2] = {
  * @param length - length of payload String
  */
 bool updateSensorRanges(char* topic, char payload[], unsigned int length) {
-  screen = UPDATE;                                      // set screen state to update screen
-
   if(!validateFormat(payload, length)) {                // call function to validate String payload format
     return false;
   }
@@ -162,6 +160,7 @@ bool validateRanges(int min, int max) {
   if(min > max) {                                       // check that min value is not greater than max value
     return false;
   }
+  return true;
 }
 
 

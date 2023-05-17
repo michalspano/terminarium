@@ -170,13 +170,3 @@ void midButton() {
     }
   }
 }
-
-/**
- * @goPrevScreen: some draw functions switch between 2 screen states within 1 interval.
- * this function is used to revert screen state and correctly update the oldScreen value 
- */
-void goPrevScreen(Screen currentScreen) {
-  screen = oldScreen;               // set screen back to the previous screen
-  oldScreen = currentScreen;        // update oldScreen value
-  shouldUpdateOldScreen = false;    // ensure oldScreen update isn't overwritten in main program loop
-}

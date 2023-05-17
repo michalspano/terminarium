@@ -58,7 +58,4 @@ extern void midButton();            // function called when middle button is pre
 
 extern void topButton();            // function to jump to dashboard from any screen state
 
-// function used to revert screen state and correctly update the oldScreen value
-extern void goPrevScreen(Screen currentScreen);
-
 #endif                              // end header guard  
