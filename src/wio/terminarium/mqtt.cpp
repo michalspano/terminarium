@@ -18,9 +18,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
  */
 
 /***update these with values corresponding to your network***/
-const char* SSID       = "******";                    // wifi network name
-const char* PASSWORD   = "******";                    // wifi network password
-const char* SERVER     = "broker.hivemq.com";         // mqtt broker address
+char* SSID       = "******";                          // wifi network name
+char* PASSWORD   = "******";                          // wifi network password
+char* SERVER     = "broker.hivemq.com";               // mqtt broker ip address
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
@@ -43,8 +43,8 @@ const char* TOPIC_PUB_LOUD  = "/terminarium/sensor/loudness";
 
 // ********************** CONNECT GENERAL **************************** //
 
-bool wifiWasConnected = false;            // global flag denoting previous connection to mqtt server, false by default
-bool mqttWasConnected = false;            // global flag denoting previous connection to wifi network, false by default
+bool wifiWasConnected = false;                        // global flag denoting previous connection to mqtt server, false by default
+bool mqttWasConnected = false;                        // global flag denoting previous connection to wifi network, false by default
 
 /**
  * @connect: call functions to either connect to wifi or mqtt depending on screen state context.
@@ -69,10 +69,10 @@ void maintainConnection() {               // maintain or recover connection if i
   if(wifiWasConnected && !wifiConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
     Serial.print("Connection to Wi-Fi network lost.");  // print connection loss message to serial monitor
     mqttWasConnected = false;                           // set to false so conditional below doesn't trigger when wifi is lost
-    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
+    screen = CONNECT_SELECT;                            // change screen to ask if user wants to reconnect
   } else if (mqttWasConnected && !mqttConnected() && screen != CONNECT_SELECT && screen != CONNECT_WIFI && screen != CONNECT_MQTT) {
     Serial.println("Connection to MQTT server lost");   // print connection mqtt loss message to serial monitor
-    goConnSelectScreen();                               // change screen to ask if user wants to reconnect
+    screen = CONNECT_SELECT;                            // change screen to ask if user wants to reconnect
   } 
 }
 
@@ -96,7 +96,7 @@ void setupWifi() {
   WiFi.begin(SSID, PASSWORD);                         // connect to wifi network
 
   while (!wifiConnected()) {                          // loop while not connected to wifi
-    drawDotDotDot(strlen(SSID), getCenterX(toString(SSID)), 169);
+    drawDotDotDot(strlen(SSID), getCenterX(toString(SSID), 3), 169);
     Serial.print(".");                                // print dot..dot..dot... to serial monitor
     WiFi.begin(SSID, PASSWORD);                       // reattempt connection
   }
@@ -136,7 +136,7 @@ void setupClient() {
   client.connect(clientID.c_str());                   // connect to mqtt broker
 
   while(!client.connected()) {                        // loop while not connected to broker
-    drawDotDotDot(strlen(SERVER), getCenterX(toString(SERVER)), 169);
+    drawDotDotDot(strlen(SERVER), getCenterX(toString(SERVER), 3), 169);
     Serial.print("Failed, return code = ");           // print error message
     Serial.println(client.state());                   // print client state (error code as int value that represents additional info on specific error) 
     Serial.println("Trying again");      
@@ -177,11 +177,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.print((char)payload[i]);
     buff_p[i] = (char)payload[i];
   }
-    //update array values
+  // print new line
+  Serial.println();
+  //update array values
   if(updateSensorRanges(topic, buff_p, length)) {
+    // print success message
     Serial.println("Succesfully updated sensor ranges");
   } else {
-      Serial.println("Sensor ranges not updated succesfully");
+    // print fail message
+    Serial.println("Sensor ranges not updated succesfully");
   }
 
   Serial.println();

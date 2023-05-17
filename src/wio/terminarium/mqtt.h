@@ -12,18 +12,18 @@
 
 #include "rpcWiFi.h"                                  // import wifi library
 #include "PubSubClient.h"                             // import mqtt library
-//#include "credentials.h"    
+    
 extern WiFiClient wioClient;                          // wifi client 
 extern PubSubClient client;                           // mqtt client 
 
-#include "screen_draw.h"                              // include screen drawing functions
-#include "screen_control.h"                           // include screen controlling functions
+#include "screen_draw.h"                              // import screen drawing functions
+#include "screen_control.h"                           // import screen controlling functions
 extern Screen screen;                                 // include global screen state variable in current scope        
 
 // user network credentials
-extern const char* SSID;                              // wifi network name
-extern const char* PASSWORD;                          // wifi network password
-extern const char* SERVER;                            // mqtt broker ip address
+extern char* SSID;                                    // wifi network name
+extern char* PASSWORD;                                // wifi network password
+extern char* SERVER;                                  // mqtt broker ip address
 
 // topic for receiving messages
 extern const char* TOPIC_SUB;

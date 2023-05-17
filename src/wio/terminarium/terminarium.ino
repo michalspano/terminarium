@@ -31,10 +31,11 @@ void setup() {
   tft.setRotation(3);                     // set terminal LCD rotation
 
   // set buttons as input that interrupts program loop
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_A), goRightScreen, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_C), goLeftScreen, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_KEY_B), goDashScreen, FALLING);
-  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), goConnSelectScreen, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_RIGHT), rightButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_LEFT), leftButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_UP), upButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_DOWN), downButton, FALLING);
+  attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), midButton, FALLING);
 
   client.setServer(SERVER, 1883);         // set up mqtt server   
   client.setCallback(callback);           // set up behavior when new message received from mqtt broker
@@ -90,9 +91,9 @@ void loop() {
   // ***************************** DRAWING (LCD screen) ********************************** //
 
     // draw screen graphics on LCD
-    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);    
-
-    oldScreen = screen;                                    // update oldScreen value, used to determine drawing behavior on next interval                         
+    drawScreen(temp, humi, vibSignal, moistureResult, lightResult, loudnessResult, isStartup);                             
+    
+    oldScreen = screen;                                    // update oldScreen value, used to determine drawing behavior on next interval
 
   // ***************************** CONNECTING (MQTT) ************************************* //
 
