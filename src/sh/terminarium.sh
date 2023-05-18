@@ -16,7 +16,7 @@ logger() {
 
 # Function to show the usage of the script
 usage() {
-    echo "Usage: terminariu.sh [port] [+options]"
+    echo "Usage: terminarium.sh [port] [+options]"
     echo "  port: the port where the Arduino board is connected to"
     echo "  options:"
     echo "    --list-ports, -lp: list all the available ports"
@@ -29,6 +29,11 @@ PORT="$1"
 BOARD="Seeeduino:samd:seeed_wio_terminal"
 SRC_DIR="wio/terminarium"
 
+# Show usage in case the user passes --help or -h or no arguments
+# Should be checked before the arduino-cli is checked, so that the user can 
+# see the usage even if the arduino-cli is not installed
+if [[ "$1" == "--help" || "$1" == "-h" || "$#" -eq 0 ]]; then usage; fi
+
 # Verify that the arduino-cli is installed
 if ! command -v arduino-cli &> /dev/null; then
     echo "arduino-cli could not be found"; exit 1
@@ -36,10 +41,8 @@ fi
 
 logger "Arduino CLI found"; sleep 0.5
 
-# Show usage in case the user passes --help or -h or no arguments
-if [[ "$1" == "--help" || "$1" == "-h" || "$#" -eq 0 ]]; then usage; fi
-
 # List current ports if the user passes --list-ports or -lp
+# Arduino-cli is needed, hence the order of the if statements
 if [[ "$1" == "--list-ports" || "$1" == "-lp" ]]; then
     arduino-cli board list; exit 0
 fi
