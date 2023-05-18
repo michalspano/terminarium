@@ -19,24 +19,35 @@ describe('Check that the components are being imported properly', () => {
 });
 
 describe('Check that the component is being rendered', () => {
-    const wrapper = shallowMount(AccessButton);
+    const wrapper = shallowMount(AccessButton, {
+        global: {
+            provide: { isLoggedIn: { value: false } }   // the injected value is not used in the test
+                                                        // but it is required for the component to be rendered
+        }
+    });
     it('should exist', () => {
         expect(wrapper.exists()).toBe(true);
     });
 });
 
 describe('Check that the structure of the component is correct', () => {
-    const wrapper = shallowMount(AccessButton);
+    const wrapper = shallowMount(AccessButton, {
+        global: {
+            provide: { isLoggedIn: { value: false } }
+        }
+    });
 
     it('should contain a button instance with class "access"', () => {
         expect(wrapper.find('button.access').exists()).toBe(true);
     });
-
-    // TODO: add potentially new tests here (regarding the structure of the component) if needed.
 });
 
 describe('Check the click functionality of the button', () => {
-    const wrapper = shallowMount(AccessButton);
+    const wrapper = shallowMount(AccessButton, {
+        global: {
+            provide: { isLoggedIn: { value: false } }
+        }
+    });
 
     /* Note: when an element is not 'clickable', its property "disabled" is set to true.
      * Hence, we expect that such property is undefined (i.e. not set/false). */
@@ -44,8 +55,10 @@ describe('Check the click functionality of the button', () => {
         expect(wrapper.find('button').attributes('disabled')).toBeUndefined();
     });
 
-    it('should contain "accessButtonAction" function', () => {
-        expect(wrapper.vm.accessButtonAction).toBeDefined();
+    // Check that the button emits the correct event when clicked (i.e. "accessButtonEvent")
+    it('should emit "accessButtonEvent" event when clicked', async () => {
+        await wrapper.find('button').trigger('click');
+        expect(wrapper.emitted('accessButtonEvent')).toBeTruthy();
     });
 });
 
@@ -57,8 +70,8 @@ describe('Check the click functionality of the button', () => {
 describe('Check the logic of the component based on the login stats', () => {
     it('should display "log in" when the user is not logged in', () => {
         const wrapper = shallowMount(AccessButton, {
-            data() {
-                return { isLoggedIn: false };
+            global: {
+                provide: { isLoggedIn: { value: false } }
             }
         });
         /* Assumption: since the template contains only a single button,
@@ -69,20 +82,11 @@ describe('Check the logic of the component based on the login stats', () => {
 
     it('should display "log out" when the user is logged in', () => {
         const wrapper = shallowMount(AccessButton, {
-            data() {
-                return { isLoggedIn: true };
+            global: {
+                provide: { isLoggedIn: { value: true } }
             }
         });
         // Same assumption as above
         expect(wrapper.find('button').text()).toBe('log out');
-    });
-});
-
-describe('Check that the user is redirected to the correct page', () => {
-    // TODO: add a test to check that the button redirects to the correct page
-    //   based on the login status of the user.
-    // Note: the logic in the AccessButton component is not yet implemented.
-    it('TODO: add a set of tests to check that the button redirects to the correct page', () => {
-        expect(true).toBe(true);    // TODO: remove this line and replace it with a valid test
     });
 });
