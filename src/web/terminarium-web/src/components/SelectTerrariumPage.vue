@@ -36,7 +36,7 @@ import Avatar from './Avatar.vue';
                     <!-- Placeholder function call 
                          TODO: replace -->
                     <img    
-                        src="src/assets/add-button.png" 
+                        src="/src/assets/add-button.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
                         @click="addTerrarium"   

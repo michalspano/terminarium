@@ -13,7 +13,7 @@ import { computed } from 'vue'
 
 <template>
   <div id="app">
-    <!-- Component that contains all elements that are always part of the page (layout) -->
+    <!-- Component containing the elements (components) that are always part of the website's layout -->
     <DefaultPageLayout @access-button-event="handleAccessButtonEvent" />
 
     <!-- The "KeepAlive" tag wraps the loaded components and caches them to maintain state 
@@ -25,7 +25,7 @@ import { computed } from 'vue'
 </template>
 
 <script>
-// Define which component to load - based on defined paths (routes) correlating with the URL hash fragment.
+// Decide which component to load - based on defined paths (routes) correlating to the URL hash fragment.
 const routes = {
   "/": HomePage,
   "/set-sensor-ranges": SetSensorRanges,
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       currentPath: window.location.hash,    // Initialise currentPath as the current URL hash fragment.
-      isLoggedIn: false             // Initialise the User's login status as false.
+      isLoggedIn: false             // Initialise the User's login status to false.
     }
   },
 
