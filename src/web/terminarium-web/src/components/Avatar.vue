@@ -59,7 +59,7 @@ export default {
 
     computed: {
         imageSrc() {
-            return (`src/assets/${this.image}`);
+            return (`/src/assets/${this.image}`);
         }
     },
 
@@ -77,12 +77,6 @@ export default {
 
 
 <style>
-/* Outline that applies to all component elements - helpful during development process */
-/* TODO: Remove */
-* {
-    outline: green dashed 1px;
-}
-
 .terrariumName {
     text-align: center;
     font-weight: bold;

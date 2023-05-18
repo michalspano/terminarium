@@ -35,21 +35,23 @@ import MonitorTerrarium from './MonitorTerrarium.vue';
                     v-on:avatarClicked="handleAvatarClicked"
                 />   
                 <div class="add-terrarium" v-if="!isFull">
-                    <!-- Placeholder function call 
-                         TODO: replace -->
-                    <img    
-                        src="src/assets/add-button.png" 
+                    <div class="add-button">
+                        <img    
+                        src="/src/assets/add-button.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
                         @click="addTerrarium"   
-                    >
+                        >
+                    </div>
                     <figcaption id="add-button-text">Add Terrarium</figcaption>
                 </div>
             </div>
             <div class="manage-terrariums">
                 <button class="button" @click="manageTerrariums">manage terrariums</button>
             </div>
-            <MonitorTerrarium/>
+            <div class="monitoring-board">
+                <MonitorTerrarium/>
+            </div>
         </div>
     </div>
 </template>
@@ -151,6 +153,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 50%;
 }
 
 .avatar-container {
@@ -165,21 +168,32 @@ export default {
     margin-bottom: 2vh;
 }
 
+.add-button {
+    cursor: pointer;
+}
+
 #add-button-text {
     text-align: center;
     font-weight: bold;
     color: white;
+    cursor: default;
 }
 
 .button {
+    border-radius: 20px;
     background-color: #45C059;
     color: black;
     text-align: center;
+    cursor: pointer;
 }
 
 img {
     height: 100px;
     width: 100px;
+}
+
+.monitoring-board {
+    width: 100%;
 }
 
 </style>
