@@ -140,12 +140,7 @@ export default {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 5vh;
-
-
-    /* TODO: investigate! 
-     * Somehow this seems to be related to the issue with the "grey bar" appearing at the bottom of screen */
-    height: 90vh; 
+    margin-top: 150px;
 }
 
 .terrariums {
@@ -177,6 +172,7 @@ export default {
     font-weight: bold;
     color: white;
     cursor: default;
+    white-space: nowrap;
 }
 
 .button {

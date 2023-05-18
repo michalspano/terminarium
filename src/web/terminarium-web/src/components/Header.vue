@@ -8,17 +8,14 @@
 <template>
   <header class="terminarium_header">
     <div class="logo_container">
-      <!-- TODO: make logo clickable and return User to "Home" -->
-      <img src="/src/assets/terminarium-logo.png" alt="Terminarium logo">
+      <a href="#/"><img src="/src/assets/terminarium-logo.png" alt="Terminarium logo"></a>
     </div>
     <nav class="header_nav_bar" v-if="!isLoggedIn.value"> <!-- Signed out user menu -->
-      <!-- TODO: Set links -->
       <a href="#/about" class="header_link">About</a>
       <a href="#/help" class="header_link">Help</a>
       <a href="#/contact" class="header_link">Contact</a>
     </nav>
     <nav class="header_nav_bar" v-else>             <!-- Signed in user menu -->
-      <!-- TODO: Set links -->
       <a href="#/" class="header_link">Home</a>
       <a href="#/about" class="header_link">About</a>
       <a href="#/help" class="header_link">Help</a>
