@@ -5,35 +5,86 @@
     <div class="row-name">
       <img class="avatar" src="@/assets/avatar-lizard.png" alt="avatar">
       <div class="form-name">
-        <label for="name" class="label-name">Name:</label>
-        <input class="input-name" name="name" id="name" type="text">
+        <label for="nameID" class="label-name">Name:</label>
+        <input class="input-name" name="name" id="nameID" type="text" v-model="name">
       </div> 
     </div>
     <!-- 2nd row: username row -->
     <div class="row-form-user">
-      <label for="username" class="label-user-pass">Username:</label>
-      <input class="input-user" name="username" id="username" type="text">
+      <label for="usernameID" class="label-user-pass">Username:</label>
+      <input class="input-user" name="username" id="usernameID" type="text" v-model="username">
     </div>
     <!-- 3rd row: password row -->
     <div class="row-form-user">
-      <label for="password" class="label-user-pass">Password:</label>
-      <input class="input-user" name="password" id="password" type="password">
+      <label for="passwordID" class="label-user-pass">Password:</label>
+      <input class="input-user" name="password" id="passwordID" type="password" v-model="password">
     </div>
-    <!-- 4th row: buttons -->
+    <!-- 4th row: save changes button -->
     <div class="button-container"> 
-      <!--TODO: handleClick to be implemented -->
-      <button class="btn" @click="handleClick">Cancel</button>
-      <button class="btn" @click="handleClick">Save</button>
+      <button class="btn" type="button" @click="saveButton()">Save</button>
     </div>  
+
+    <!-- confirmation text indicating changes were saved or not -->
+    <div class="saved-message-container">
+      <p v-if="isSaved && !isEmpty" class="saved-message">Changes saved succesfully!</p>
+      <p v-if="isSaved && isEmpty" class="saved-message">No changes saved!</p>  
+    </div>
+
+    
   </div>
 </template>
  
  <script>
-  // TODO: handleClick to be implemented
+
   export default {
-    name: 'UserSettings'
+    name: 'UserSettings',
+    data() {
+      return {
+        name: '',
+        username: '',
+        password: '',
+        isSaved:false,
+        isEmpty:false
+      };
+    },
+    // populate variables with values saved in local storage
+    created() {
+      this.name = localStorage['name'] || '' ;
+      this.username = localStorage['username'] || '' ;
+      this.password = localStorage['password'] || '' ;
+    },
+    methods:{
+      /* this method gets the values entered in the name, username, and password 
+      input fields and, as long as they are not empty, updates the current value with the new value.*/
+      saveButton(){
+        this.isSaved = true;                  // flag for the confirmation text to print when save button is pressed
+
+        // assign field values to new variables
+        const newName = this.name;
+        const newUsername = this.username;
+        const newPassword = this.password;
+
+        // isEmpty boolean is true if each field is empty
+        this.isEmpty = newName === '' && 
+                       newUsername === '' && 
+                       newPassword  === '';
+
+        if (!this.isEmpty){                   // if at least 1 field isn't empty
+          this.saveToLocalStorage();          // save values to local storage
+
+      }
+    }, 
+    // save new valid String values to local storage
+    saveToLocalStorage() {
+      this.name !== '' ? localStorage['name'] = this.name : '';
+      this.username !== '' ? localStorage['username'] = this.username : '';
+      this.password !== '' ? localStorage['password'] = this.password : '';
+
+    }
   }
- </script>
+}
+
+</script>
 
 <style scoped>
 
@@ -112,14 +163,36 @@
     gap: 30px;
     justify-content: center;
     padding-top: 2%;
-  }
+}
 
-  /* Styling for the buttons */
+ /* Movement for the button */
+  button:active {
+   transform: translate(0em, 0.2em);
+}
+
+  /* Styling for the button */
   .btn {
     color: black;
     font-size: 2.5vh;
     border: #45C059;
     background-color: #45C059;
     font-family: Cantora One, Georgia;
+    cursor: pointer;
   }
+
+  /* Styling for the message container */
+  .saved-message-container{
+    display: flex;
+    display: row;
+    gap: 30px;
+    justify-content: center;
+    padding-top: 2%;
+  }
+
+  /* Styling for the message */
+  .saved-message {
+  color: white;
+  font-family: Cantora One, Georgia;
+}
+
 </style>

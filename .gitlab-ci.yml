@@ -1,4 +1,4 @@
-# Entry point for GitLab CI for terminarium-web
+# Entry point for GitLab CI for the Terminarium Project
 
 # Variables are defined in the following order:
 variables:
@@ -18,12 +18,13 @@ cache:
 #   2. lint-job: Lint the project - catch syntax errors and bad practices
 #   3. test-job: Test the project - run the unit tests
 #   4. build-job: Build the project
-#   5. TODO
+#   5. deploy-job: Deploy the project
 stages:
   - install
   - lint
   - test
   - build
+  - deploy
 
 # Define the image to use for the jobs
 before_script:
@@ -73,3 +74,25 @@ build-job:
   artifacts:
     paths:
       - $SRC_PATH/dist                        # Save the build folder as an artifact
+  only:
+    - main                                    # Only build the project when the main branch is updated
+
+# Job 5. Deploy the project
+deploy-job:
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - echo "Deploying the project..."         # Print a message
+    # Deploy the project with a log - use the environment variables to authenticate with Netlify and select the site to deploy
+    # Observe: this is different than the deploy script defined in the package.json file; the reason is, that the GitLab platform
+    # is given the environment variables via the CI/CD settings. On the other hand, on the local level, the environment variables
+    # are given within the shell instance, and hence `npm run deploy` is sufficient (the netlify-cli package is installed locally
+    # and has the access to the environment variables via an authentication process).
+    - ./node_modules/.bin/netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_AUTH_TOKEN --dir dist | tee deploy.log
+    - echo "Project deployed!"                # Print a message
+  artifacts:
+    paths:
+      - $SRC_PATH/deploy.log                            # Save the log of the deployment as an artifact
+  only:
+    - main                                    # Only deploy the project when the main branch is updated

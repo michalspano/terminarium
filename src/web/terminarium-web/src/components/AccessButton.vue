@@ -4,10 +4,8 @@
 ----------------------------------------------------------------------------------->
 
 <template>
-    <button 
-        @click="accessButtonAction" 
-        type="button" 
-        class="access">{{ accessButtonDescription }}
+    <button @click="$emit('accessButtonEvent')" type="button" class="access">
+        {{ accessButtonDescription }}
     </button>
 </template>
 
@@ -18,36 +16,18 @@
  * the Vue-compiler for type inference / support. */
 export default {
     name: "AccessButton",
-    data () {
-        return {
-            // Placeholder hard-coded value
-            isLoggedIn: false
-            // TODO: actually implement logic to check if user is logged in
-            // (likely to be a computed value instead)
-        };
-    },
+    inject: ['isLoggedIn'],
 
     computed: {
         // Return the correct button description.
         accessButtonDescription() {
-            if (this.isLoggedIn) {
+            if (this.isLoggedIn.value) {
                 return "log out";
             } else {
                 return "log in";
             }
         }
     },
-
-    methods: {
-        // Either redirect to the login-page, or log the User out and redirect to the home-page
-        accessButtonAction() {
-            if (this.isLoggedIn) {
-                // TODO: insert logic to log the user out and redirect them to login page
-            } else {
-                // TODO: insert logic to redirect user to login page
-            }
-        }
-    }
 }
 </script>
 
