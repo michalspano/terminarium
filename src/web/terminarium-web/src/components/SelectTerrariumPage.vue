@@ -10,6 +10,7 @@
 
 <script setup>
 import Avatar from './Avatar.vue';
+import MonitorTerrarium from './MonitorTerrarium.vue';
 </script>
 
 <template>
@@ -29,23 +30,27 @@ import Avatar from './Avatar.vue';
                     v-bind:key="index"
                     v-bind:image="terrarium.avatarImage"
                     v-bind:name="terrarium.avatarName"
+                    v-bind:size="'100px'"
                     v-bind:index="index"
                     v-on:avatarClicked="handleAvatarClicked"
                 />   
                 <div class="add-terrarium" v-if="!isFull">
-                    <!-- Placeholder function call 
-                         TODO: replace -->
-                    <img    
+                    <div class="add-button">
+                        <img    
                         src="/src/assets/add-button.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
                         @click="addTerrarium"   
-                    >
+                        >
+                    </div>
                     <figcaption id="add-button-text">Add Terrarium</figcaption>
                 </div>
             </div>
             <div class="manage-terrariums">
                 <button class="button" @click="manageTerrariums">manage terrariums</button>
+            </div>
+            <div class="monitoring-board">
+                <MonitorTerrarium/>
             </div>
         </div>
     </div>
@@ -127,17 +132,15 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 /* TODO: supply this section with proper code commenting in a follow-up commit. */
 
 .page-content {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
-
-    /* TODO: investigate! 
-     * Somehow this seems to be related to the issue with the "grey bar" appearing at the bottom of screen */
-    height: 100vh; 
+    margin-top: 150px;
 }
 
 .terrariums {
@@ -145,6 +148,7 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 50%;
 }
 
 .avatar-container {
@@ -155,24 +159,37 @@ export default {
 }
 
 .manage-terrariums {
-    margin-top: 25px;
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+}
+
+.add-button {
+    cursor: pointer;
 }
 
 #add-button-text {
     text-align: center;
     font-weight: bold;
     color: white;
+    cursor: default;
+    white-space: nowrap;
 }
 
 .button {
+    border-radius: 20px;
     background-color: #45C059;
     color: black;
     text-align: center;
+    cursor: pointer;
 }
 
 img {
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
+}
+
+.monitoring-board {
+    width: 100%;
 }
 
 </style>
