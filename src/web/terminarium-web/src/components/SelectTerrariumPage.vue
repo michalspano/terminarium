@@ -9,14 +9,10 @@
 --------------------------------------------------------------------------------------->
 
 <script setup>
-import DefaultPageLayout from './DefaultPageLayout.vue';
 import Avatar from './Avatar.vue';
 </script>
 
 <template>
-    <!--Perhaps the default-layout component should instead be defined 
-        only once within the root component of the website?-->
-    <DefaultPageLayout/>
     <div class="page-content">
         <div class="terrariums">
             <div class="avatar-container">
@@ -40,7 +36,7 @@ import Avatar from './Avatar.vue';
                     <!-- Placeholder function call 
                          TODO: replace -->
                     <img    
-                        src="src/assets/add-button.png" 
+                        src="/src/assets/add-button.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
                         @click="addTerrarium"   

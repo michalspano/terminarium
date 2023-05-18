@@ -13,7 +13,7 @@ import Background from './Background.vue';
 <template>
     <div id="defaultLayout">
         <section class="container">
-            <SiteHeader/>
+            <SiteHeader @accessButtonEvent="$emit('accessButtonEvent')" />
         </section>
         <section class="container">
             <SiteFooter/>
@@ -25,6 +25,11 @@ import Background from './Background.vue';
 
 <script>
 export default {
-    name: "DefaultPageLayout"
+    name: "DefaultPageLayout",
+    components: {
+        SiteHeader,
+        SiteFooter,
+        Background
+    },
 }
 </script>
