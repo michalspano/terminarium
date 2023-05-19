@@ -4,6 +4,7 @@ import HomePage from './components/HomePage.vue';
 import SelectTerrarium from './components/SelectTerrariumPage.vue';
 import SetSensorRanges from './components/SetSensorRanges.vue';
 import UserSettings from './components/UserSettings.vue';
+import Register from './components/Register.vue';
 
 // Import the "computed()" method from Vue Composition API. 
 // Used inside the "provide()" option/function.
@@ -19,7 +20,7 @@ import { computed } from 'vue'
     <!-- The "KeepAlive" tag wraps the loaded components and caches them to maintain state 
       (keeps the same component instance alive). Only components that are "included" will be cached. -->
     <KeepAlive include="SelectTerrarium, SetSensorRanges">
-      <component v-bind:is="currentView" />
+      <component v-bind:is="currentView" @accRegisterSuccess="handleAccRegistration"/>
     </KeepAlive>
   </div>
 </template>
@@ -30,6 +31,7 @@ const routes = {
   "/": HomePage,
   "/set-sensor-ranges": SetSensorRanges,
   "/settings": UserSettings,
+  "/register-account": Register,
   "/your-terrariums": SelectTerrarium,
 }
 
@@ -39,7 +41,8 @@ export default {
     HomePage,
     SelectTerrarium,
     SetSensorRanges,
-    UserSettings
+    UserSettings,
+    Register
   },
 
   data() {
@@ -86,16 +89,29 @@ export default {
   },
 
   methods: {
+    toggleLoginStatus() {
+      this.isLoggedIn = !this.isLoggedIn
+    },
+
     // Method for when the AccessButton-component has been clicked (login/logout button).
     // This event propagates through: AccessButton --> Header --> DefaultPageLayout --> App (this file). 
     // In both of the intermediary components the event is re-emitted.
     handleAccessButtonEvent() {
       if (this.isLoggedIn) {
         window.location.href="#/"   // Returns the User to the HomePage when they log out.
-        this.isLoggedIn = false
+        this.toggleLoginStatus()
+      } else if (localStorage.getItem("username") && localStorage.getItem("password")) {
+        this.toggleLoginStatus()
       } else {
-        this.isLoggedIn = true     // TODO: replace this line with a "window.location.href" redirecting to the login page, IF it's added.
+        window.location.href="#/register-account"     // TODO: replace this line with a "window.location.href" redirecting to the login page, IF it's added.
       }
+    },
+
+    // Returns the User to the Home page and changes the login status to "true".
+    // Called by the event listener for "accRegisterSuccess" - an event emitted by the "RegisterPage"-component.
+    handleAccRegistration() {
+      window.location.href="#/"
+      this.toggleLoginStatus()
     }
   }
 }
