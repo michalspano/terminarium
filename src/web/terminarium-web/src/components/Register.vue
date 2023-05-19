@@ -97,12 +97,8 @@ export default {
     font-family: Cantora One, Georgia;
     border: 1px solid rgba(0, 0, 0, 0.301);
     background-color:rgba(0, 0, 0, 0.301);
-  }
-
-  /* Spcific styling for the name input field */
-  .input{ 
     width: 62%; 
-}
+  }
 
   /* Styling for the button container */
   .button-container {
