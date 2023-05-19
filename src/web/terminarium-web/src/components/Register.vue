@@ -1,16 +1,17 @@
 <template> 
     <!-- Classes containing heading text -->
-    <div class="text1"> 
-      <h1>Register!</h1> </div>
-    <div class="text2">
-      <p>create your account now 
-         <br>and start monitoring</p>
-    </div> 
+     <div class="heading"> 
+        <h1>Register!</h1> 
+     </div>
+     <div class="sub-heading">
+        <p>create your account now 
+        <br>and start monitoring</p>
+     </div> 
     <!-- Container for the form -->
-    <div class="form-entries">
+     <div class="form-entries">
       <!-- 1st row: name -->
       <div class="row-form">
-          <input class="input" name="name" id="nameID" type="text" v-model="name"
+        <input class="input" name="name" id="nameID" type="text" v-model="name"
              placeholder="name" >
       </div>
       <!-- 2nd row: username row -->
@@ -141,36 +142,34 @@ export default {
   }
 
 /* Styling for the top text */
-  .text1 {
+  .heading {
     font-family: Cantora One, Georgia;
     font-size: 2em;
     border: black;
     color: #45C059;
-    display: flex;
     margin-top: 150px;
     margin-left: 60px;      
 }
 
 /* Styling for the bottom text */
-  .text2 {
+  .sub-heading {
    font-family: Cantora One, Georgia;
    font-size: 1.5rem;
    border: #45C059;
    color: rgba(245, 245, 245, 0.692);
-   display:flex;
    margin-top: -60px;
    margin-left: 100px;
   }
 
   /* Adjust font and margins for smaller size screeens*/
 @media (max-width: 768px) {
-  .text1 {
+  .heading {
     font-size: 1.5em;
     margin-top: 100px;
     margin-left: 30px;
   }
 
-  .text2 {
+  .sub-heading {
     font-size: 1rem;
     margin-top: -40px;
     margin-left: 50px;
