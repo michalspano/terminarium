@@ -36,7 +36,7 @@ Furthermore, the system will _notify_ the user in the event of an __emergency__ 
 The following section lists the __dependencies and requirements__ for the project; these should be installed prior to the [installation process](#installation) described in the section afterwards.
 
 1. [Wio Seeed Terminal](https://www.seeedstudio.com/Wio-Terminal-p-4509.html) (or compatible alternative board)
-2. [Arduino IDE](https://www.arduino.cc/en/software) or [Arduino CLI](https://github.com/arduino/arduino-cli) (optional: for `CLI` usage)
+2. [Arduino IDE](https://www.arduino.cc/en/software) or [Arduino CLI](https://github.com/arduino/arduino-cli) (optional: for [`CLI` usage](#2-automated-shell-script---usage))
 3. Wio Terminal **Board Library** (parsed from [link](https://files.seeedstudio.com/arduino/package_seeeduino_boards_index.json)); more information can be found [here](https://wiki.seeedstudio.com/Wio-Terminal-Getting-Started/#getting-started)
 4. A collection of `Arduino` libraries$^*$:
    - [DHT-Sensors-Non-Blocking](https://github.com/toannv17/DHT-Sensors-Non-Blocking) library, Toan Nguyen
@@ -193,15 +193,20 @@ As part of the project's delivery, the following **video** was created to demons
 
 [`Terminarium` - Project Demo](www.TODO.com)
 
+<details>
+<summary>Terminarium <code>CLI</code> Demo</summary>
+
+  [![Terminarium CLI Demo](https://i9.ytimg.com/vi_webp/Gz2omDNVtLk/mq2.webp?sqp=CMzenaMG-oaymwEmCMACELQB8quKqQMa8AEB-AHSCIAC0AWKAgwIABABGEQgWChyMA8=&rs=AOn4CLCsD-GtWjiJY_BjMjs_VxrOUrGdDA)](https://www.youtube.com/embed/Gz2omDNVtLk)
+
+</details>
+
 ## System design
 
 The __system's design__ is depicted in the following diagram (with an additional legend):
 
-![System Design](docs/images/system-design-new.jpg)
+![System Design](docs/images/system-design-final.jpg)
 
-\*view the __diagram__ in an __uncompressed__ form (full quality): [link](https://tinyurl.com/dit113-init-system-design)
-
-A more thorough description of the system's design can be found in the [**System Design Breakdown**](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/wikis/System-Design) section of the `wiki` page.
+\*view the __diagram__ in an __uncompressed__ form (full quality): [link](https://tinyurl.com/dit113-final-system-design)
 
 ## Acknowledgements
 
@@ -236,12 +241,12 @@ The **license** of the project is to be added once it has been released as an op
 
 ### Team members
 
-- Manely Abbasi (@manely)
-- Erik Lindstrand (@elindstr)
-- Michal Spano (@spano)
-- James Klouda (@klouda)
-- Konstantinos Rokanas (@rokanas)
-- Jonathan Boman (@bomanjo)
+- **Manely Abbasi (@manely)**: Made significant contributions to UI and played a crucial role in the design process.
+- **Erik Lindstrand (@elindstr)**: Made significant contributions to the UI part of the project.
+- **Michal Spano (@spano)**: Provided extensive knowledge in project development and led the team as project manager. Michal supervised and contributed across the whole system on both the hardware and software side.
+- **James Klouda (@klouda)**: Made significant contributions to the UI part of the project.
+- **Konstantinos Rokanas (@rokanas)**: Made significant contributions to the backend with a special focus on the Wio terminal.
+- **Jonathan Boman (@bomanjo)**: Made significant contributions to the backend utilities related to the Wio terminal and the web-based application.
 
 The team members have used the following `CODE_OF_CONDUCT.md` file as a reference: [link](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/main/CODE_OF_CONDUCT.md).
 
@@ -253,7 +258,7 @@ ___
     <img src="https://lh4.googleusercontent.com/g2R-0dcKMDGH1mGu5NexBAYTIEs3qP6gOqVr4phfJ8yLdXzL_bYTfohEHvOWpjCAFLA=w100"/>
     <img src="https://lh3.googleusercontent.com/4pymfiaWsWiRaiO_DuRkY4LQKIZR0H9DggRmJzfpqe97oS8nfSbqOy08lS7f-UIsmAg=w100"/>
     <img src="https://lh6.googleusercontent.com/SaCLOhdUhMUvfZUXG5nOTf--Sze4VMdo1f51hd6RuqvGMT-_vQWuz3moloNbCaMvY8I=w100"/>
-    <img src="https://lh4.googleusercontent.com/xeoJmT-cJHjdycPUvXnK5dJjIbOYp8JMDcI5BUbPh01AVsGEXSBRJX1sMD1CfCvjzEk=w100">
+    <img src="https://lh4.googleusercontent.com/xeoJmT-cJHjdycPUvXnK5dJjIbOYp8JMDcI5BUbPh01AVsGEXSBRJX1sMD1CfCvjzEk=w100"/>
 </p>
 
 _Terminarium 2023_, `DIT113`, University of Gothenburg | Chalmers University of Technology, Sweden

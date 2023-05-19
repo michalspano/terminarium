@@ -37,8 +37,8 @@ The system requirements are written either in the **SRS-format** or as **User Ep
 
 ### Labels
 
-- Labels are used to organise [issues](#issues) and [milestones](#milestones) - **appropriate labels must always be attached.** 
-- A list of labels and their full desciptions can be found [here](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/labels).
+- Labels are used to organize [issues](#issues) and [milestones](#milestones) - **appropriate labels must always be attached.** 
+- A list of labels and their full descriptions can be found [here](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/labels).
 - The `backlog` label is used to indicate an issue that is **not** currently in the considered scope (say, a sprint, or some proportion of a sprint); however, it may be considered for future development or to offer a way to introduce **new ideas**, without cluttering the main issue board.
   - Nevertheless, the `backlog` label should be **removed** once the issue is moved into the scope (i.e. is started to be worked on).
   - Furthermore, it's used to improve the documentation of the project, by providing a way to **track** the **evolution** of the project.
