@@ -15,6 +15,8 @@
 #include "TFT_eSPI.h"                     // import TFT LCD library 
 #include "screen_draw.h"                  // import screen drawing functions
 #include "mqtt.h"                         // import mqtt functions
+#include "save_data.h"
+#include "FlashStorage_SAMD.h"
 
 // initializations
 DHT_Async dht(DHT_PIN, DHTTYPE);          // initialise temp&humi sensor-struct
@@ -37,12 +39,13 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(WIO_5S_DOWN), downButton, FALLING);
   attachInterrupt(digitalPinToInterrupt(WIO_5S_PRESS), midButton, FALLING);
 
+  loadData();
+
   client.setServer(SERVER, 1883);         // set up mqtt server   
   client.setCallback(callback);           // set up behavior when new message received from mqtt broker
 
   drawHeader();                           // draw headder & background for all screens
 }
-
 
 void loop() {
 
@@ -98,9 +101,11 @@ void loop() {
   // ***************************** CONNECTING (MQTT) ************************************* //
 
     connect();                                             // call function to connect WiFi and MQTT according to screen state context
+
+   
   }                                                        // end code block that runs only per desired interval (ms)
     
-  maintainConnection();                                    // call function to maintain or recover connection if it was established but lost
+   maintainConnection();                                    // call function to maintain or recover connection if it was established but lost
 
   // check if sensor range update ongoing and if time since last update exceeds defined limit (ms)
   if(screen == UPDATE && (millis() - lastUpdateTime > LOOP_INTERVAL)) {    
