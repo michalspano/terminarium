@@ -4,7 +4,7 @@ import HomePage from './components/HomePage.vue';
 import SelectTerrarium from './components/SelectTerrariumPage.vue';
 import SetSensorRanges from './components/SetSensorRanges.vue';
 import UserSettings from './components/UserSettings.vue';
-import './assets/global.css';
+import '@/css/global.css';
 
 // Import the "computed()" method from Vue Composition API. 
 // Used inside the "provide()" option/function.
