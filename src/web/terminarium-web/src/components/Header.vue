@@ -53,6 +53,7 @@ export default {
   left: 0;
   width: 100%;
   padding: 20px;
+  z-index: 9999;              /* The high z-index value ensures consistency in that the page header is always displayed above all other page content. */
 }
 
 .logo_container {

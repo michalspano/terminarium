@@ -69,7 +69,7 @@ describe('Check AccessButton child component', () => {
 });
 
 /**
- * Note: the current convention is that the header should have only 3 links when
+ * Note: the current convention is that the header should have only 4 links when
  * the user is not logged in, and 6 links when the user is logged in (inside the 
  * "header_nav_bar" nav class). Furthermore, the text of the AccessButton changes; 
  * however, that is covered in the AccessButton test suite.
@@ -90,7 +90,8 @@ describe('Check the logic based on the logged in status', () => {
         });
         expect(wrapper.find('.header_nav_bar').exists()).toBe(true);
         expect(wrapper.find('.header_nav_bar').isVisible()).toBe(true);
-        expect(wrapper.findAll('.header_nav_bar a').length).toBe(3); // Make sure there are 3 links
+        expect(wrapper.findAll('.header_nav_bar a').length).toBe(4); // Make sure there are 4 links
+        expect(wrapper.find('.header_nav_bar a[href="#/"]').exists()).toBe(true);
         expect(wrapper.find('.header_nav_bar a[href="#/about"]').exists()).toBe(true);
         expect(wrapper.find('.header_nav_bar a[href="#/help"]').exists()).toBe(true);
         expect(wrapper.find('.header_nav_bar a[href="#/contact"]').exists()).toBe(true);
