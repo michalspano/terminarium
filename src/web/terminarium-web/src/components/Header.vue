@@ -11,6 +11,7 @@
       <a href="#/"><img src="/src/assets/terminarium-logo.png" alt="Terminarium logo" draggable="false"></a>
     </div>
     <nav class="header_nav_bar" v-if="!isLoggedIn.value"> <!-- Signed out user menu -->
+      <a href="#/" class="header_link">Home</a>
       <a href="#/about" class="header_link">About</a>
       <a href="#/help" class="header_link">Help</a>
       <a href="#/contact" class="header_link">Contact</a>
@@ -52,6 +53,7 @@ export default {
   left: 0;
   width: 100%;
   padding: 20px;
+  z-index: 9999;              /* The high z-index value ensures consistency in that the page header is always displayed above all other page content. */
 }
 
 .logo_container {

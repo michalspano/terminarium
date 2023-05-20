@@ -58,7 +58,7 @@ p {
   box-shadow:#437649 0px 2px 4px, #437649 0px 7px 13px -3px,#437649 0px -3px 0px inset;
   border: 1px solid rgba(13, 255, 0, 0.76);
   transform: scale(1.05);
-  z-index: -1;
+  z-index: 0;     /* This value needs to be at least one higher than the background to ensure that the video is interactable. */
 }
 
 </style>
