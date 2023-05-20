@@ -3,7 +3,7 @@
   <div class="form-entries">
     <!-- 1st row: name and avatar -->
     <div class="row-name">
-      <img class="avatar" src="@/assets/avatar-lizard.png" alt="avatar">
+      <img class="avatar" src="@/assets/avatar-lizard.png" alt="avatar" draggable="false">
       <div class="form-name">
         <label for="nameID" class="label-name">Name:</label>
         <input class="input-name" name="name" id="nameID" type="text" v-model="name">
