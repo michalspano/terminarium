@@ -22,9 +22,9 @@ export default {
         // Return the correct button description.
         accessButtonDescription() {
             if (this.isLoggedIn.value) {
-                return "log out";
+                return "Log out";
             } else {
-                return "log in";
+                return "Log in";
             }
         }
     },
@@ -34,11 +34,6 @@ export default {
 
 <style scoped>
 .access {
-  border-radius: 20px;       /* Rounding the edges */
-  background-color: green;
-  border-color: gold;
-  font-size: 16px;
-  color: white;
   display: flex;            /* Adapting to screen size */
 }
 </style>

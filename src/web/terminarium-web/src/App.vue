@@ -12,6 +12,10 @@ import { createTimestamp } from '@/modules/utils.js';
 import { write } from "@/modules/database.js";
 import { MQTTClient } from "@/modules/mqtt_config.js";
 
+// Import global CSS styling
+import '@/css/global.css';
+
+
 // Import the "computed()" method from Vue Composition API. 
 // Used inside the "provide()" option/function.
 // More info: https://vuejs.org/api/reactivity-core.html#computed

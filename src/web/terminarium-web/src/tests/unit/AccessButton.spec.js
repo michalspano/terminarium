@@ -77,7 +77,7 @@ describe('Check the logic of the component based on the login stats', () => {
         /* Assumption: since the template contains only a single button,
          * we can use the "button" selector to find it. Otherwise, we would
          * have to use the "findComponent" method.*/
-        expect(wrapper.find('button').text()).toBe('log in');
+        expect(wrapper.find('button').text()).toBe('Log in');
     });
 
     it('should display "log out" when the user is logged in', () => {
@@ -87,6 +87,6 @@ describe('Check the logic of the component based on the login stats', () => {
             }
         });
         // Same assumption as above
-        expect(wrapper.find('button').text()).toBe('log out');
+        expect(wrapper.find('button').text()).toBe('Log out');
     });
 });

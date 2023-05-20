@@ -212,11 +212,7 @@ export default {
 }
 
 .button {
-    border-radius: 20px;
-    background-color: #45C059;
-    color: black;
     text-align: center;
-    cursor: pointer;
 
     /* TODO: placeholder: decide on the final value. 
     Currently; same width as the longest possible button text.

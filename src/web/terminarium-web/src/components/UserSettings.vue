@@ -110,7 +110,6 @@
     width: 50%; /* stretch the form to fill the container */
     flex-direction: column;
     justify-content: center;
-    align-items: left;
   }
 
   /* Styling for the avatar of the user in the first row */
@@ -159,31 +158,14 @@
   /* Styling for the buttons container */
   .button-container {
     display: flex;
-    display: row;
     gap: 30px;
     justify-content: center;
     padding-top: 2%;
 }
 
- /* Movement for the button */
-  button:active {
-   transform: translate(0em, 0.2em);
-}
-
-  /* Styling for the button */
-  .btn {
-    color: black;
-    font-size: 2.5vh;
-    border: #45C059;
-    background-color: #45C059;
-    font-family: Cantora One, Georgia;
-    cursor: pointer;
-  }
-
   /* Styling for the message container */
   .saved-message-container{
     display: flex;
-    display: row;
     gap: 30px;
     justify-content: center;
     padding-top: 2%;

@@ -1,0 +1,32 @@
+/*
+This file defines global css styles.
+*/
+
+a {
+    color: #45C059;                      /* Link color */
+    font-size: 2.5vh;
+}
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Cantora One, Georgia;  /* Text font */
+    color: #ffffff;                     /* Text color */
+}
+                                        /* Movement for all button */
+button:active {
+    transform: translate(0em, 0.2em);
+}
+
+button {                                /* Styling for all button */
+    color: black;
+    font-size: 2.5vh;
+    border: #45C059;
+    background-color: #45C059;
+    cursor: pointer;
+    border-radius: 20px;
+    font-family: Cantora One, Georgia;
+}
