@@ -145,7 +145,7 @@ export default {
 
   methods: {
     goToMonitorTerrarium() {
-      window.location.href = "#/your-terrariums"
+      window.location.href = "#/your-terrariums";
     },
     // Saves the user input values to the wio terminal and handles potential error cases
     saveSensorRanges: function () {
@@ -275,19 +275,6 @@ p {
 
 .set_ranges_buttons {
   width: 60%;
-  height: 20px;
-  border-radius: 20px;
-  color: #ffffff;
-  background-color: rgba(80, 80, 80, 0.7); /* rgba's first three arguments take red, green and blue 0 - 255. */
-  border: none;                            /* The fourth lets you set transparency 0 - 1. Guide to learn: https://www.webfx.com/blog/web-design/rgba/ */
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.set_ranges_buttons:hover {
-  background-color: #437649;
-  transition: background-color 1.0s ease;  /* Fades in the background-color on hover. */
 }
 
 .success_message {

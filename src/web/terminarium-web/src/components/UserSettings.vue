@@ -163,21 +163,6 @@
     padding-top: 2%;
 }
 
- /* Movement for the button */
-  button:active {
-   transform: translate(0em, 0.2em);
-}
-
-  /* Styling for the button */
-  .btn {
-    color: black;
-    font-size: 2.5vh;
-    border: #45C059;
-    background-color: #45C059;
-    font-family: Cantora One, Georgia;
-    cursor: pointer;
-  }
-
   /* Styling for the message container */
   .saved-message-container{
     display: flex;

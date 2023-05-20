@@ -175,14 +175,6 @@ export default {
     white-space: nowrap;
 }
 
-.button {
-    border-radius: 20px;
-    background-color: #45C059;
-    color: black;
-    text-align: center;
-    cursor: pointer;
-}
-
 img {
     height: 100px;
     width: 100px;
