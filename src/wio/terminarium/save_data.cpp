@@ -11,7 +11,7 @@
  * NOTE: The below code makes use of the FlashStorage_SAMD library by Khoih Prog and Cristian Maglie.
  * It is adapted from the example code provided in the library's github repository.
  * Please follow the instructions in the link below for applying the patch necessary for the package:
- * Link: https://github.com/khoih-prog/FlashStorage_SAMD#using-flashstorage-objects-directly
+ * Link: https://github.com/khoih-prog/FlashStorage_SAMD/tree/master#packages-patches
  */
 
 #include "save_data.h"                                          // include corresponding header file
