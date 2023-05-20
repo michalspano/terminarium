@@ -64,4 +64,4 @@ extern void initUserInput(char* currentVal);
 // function to save user input upon selecting the ENTER key
 extern void saveUserInput();
 
-#endif
+#endif                                         // end header guard  

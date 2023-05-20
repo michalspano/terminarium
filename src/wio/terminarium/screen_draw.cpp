@@ -415,9 +415,11 @@ void drawConnSelectScreen(bool isStartup) {
   if(isStartup) {                                    // if at startup, print contextual "Welcome" text           
     text = "Welcome!";
   } else if(wifiWasConnected && !wifiConnected()) {  // if wifi previously connected but then disconnected, print contextual text
-    text = "WiFi conn. lost!";
+    text = "WiFi conn. lost!";  
+    wifiWasConnected = false;                        // set flag to false to prevent this screen from being redrawn
   } else if(mqttWasConnected && !mqttConnected()) {  // if mqtt previously connected but then disconnected, print contextual text
     text = "MQTT conn. lost!";
+    mqttWasConnected = false;                        // set flag to false to prevent this screen from being redrawn
   } else if(wifiConnected() && mqttConnected()) {    // if wifi and mqtt both connected, print contextual text
     text = "Already connected";
   }
