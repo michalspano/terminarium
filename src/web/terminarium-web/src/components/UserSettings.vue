@@ -110,7 +110,6 @@
     width: 50%; /* stretch the form to fill the container */
     flex-direction: column;
     justify-content: center;
-    align-items: left;
   }
 
   /* Styling for the avatar of the user in the first row */
@@ -159,7 +158,6 @@
   /* Styling for the buttons container */
   .button-container {
     display: flex;
-    display: row;
     gap: 30px;
     justify-content: center;
     padding-top: 2%;
@@ -183,7 +181,6 @@
   /* Styling for the message container */
   .saved-message-container{
     display: flex;
-    display: row;
     gap: 30px;
     justify-content: center;
     padding-top: 2%;

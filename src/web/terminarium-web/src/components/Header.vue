@@ -15,7 +15,7 @@
       <a href="#/help" class="header_link">Help</a>
       <a href="#/contact" class="header_link">Contact</a>
     </nav>
-    <nav class="header_nav_bar" v-else>             <!-- Signed in user menu -->
+    <nav class="header_nav_bar" v-else>                   <!-- Signed in user menu -->
       <a href="#/" class="header_link">Home</a>
       <a href="#/about" class="header_link">About</a>
       <a href="#/help" class="header_link">Help</a>
@@ -36,7 +36,7 @@ import AccessButton from "@/components/AccessButton.vue";
 export default {
   name: "SiteHeader",
   components: {AccessButton}, // Access to the child component.
-  inject: ['isLoggedIn'], // Prop injected from "App.vue"
+  inject: ['isLoggedIn'],     // Prop injected from "App.vue"
 }
 </script>
 
@@ -44,7 +44,6 @@ export default {
 
 .terminarium_header {
   background-color: rgba(0, 0, 0, 0.301);
-  color: #fff;
   display: flex;               /* Adapting to screen size*/
   align-items: center;
   height: 100px;
@@ -67,14 +66,13 @@ export default {
 
 .header_link {
   margin: 10px;
-  color: #fff;
   text-decoration: none;
   transition: transform 0.3s ease-in-out;  /* Defines how the transition between two states will look.  */
 }                                          /* In this case the links will move smoothly in and out between scale 1 and 1.1 when hovered  */
 
 
 .header_link:hover {
-  transform: scale(1.1);                  /* Makes element  10 % larger  */
+  transform: scale(1.1);                   /* Makes element  10 % larger  */
 }
 
 .header_button {

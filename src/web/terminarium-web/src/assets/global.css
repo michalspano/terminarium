@@ -1,0 +1,17 @@
+/*
+This file defines global css styles.
+*/
+
+a {
+    color: #ffffff;                      /* Link color */
+}
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Cantora One, Georgia;  /* Text font */
+    color: #ffffff;                     /* Text color */
+}

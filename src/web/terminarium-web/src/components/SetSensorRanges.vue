@@ -10,8 +10,8 @@
    The elements are styled using css.
 ----------------------------------------------------------------------------------->
   <div class="Choose_ranges_box">
+    <button type="button" class="set_ranges_buttons" @click="goToMonitorTerrarium">Monitor Terrarium</button>
     <div class="grid-container">
-
       <!-------------------------------------------------*MOISTURE*-------------------------------------------------->
       <div class="grid-item">
         <p><b>Set</b> your desired <b>minimum </b> and <b> maximum </b><b style="color: gold">Moisture %</b></p>
@@ -90,12 +90,13 @@
 
     </div>
 
-    <button class="save_button" @click="saveSensorRanges">Save</button> <!-- @click binds the button to a method in script -->
+    <button class="set_ranges_buttons" @click="saveSensorRanges">Save</button> <!-- @click binds the button to a method in script -->
 
-    <div class="success_message" v-if="displayOnSaveMessage">           <!-- v-if is only displayed if the data property is true -->
-      <p>{{ onSaveMessage }}</p>                                        <!-- Dynamic message, displayed when user clicks save button -->
-    </div>
 
+
+  </div>
+  <div class="success_message" v-if="displayOnSaveMessage">           <!-- v-if is only displayed if the data property is true -->
+    <p>{{ onSaveMessage }}</p>                                        <!-- Dynamic message, displayed when user clicks save button -->
   </div>
 </template>
 
@@ -139,9 +140,13 @@ export default {
       this[`${sensorName}_min`] = localStorage[`${sensorName}_min`] || 0;// if previous ranges are saved retrieve 'sensorname'min from local storage else set 0.
       this[`${sensorName}_max`] = localStorage[`${sensorName}_max`] || 0;// if previous ranges are saved retrieve 'sensorname'max from local storage else set 0.
     }
+    window.scrollTo(0,0);                                           // Takes you to the top of the screen when entering the screen.
   },
 
   methods: {
+    goToMonitorTerrarium() {
+      window.location.href = "#/your-terrariums"
+    },
     // Saves the user input values to the wio terminal and handles potential error cases
     saveSensorRanges: function () {
       let rangeBuffer = new Map(); // Buffer for the sensor data to be sent to the wio terminal
@@ -160,7 +165,10 @@ export default {
           rangeBuffer.set(sensorName, { min, max });
         }
       } catch (error) {
-        console.error(error); // Logs error to the console
+        console.error(error);                                                       // Logs error to the console
+        this.displayOnSaveMessage = true;
+        this.resetSaveButton();
+        return;
       }
       
       /* Displays the message to the user and resets the save button's state
@@ -223,10 +231,13 @@ export default {
 <style scoped>
 
 .Choose_ranges_box {                    /* This box defines the space for the grid_container */
-  width: 800px;
-  height: 400px;
-  margin: 0;
   padding: 0;
+  display: flex;                        /* Adapting to screen size */
+  flex-direction: column;               /* Flex items stack vertically */
+  justify-content: center;              /* Align flex items centered vertically */
+  align-items: center;                  /* Align flex items centered horizontally */
+  width: 100%;
+  margin-top: 20vh;
 }
 
 p {
@@ -252,6 +263,8 @@ p {
   grid-template-rows: repeat(5, 1fr);     /* Creates a grid with 5 rows Guides to learn more: https://css-tricks.com/snippets/css/complete-guide-grid/ */
   grid-template-columns: repeat(3, 1fr);  /* 3 columns                                        https://www.w3schools.com/cssref/pr_grid-template.php    */
   gap: 10px;
+  width: 60%;
+  margin: 10px;
 }
 
 .grid-item {
@@ -260,9 +273,8 @@ p {
   border-radius: 20px;                     /* Rounds edges */
 }
 
-.save_button {
-  margin-top: 10px;
-  width: 100%;
+.set_ranges_buttons {
+  width: 60%;
   height: 20px;
   border-radius: 20px;
   color: #ffffff;
@@ -271,22 +283,17 @@ p {
   text-align: center;
   font-size: 16px;
   cursor: pointer;
-
 }
 
-.save_button:hover {
+.set_ranges_buttons:hover {
   background-color: #437649;
-  transition: background-color 1.0s ease;  /* Fades in the background-color on hover, can be removed later if a global standard is introduced */
+  transition: background-color 1.0s ease;  /* Fades in the background-color on hover. */
 }
 
 .success_message {
   margin-top: 5px;
   width: 100%;
   height: 20px;
-  border-radius: 20px;                     /* Rounds edges */
-  color: #ffffff;
   text-align: center;
-  transition: background-color 3.0s ease;
-  opacity: 1;
 }
 </style>

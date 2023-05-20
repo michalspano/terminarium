@@ -106,11 +106,9 @@ export default {
 }
 
 .grid-item {
-  background-color: #ffffff;
   padding: 5px;
   border-radius: 5px;
-  color: white;
-  
+
   /* Centers the contents of each grid-item */
   display: flex;
   justify-content: center;
@@ -132,6 +130,6 @@ export default {
   border-radius: 10px;
   background-color: #45C059;
   cursor: pointer;
-  color: white;
+  margin-bottom:10vh;
 }
 </style>
