@@ -87,14 +87,17 @@ export default {
                 {
                     avatarImage: "lizard",
                     avatarName: "Örjan Ödla"
-                }
+                },
+
             ],
 
             // List of avatar image-assets. Iterated through when setting the image of a terrarium Avatar.
             imageAssetsList: [
                 "default",
-                "lizard",
+                "spider",
                 "plant",
+                "lizard",
+                "elephant",
             ],
 
             // Determine if the user is managing their list of terrariums. 
