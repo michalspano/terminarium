@@ -1,42 +1,19 @@
+// *** Database Functionality Module ***
+
 import { initializeApp } from "firebase/app";                                             // import firebase application
 import { getDatabase, ref, onValue, set } from "firebase/database";  // import firebase database functionality
-import { firebaseConfig } from "./utils.js";
+import { firebaseConfig } from "./config.js";
 
 const app       = initializeApp(firebaseConfig);                       // initialize firebase application via the configuration object
 const database  = getDatabase();                                       // initialize database instance
 
-const printConnectionStatus = (connected) => {                         // function that prints message based on connection status
-  if (connected) {
-    console.log("Database connection established.");
-  } else {
-    console.log("Database connection lost.");
-  }
-};
-
-/** @function onValue
- * The onValue function is a listener that is triggered when the value of the database
- * reference changes. The function is used to determine whether the application is connected
- * to the database or not. The function is used to log the status of the database connection
- * to the console. The path '.info/connected' is a special path that is provided by the
- * firebase database. The path is used to determine whether the application is connected to
- * the database or not.
- * 
- * @param {Object} ref - the ref parameter is a reference to the database instance
- * @param {snapshot} snapshot - the snapshot parameter is a snapshot of the database instance
- * 
- * * NOTE: The function is used for debugging purposes only. */
-
-onValue(ref(database, ".info/connected"), (snapshot) => {             
-  printConnectionStatus(snapshot.val());                               
-});
-
 /** @function isDatabaseConnected
  * When called, this function determines the connection status to the database and 
  * returns a boolean accordingly. It does this by creating a new 'promise' and passing
- * the arguement 'resolve', which resolves the 'promise' with a true or false value
+ * the argument 'resolve', which resolves the 'promise' with a true or false value
  * based on the result of the following onValue operation (explained above). */
 
-const isDatabaseConnected = () => {                                     
+const isDatabaseConnected = async () => {                                     
   return new Promise((resolve) => {                                    
     onValue(ref(database, ".info/connected"), (snapshot) => {          
       resolve(snapshot.val() == true)                                  
@@ -52,10 +29,10 @@ const isDatabaseConnected = () => {
  * 
  * @param {boolean} connected - value indicating whether client is connected to Firebase Realtime Database 
  * @param {String} value - sensor data to be written to the database (received as a String)
- * @param {String} nodeName - String uased in reference to the db node where data should be written
+ * @param {String} nodeName - String used in reference to the db node where data should be written
  *                            Its value is a concatenation of the sensor's unique mqtt topic and timestamp */
 
-export function write(nodeName, value) {                               
+export async function write(nodeName, value) {                               
   isDatabaseConnected().then((connected) => {                          
     if (connected) {                                                   
       const reference = ref(database, nodeName);                       

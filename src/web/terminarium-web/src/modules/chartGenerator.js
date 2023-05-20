@@ -1,3 +1,5 @@
+// *** Chart Generator Module ***
+
 import { Chart } from 'chart.js/auto';
 
 /**

@@ -1,3 +1,5 @@
+// *** Fetching (reading) Data from DATABASE ***
+
 import { initializeApp } from "firebase/app";                   // import firebase application
 import { getDatabase, ref, onValue } from "firebase/database";  // import firebase database functionality
 import { firebaseConfig } from "@/modules/config.js";
@@ -10,11 +12,11 @@ const database  = getDatabase();                    // initialize database insta
  * Fetch data entries from the database for the last specified number of hours
  * It is used to populate the chart with range-based data
  * @param {number} hours - number of hours to go back in time
- * @returns {Promise} a promise that resolves to an array of objects with the following structure:
- * @example [{sensor: "sensor1", timestamp: "01-01-2021;00:00", value: "10"}, ...]
+ * @returns {Promise} a promise that resolves a Map containing the data entries in a Object format
+ * @example { sensorType_1: { timestamp_1: value_1, timestamp_2: value_2, ... }, sensorType_2: { ... }, ... }
  */
 export const readSensorRange = (hours) => {
-  let result = {};                                                  // array to store the results
+  let result = new Map();                                           // A Map to store the result
   const now = new Date();                                           // get the current time
 
   return new Promise((resolve) => {
