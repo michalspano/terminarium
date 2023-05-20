@@ -1,7 +1,7 @@
 <!---------------------------*COMPONENT DESCRIPTION*------------------------------------
-    This component defines the contents for the "terrarium menu"-page.
+    This component defines the contents for the "select terrarium"-page.
     Lets the user manage their terrariums, displayed as a list of avatars, and 
-    provides access to detailed information for each terrarium on a separate page.
+    provides access to detailed information for a specific enclosure.
 
     Official documentation, explaining the 'v-for'-directive and 'keys':
     List rendering: https://vuejs.org/guide/essentials/list.html#v-for
@@ -32,14 +32,18 @@ import MonitorTerrarium from './MonitorTerrarium.vue';
                     v-bind:name="terrarium.avatarName"
                     v-bind:size="'100px'"
                     v-bind:index="index"
+                    v-bind:isEditable="this.isManaging"
                     v-on:avatarClicked="handleAvatarClicked"
+                    v-on:deleteButtonEvent="deleteTerrarium"
+                    v-on:updateName="updateTerrariumName"
                 />   
                 <div class="add-terrarium" v-if="!isFull">
-                    <div class="add-button">
-                        <img    
-                        src="/src/assets/add-button.png" 
+                    <div class="add-button-img">
+                        <img
+                        src="/src/assets/button-add.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
+                        draggable="false"
                         @click="addTerrarium"   
                         >
                     </div>
@@ -47,7 +51,7 @@ import MonitorTerrarium from './MonitorTerrarium.vue';
                 </div>
             </div>
             <div class="manage-terrariums">
-                <button class="button" @click="manageTerrariums">manage terrariums</button>
+                <button type="button" class="button" @click="manageTerrariums">{{ isManaging ? "submit" : "manage terrariums" }}</button>
             </div>
             <div class="monitoring-board">
                 <MonitorTerrarium/>
@@ -63,6 +67,12 @@ export default {
         Avatar
     },
 
+    // Triggers certain actions when the component is removed from the DOM (but the instance is cached).
+    // https://vuejs.org/api/options-lifecycle.html#deactivated
+    deactivated() {
+        this.isManaging = false;
+    },
+
     data() {
         return {
             /**These values are hard-coded for now - later on they will instead be fetched.
@@ -70,62 +80,88 @@ export default {
              */
             terrariumList: [
                 {
-                    avatarImage: "avatar-plant.png",
+                    avatarImage: "plant",
                     avatarName: "Peter Planta"
                 },
 
                 {
-                    avatarImage: "avatar-lizard.png",
+                    avatarImage: "lizard",
                     avatarName: "Örjan Ödla"
                 }
-            ]
-            
+            ],
+
+            // List of avatar image-assets. Iterated through when setting the image of a terrarium Avatar.
+            imageAssetsList: [
+                "default",
+                "lizard",
+                "plant",
+            ],
+
+            // Determine if the user is managing their list of terrariums. 
+            // If set to true; enables them to edit the name and image, or delete terrariums.
+            isManaging: false
         }
     },
 
     computed: {
+        // Check if the list of terrariums is full.
         isFull() {
             return (this.terrariumList.length >= 5);
         }
     },
 
     methods: {
-        /**Adds a new terrarium with a default name and image.
-         * The cardinality is computed on demand so that it corresponds 
-         * to how many terrariums the user already has.
-         */
+        // Add a new terrarium with a default name and image.
+        // The cardinality is computed on demand so that it corresponds to how many terrariums the user has in the list.
         addTerrarium() {
+            this.isManaging = true;     // Set value to true so that new component passes if-condition inside mounted().
             if (this.terrariumList.length < 5) {
                 const terrariumCardinality = this.terrariumList.length + 1;
                 this.terrariumList.push({ 
-                    avatarImage: "avatar-default.png",
+                    avatarImage: this.imageAssetsList[0],
                     avatarName: `terrarium #${terrariumCardinality}`
-                })
+                });
             }
         },
 
+        // Delete terrarium from list.
         deleteTerrarium(index) {
             this.terrariumList.splice(index, 1);
         },
 
+        // ****** CURRENTLY UNUSED ******   -However, left in for future update(s).
+        // Move terrarium to new index in the terrarium list.
         moveTerrarium(oldIndex, newIndex) {
-            /**Eventually the user will be able to just drag-and-drop the avatars on-screen to change the terrarium order.
-             * This check is somewhat redundant - but is left in, in case of future functionality changes.
-             */
             if (newIndex < this.terrariumList.length && newIndex >= 0) {
                 this.terrariumList.splice(newIndex, 0, this.terrariumList.splice(oldIndex, 1)[0]);
             }
         },
 
-        /**This method will be re-factored to take the user to the specific terrarium page.
-         * Right now it is just moving whichever terrarium was clicked to the first index.
-         */
-        handleAvatarClicked(oldIndex) {
-            this.moveTerrarium(oldIndex, 0);
+
+        // Handles the actions triggered when an Avatar has been interacted with.
+        // For now it only changes the 
+        handleAvatarClicked(index, oldImage) {
+            if (this.isManaging) {
+                this.terrariumList[index].avatarImage = this.cycleAvatarImage(oldImage);
+            } else {
+                // TODO: Display monitoring info for specific terrarium instance clicked.
+            }
+        },
+       
+        // Change an Avatar instance's displayed image by cycling through the array of available avatar image-assets.
+        cycleAvatarImage(oldImage) {
+            const newImageIndex = (this.imageAssetsList.indexOf(oldImage) + 1) % this.imageAssetsList.length;
+            return (this.imageAssetsList[newImageIndex]);
         },
 
+        // Update name of terrarium (Avatar-component instance).
+        updateTerrariumName(index, newName) {
+            this.terrariumList[index].avatarName = newName;
+        },
+
+        // Toggle boolean to enable/disable managing the terrariums.
         manageTerrariums() {
-            this.terrariumList.pop();
+            this.isManaging = !this.isManaging;
         }
     }
 }
@@ -133,7 +169,6 @@ export default {
 
 
 <style scoped>
-/* TODO: supply this section with proper code commenting in a follow-up commit. */
 
 .page-content {
     display: flex;
@@ -165,6 +200,7 @@ export default {
 
 .add-button {
     cursor: pointer;
+    border-radius: 50%;
 }
 
 #add-button-text {
@@ -173,6 +209,15 @@ export default {
     color: white;
     cursor: default;
     white-space: nowrap;
+}
+
+.button {
+    text-align: center;
+
+    /* TODO: placeholder: decide on the final value. 
+    Currently; same width as the longest possible button text.
+    Likely to change with font styling alterations.*/
+    min-width: 127px; 
 }
 
 img {

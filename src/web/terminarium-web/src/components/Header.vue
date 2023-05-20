@@ -8,7 +8,7 @@
 <template>
   <header class="terminarium_header">
     <div class="logo_container">
-      <a href="#/"><img src="/src/assets/terminarium-logo.png" alt="Terminarium logo"></a>
+      <a href="#/"><img src="/src/assets/terminarium-logo.png" alt="Terminarium logo" draggable="false"></a>
     </div>
     <nav class="header_nav_bar" v-if="!isLoggedIn.value"> <!-- Signed out user menu -->
       <a href="#/about" class="header_link">About</a>
@@ -20,7 +20,7 @@
       <a href="#/about" class="header_link">About</a>
       <a href="#/help" class="header_link">Help</a>
       <a href="#/contact" class="header_link">Contact</a>
-      <a href="#/your-terrariums" class="header_link">Your Terrariums</a>
+      <a href="#/your-terrariums" class="header_link" style="white-space: nowrap;">Your Terrariums</a>
       <a href="#/settings" class="header_link">Settings</a>
     </nav>
     <div class="header_button">

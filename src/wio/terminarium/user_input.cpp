@@ -209,6 +209,7 @@ void saveUserInput() {
       break;
     case USER_INPUT_MQTT:
       SERVER = inputMQTT;                     // make the broker address pointer point to new user inputted character array
+      saveData();                             // call function that saves all inputted network data to flash storage (COMMENT OUT TO OPT-OUT OF USING FLASH STORAGE)
       break;
   }
 }

@@ -18,9 +18,9 @@ PubSubClient client(wioClient);                       // initialise mqtt client
  */
 
 /***update these with values corresponding to your network***/
-char* SSID       = "******";                          // wifi network name
-char* PASSWORD   = "******";                          // wifi network password
-char* SERVER     = "broker.hivemq.com";               // mqtt broker ip address
+char* SSID       = "USERNAME";                        // wifi network name
+char* PASSWORD   = "PASSWORD";                        // wifi network password
+char* SERVER     = "broker.hivemq.com";               // mqtt broker ip address (set to hiveMQ address by default)
 
 // topic for receiving messages
 const char* TOPIC_SUB = "/terminarium/app/signal";
