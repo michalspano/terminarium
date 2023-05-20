@@ -50,3 +50,36 @@ const generateUniqueID = () => {
     const randomN = Math.floor(Math.random() * 1000) + 1;
     return Math.floor(Date.now() / randomN);
 };
+
+/**
+ * This function formats the current time to a string in the format yyyy-mm-ddThh:mm.
+ * This is a convention used in the database to name the nodes.
+ * @returns {string} a formatted timestamp in the format yyyy-mm-ddThh:mm
+ */ 
+export const createTimestamp = () => {                                         // function returns formatted timestamp
+    const date = new Date();                                           // create new Date object with current date/time
+
+    const options = {                                                  // define date/time formatting options
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    };
+
+    let formattedDate = date.toLocaleString('en-GB', options);         // format using defined options
+    formattedDate = formattedDate.replace(',', ';').replace(/\s+/g, ''); // replace ',' between time and date and remove whitespace
+    formattedDate = formattedDate.replace(/\//g, '-');                 // replace '/' with '-' in string to not cause node name issues when writing to DB
+    return formattedDate;                                              // return formatted timestamp
+} 
+
+/**
+ * This function formats the raw vibration data received from the MQTT broker to a more readable format.
+ * Namely: 'true' -> 'Yes' and 'false' -> 'No'
+ * @param {String} vibrationData - the registered vibration data from MQTT
+ * @returns 
+ */
+export const parseVibrationData = (vibrationData) => {
+    return vibrationData === 'true' ? 'Yes' : 'No';
+};

@@ -1,5 +1,6 @@
-import {readSensorRange} from "./fetch.js";
+// *** Average Values - Calculations ***
 
+import { readSensorRange } from "@/modules/fetch.js";
 
 /**
  * Calculate the average value for all sensors given a specific interval in hours.
@@ -22,9 +23,12 @@ export async function averageSensorValues(hours) {
 
 /**
  * Calculate the average value of an array of numbers
+ * Rounds the result to 2 decimal places – (a * 100 / 100)
  * @param {Array} values - array of numbers
  * @returns The average of all numbers in values as a number
  */
 const calculateAverage = (values) => {
-    return values.reduce((a, b) => a + b, 0) / values.length;       //The reduce function sums all values in the values array
+    return Math.round(
+        values.reduce((a, b) => a + b, 0) / values.length * 100
+    ) / 100;
 }
