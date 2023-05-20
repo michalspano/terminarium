@@ -239,8 +239,6 @@ export default {
       },
     };
   },
-  // Hook: 'created' - responsibility: update the average values.
-
 
   activated() {
     this.updateAverageValues();   // Compute the average sensor values
@@ -365,7 +363,7 @@ export default {
 }
 
 .apply-green-text {
-  color: #10e734;         /*   #45C059 */ 
+  color: #10e734;
   text-shadow: -0.5px -0.5px 0 rgb(26, 110, 0), 0.5px -0.5px 0 rgb(26, 110, 0), -0.5px 0.5px 0 rgb(26, 110, 0), 0.5px 0.5px 0 rgb(26, 110, 0);
 }
 </style>
