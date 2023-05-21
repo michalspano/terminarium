@@ -41,7 +41,7 @@ import { parseVibrationData } from "@/modules/utils";
             : 'apply-red-text',
         ]"
       >
-        {{ this.sensorValues.value[sensorNames[0].toLowerCase()] || NaN }}°C
+        {{ sensorValues.value[sensorNames[0].toLowerCase()] || NaN }}°C
       </div>
       <div class="grid-item">{{ sensorAvgs.temperature.oneHourAvg }}</div>
       <div class="grid-item">
@@ -68,7 +68,7 @@ import { parseVibrationData } from "@/modules/utils";
             : 'apply-red-text',
         ]"
       >
-        {{ this.sensorValues.value[sensorNames[1].toLowerCase()] || NaN }}% RH
+        {{ sensorValues.value[sensorNames[1].toLowerCase()] || NaN }}% RH
       </div>
       <div class="grid-item">{{ sensorAvgs.humidity.oneHourAvg }}</div>
       <div class="grid-item">{{ sensorAvgs.humidity.oneHourAvg }}</div>
@@ -93,7 +93,7 @@ import { parseVibrationData } from "@/modules/utils";
             : 'apply-red-text',
         ]"
       >
-        {{ this.sensorValues.value[sensorNames[2].toLowerCase()] || NaN }}%
+        {{ sensorValues.value[sensorNames[2].toLowerCase()] || NaN }}%
       </div>
       <div class="grid-item">{{ sensorAvgs.light.oneHourAvg }}</div>
       <div class="grid-item">{{ sensorAvgs.light.twentyFourHourAvg }}</div>
@@ -118,7 +118,7 @@ import { parseVibrationData } from "@/modules/utils";
             : 'apply-red-text',
         ]"
       >
-        {{ this.sensorValues.value[sensorNames[3].toLowerCase()] || NaN }}% RH
+        {{ sensorValues.value[sensorNames[3].toLowerCase()] || NaN }}%
       </div>
       <div class="grid-item">{{ sensorAvgs.moisture.oneHourAvg }}</div>
       <div class="grid-item">{{ sensorAvgs.moisture.twentyFourHourAvg }}</div>
@@ -143,7 +143,7 @@ import { parseVibrationData } from "@/modules/utils";
             : 'apply-red-text',
         ]"
       >
-        {{ this.sensorValues.value[sensorNames[4].toLowerCase()] || NaN }}%
+        {{ sensorValues.value[sensorNames[4].toLowerCase()] || NaN }}%
       </div>
       <div class="grid-item">{{ sensorAvgs.loudness.oneHourAvg }}</div>
       <div class="grid-item">{{ sensorAvgs.loudness.twentyFourHourAvg }}</div>
@@ -171,7 +171,7 @@ import { parseVibrationData } from "@/modules/utils";
       >
         {{
           parseVibrationData(
-            this.sensorValues.value[sensorNames[5].toLowerCase()]
+            sensorValues.value[sensorNames[5].toLowerCase()]
           ) || NaN
         }}
       </div>

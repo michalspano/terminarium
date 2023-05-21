@@ -36,7 +36,7 @@ export const threeDigitFormat = (num) => {
 export const MQTTClientInit = () => {
     return new Paho.Client(
             'broker.hivemq.com',
-            Number(8000),
+            Number(8884), // port - for secure connection
             `client-id-${generateUniqueID()}`
     );
 };

@@ -32,7 +32,7 @@ import MonitorTerrarium from './MonitorTerrarium.vue';
                     v-bind:name="terrarium.avatarName"
                     v-bind:size="'100px'"
                     v-bind:index="index"
-                    v-bind:isEditable="this.isManaging"
+                    v-bind:isEditable="isManaging"
                     v-on:avatarClicked="handleAvatarClicked"
                     v-on:deleteButtonEvent="deleteTerrarium"
                     v-on:updateName="updateTerrariumName"
@@ -40,7 +40,7 @@ import MonitorTerrarium from './MonitorTerrarium.vue';
                 <div class="add-terrarium" v-if="!isFull">
                     <div class="add-button-img">
                         <img
-                        src="/src/assets/button-add.png" 
+                        src="@/assets/button-add.png" 
                         alt="Add Terrarium button" 
                         class="add-button" 
                         draggable="false"
