@@ -15,6 +15,7 @@
     - [`Wio` Terminal - Usage](#wio-terminal---usage)
       - [1. `Arduino IDE` - Usage](#1-arduino-ide---usage)
       - [2. Automated `Shell` Script - Usage](#2-automated-shell-script---usage)
+    - [Web-based Application - Live Demo](#web-based-application---live-demo)
     - [Web-based Application - Local Usage](#web-based-application---local-usage)
     - [Demo and Examples](#demo-and-examples)
   - [System design](#system-design)
@@ -43,6 +44,7 @@ The following section lists the __dependencies and requirements__ for the projec
    - [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI), Bodmer
    - [rpcWifi](https://github.com/Seeed-Studio/Seeed_Arduino_rpcWiFi), Hontai Liu / Seeed
    - [PubSbClient](https://pubsubclient.knolleary.net/), Nick O'Leary
+   - [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD), Khoih Prog & Cristian Maglie
 5. Wio Terminal **Grove Sensors**:
    - the list of the required sensors can be obtained from [link](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/wikis/home#System%20Sensors).
 6. [`Node.js`](https://nodejs.org/en) and `npm` (the `Node` Package Manager) for the web-based application (it is required to go with the latest stable version of `Node.js`)
@@ -159,9 +161,13 @@ Furthermore, this `script` emulates the **Serial monitor** right in your termina
 
 **Note:** the following script is only available for `Unix` based systems, such as `Linux` and `macOS`. However, the script can be easily modified to work with `Windows` based systems.
 
+### Web-based Application - [Live Demo](https://terminarium.netlify.app/)
+
+The **website application** is deployed via `Netlify`; a **report** of the deployment can be found [here](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/wikis/Sprint-3-Challenges).
+
 ### Web-based Application - Local Usage
 
-Even though our platform is deployed to `Netlify`, there's still an opportunity to run the web-based application locally. The following steps are required to engage with the application locally:
+There's an opportunity to run the web-based application locally. The following steps are required to engage with the application locally:
 
 ```sh
 # Assuming that the user is terminarium-web directory
@@ -175,9 +181,6 @@ npm run dev
 #    (the port number is displayed in the terminal)
 
 # 3. To stop the application, press CTRL + C in the terminal
-
-# 4. To build the application, run the following command: 
-npm run build
 ```
 
 <details>
@@ -191,14 +194,17 @@ All the additional commands, such as for **testing**, **linting**, etc. can be f
 
 As part of the project's delivery, the following **video** was created to demonstrate the core functionality of the system:
 
-[`Terminarium` - Project Demo](www.TODO.com)
+[`Terminarium` - Project Demo](https://youtu.be/oMgfVUPOEtc)
 
 <details>
 <summary>Terminarium <code>CLI</code> Demo</summary>
 
-  [![Terminarium CLI Demo](https://i9.ytimg.com/vi_webp/Gz2omDNVtLk/mq2.webp?sqp=CMzenaMG-oaymwEmCMACELQB8quKqQMa8AEB-AHSCIAC0AWKAgwIABABGEQgWChyMA8=&rs=AOn4CLCsD-GtWjiJY_BjMjs_VxrOUrGdDA)](https://www.youtube.com/embed/Gz2omDNVtLk)
+  The following video demonstrates the usage of the `Terminarium CLI`:
+
+  [`Terminarium CLI` - Demo](https://youtu.be/Gz2omDNVtLk)
 
 </details>
+
 
 ## System design
 
