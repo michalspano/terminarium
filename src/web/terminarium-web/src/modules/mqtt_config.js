@@ -25,4 +25,5 @@ const onConnectionLost = (responseObject) => {
 
 // Callbacks for the MQTT client
 MQTTClient.onConnectionLost = onConnectionLost;
-MQTTClient.connect({ onSuccess: onConnect })
+// Enforce SSL - a secure connection
+MQTTClient.connect({ onSuccess: onConnect, useSSL: true})
