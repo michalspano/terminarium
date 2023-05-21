@@ -247,12 +247,12 @@ The **license** of the project is to be added once it has been released as an op
 
 ### Team members
 
-- **Manely Abbasi (@manely)**: Made significant contributions to UI and played a crucial role in the design process.
-- **Erik Lindstrand (@elindstr)**: Made significant contributions to the UI part of the project.
+- **Manely Abbasi (@manely)**: Made significant contributions to User Interface (UI) development and the design of the Website-based application.
+- **Erik Lindstrand (@elindstr)**: Made significant contributions to the User Interface (UI) development of the Website-based application.
 - **Michal Spano (@spano)**: Provided extensive knowledge in project development and led the team as project manager. Michal supervised and contributed across the whole system on both the hardware and software side.
-- **James Klouda (@klouda)**: Made significant contributions to the UI part of the project.
-- **Konstantinos Rokanas (@rokanas)**: Made significant contributions to the backend with a special focus on the Wio terminal.
-- **Jonathan Boman (@bomanjo)**: Made significant contributions to the backend utilities related to the Wio terminal and the web-based application.
+- **James Klouda (@klouda)**: Made significant contributions to the User Interface (UI) development of the Website-based application.
+- **Konstantinos Rokanas (@rokanas)**: Made significant contributions to the Back-End with a special focus on the Wio terminal.
+- **Jonathan Boman (@bomanjo)**: Made significant contributions to the Back-End utilities related to the Wio terminal and the Website-based application.
 
 The team members have used the following `CODE_OF_CONDUCT.md` file as a reference: [link](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/main/CODE_OF_CONDUCT.md).
 
