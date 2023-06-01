@@ -243,7 +243,7 @@ The contributing guidelines for the Terminarium project should be adhered to by 
 
 ## License
 
-The **license** of the project is to be added once it has been released as an open-source repository to a public platform (i.e. `GitHub`).
+The project is licensed under the MIT License. Refer to the [`LICENSE`](https://github.com/michalspano/terminarium/blob/main/LICENSE) file for more information.
 
 ### Team members
 
