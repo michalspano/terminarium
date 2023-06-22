@@ -33,12 +33,18 @@ To ensure correctness and traceability in project contributions, **all contribut
 
 The system requirements are written either in the **SRS-format** or as **User Epics**, which are then broken down into smaller **user stories** - each relating to one [issue](#issues).
 
-> TODO: add a link to the wiki requirements page per Sprint.
+The following are the **sprint** pages that discuss the respective **requirements** (and their related issues) for each sprint:
+
+|  Sprint  |                                 Link                                 |
+|:--------:|:--------------------------------------------------------------------:|
+| Sprint 1 | [Sprint 1](https://github.com/michalspano/terminarium/wiki/Sprint-1) |
+| Sprint 2 | [Sprint 2](https://github.com/michalspano/terminarium/wiki/Sprint-2) |
+| Sprint 3 | [Sprint 3](https://github.com/michalspano/terminarium/wiki/Sprint-3) |
 
 ### Labels
 
 - Labels are used to organize [issues](#issues) and [milestones](#milestones) - **appropriate labels must always be attached.** 
-- A list of labels and their full descriptions can be found [here](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/labels).
+- A list of labels and their full descriptions can be found [here](https://github.com/michalspano/terminarium/issues/labels).
 - The `backlog` label is used to indicate an issue that is **not** currently in the considered scope (say, a sprint, or some proportion of a sprint); however, it may be considered for future development or to offer a way to introduce **new ideas**, without cluttering the main issue board.
   - Nevertheless, the `backlog` label should be **removed** once the issue is moved into the scope (i.e. is started to be worked on).
   - Furthermore, it's used to improve the documentation of the project, by providing a way to **track** the **evolution** of the project.
@@ -56,7 +62,7 @@ The `Terminarium` repository (currently) contains the following template(s):
      - Issue Description
      - Acceptance Criteria
      - Related Issues
-2. TODO: add more templates (if necessary) and their descriptions.
+2. \<SPACE_FOR_FUTURE_TEMPLATES\>
   
 ### Milestones
 
