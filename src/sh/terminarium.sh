@@ -4,6 +4,7 @@
 This script is used to upload the code to the Wio Terminal board
 and open the serial monitor. Further feature description can be found
 here: https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/issues/27
+[internal issue #27]. Accessible to group members only.
 The script is supposed to be run from the src directory:
     ./sh/terminarium.sh [port] [+options]
 '
