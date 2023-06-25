@@ -46,10 +46,10 @@ The following section lists the __dependencies and requirements__ for the projec
    - [PubSbClient](https://pubsubclient.knolleary.net/), Nick O'Leary
    - [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD), Khoih Prog & Cristian Maglie
 5. Wio Terminal **Grove Sensors**:
-   - the list of the required sensors can be obtained from [link](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/wikis/home#System%20Sensors).
+   - the list of the required sensors can be obtained from [link](https://github.com/michalspano/terminarium/wiki#system-sensors).
 6. [`Node.js`](https://nodejs.org/en) and `npm` (the `Node` Package Manager) for the web-based application (it is required to go with the latest stable version of `Node.js`)
    - `Node.js` comes pre-packaged with `npm`, so there's no need to install `npm` separately.
-   - All the required dependencies for the web-based application are listed in the [`package.json`](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/main/src/web/terminarium-web/package.json) file and no additional packages and/or global dependencies are required to be installed.
+   - All the required dependencies for the web-based application are listed in the [`package.json`](https://github.com/michalspano/terminarium/blob/main/src/web/terminarium-web/package.json) file and no additional packages and/or global dependencies are required to be installed.
 7. [`Git`](https://git-scm.com/downloads) is required to be installed in order to clone the repository
 
 $^*$Note: despite our best efforts, we were unable to find a solution how to **automate** the process of installing the required `Arduino` libraries. Therefore, the user is required to install the libraries manually via the `Arduino IDE`. For additional guidance, please refer to the [Arduino Library Manager](https://support.arduino.cc/hc/en-us/articles/5145457742236-Add-libraries-to-Arduino-IDE) documentation.
@@ -163,7 +163,7 @@ Furthermore, this `script` emulates the **Serial monitor** right in your termina
 
 ### Web-based Application - [Live Demo](https://terminarium.netlify.app/)
 
-The **website application** is deployed via `Netlify`; a **report** of the deployment can be found [here](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/wikis/Sprint-3-Challenges).
+The **website application** is deployed via `Netlify`; a **report** of the deployment can be found [here](https://github.com/michalspano/terminarium/wiki/Sprint-3-Challenges).
 
 ### Web-based Application - Local Usage
 
@@ -186,7 +186,7 @@ npm run dev
 <details>
 <summary>Additional Utilities</summary>
 
-All the additional commands, such as for **testing**, **linting**, etc. can be found in the [`package.json`](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/main/src/web/terminarium-web/package.json) file.
+All the additional commands, such as for **testing**, **linting**, etc. can be found in the [`package.json`](https://github.com/michalspano/terminarium/blob/main/src/web/terminarium-web/package.json) file.
 
 </details>
 
@@ -239,7 +239,7 @@ To TAs (Teaching Assistants), Amin Mahmoudifard and Bao Quan Lindgren, we pay sp
 
 ## Contributing
 
-The contributing guidelines for the Terminarium project should be adhered to by all contributors as specified by the guidelines in the document: [`CONTRIBUTING.md`](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/1f8d174c6a9bcaf00cedd0d7cce114d175203101/CONTRIBUTING.md).
+The contributing guidelines for the Terminarium project should be adhered to by all contributors as specified by the guidelines in the document: [`CONTRIBUTING.md`](https://github.com/michalspano/terminarium/blob/main/CONTRIBUTING.md).
 
 ## License
 
@@ -254,7 +254,7 @@ The project is licensed under the MIT License. Refer to the [`LICENSE`](https://
 - **Konstantinos Rokanas (@rokanas)**: Made significant contributions to the Back-End with a special focus on the Wio terminal.
 - **Jonathan Boman (@bomanjo)**: Made significant contributions to the Back-End utilities related to the Wio terminal and the Website-based application.
 
-The team members have used the following `CODE_OF_CONDUCT.md` file as a reference: [link](https://git.chalmers.se/courses/dit113/2023/group-15/terminarium/-/blob/main/CODE_OF_CONDUCT.md).
+The team members have used the following `CODE_OF_CONDUCT.md` file as a reference: [link](https://github.com/michalspano/terminarium/blob/main/CODE_OF_CONDUCT.md).
 
 ___
 
